@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState ,useRef} from "react";
-import Button from "../components/Button";
-import InputField from "../components/InputField";
-import Label from "../components/Label";
+import Button from "../components/Button.jsx";
+import InputField from "../components/InputField.jsx";
+import Label from "../components/Label.jsx";
 import { MyContext } from "../context api/Context";
 const Leave_Application = () => {
   const {allFormData,setAllFormData} = useContext(MyContext);

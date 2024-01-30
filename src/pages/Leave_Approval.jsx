@@ -1,6 +1,6 @@
 import {React,useState} from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
-import {leaveInfo} from '../utils/Dummy_Data'
+import {leaveInfo} from '../utils/Dummy_Data.js'
 const Leave_Approval = () => {
     const navigate = useNavigate();
     // console.log(leaveInfo);
