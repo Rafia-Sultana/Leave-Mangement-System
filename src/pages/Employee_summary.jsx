@@ -91,13 +91,14 @@ const Employee_summary = () => {
                 ></textarea>
             </div>
       <Button
-        bgColor="green-300"
+   
         fontSize="bold"
         textColor="white"
         btnText="submit"
         width="full"
         type="submit"
      onClick={handleSubmitClick}
+     bg="green"
       />
     </div>
   );

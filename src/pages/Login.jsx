@@ -73,12 +73,13 @@ localStorage.setItem('email',JSON.stringify(email));
               />
 
               <Button
-                bgColor="green-300"
+               
                 fontSize="bold"
                 textColor="white"
                 btnText="submit"
                 width="full"
                 type='submit'
+                bg="green"
                 // onClick={handleSubmitClick}
               />
           

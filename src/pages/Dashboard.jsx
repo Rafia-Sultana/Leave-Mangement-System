@@ -3,99 +3,72 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { userInfo } from "../utils/Dummy_Data.js";
 import Button from "../components/Button.jsx";
 import Overview from "./Overview.jsx";
+import '../assets/styles/Dashboard.css'
+import NavProfile from "../components/NavProfile.jsx";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+
   const emailData = JSON.parse(localStorage.getItem("email"));
   const role = userInfo.filter((user) => user.email === emailData)[0].role;
-  const handleLogOutClick = () => {
-    navigate("/");
-  };
+ 
 
+  const menuToggleClick =() =>{
+let menuToggle = document.querySelector('.menu-toggle');
+var siteNav = document.querySelector('.site-nav');
+siteNav.classList.toggle('site-nav-open');
+menuToggle.classList.toggle('open');
+}
+ 
+const navLinks = [
+  {to:'leave-application', text:'Leave Application'},
+  {to: role==='hr'?'leave-approval':'request-history',text: role === "hr" ? "Leave Approval" : "Request History"  },
+  {to:'', text:role==='hr'  || 'employee'? "My leave History":'Leave History', spanText:'Team'
+  
+    
+  }
+]
+
+const MenuItem = ({onClick,to,text,spanText})=>(
+<li onClick={onClick}>
+  <Link className="text-lg hover:text-gray-300 ml-4" to={to}>
+  {text}
+  {
+    spanText && <span className="text-xs">[{spanText}]</span>
+  }
+  </Link>
+
+</li>
+)
   return (
     <div className=" ">
-      <header className="h-20 bg-gray-900 text-end flex items-center justify-end pr-5">
-        {/* <Button
- bgColor="gray-900"
- fontSize="bold"
- textColor="white"
- btnText="Logout"
- width=""
- type=''
- onClick={handleLogOutClick}
->Logout</Button> */}
-        <div className="flex justify-center items-center ">
-          <div className="avatar">
-            <div className="w-14 rounded-full">
-              <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-            </div>
-          </div>
-          <div className="">
-            <ul className="menu menu-horizontal ">
-              <li>
-                <details>
-                  <summary className="font-semibold text-white">
-                    Rafia Sultana
-                  </summary>
-                  <ul className="relative z-50 bg-base-100 rounded-t-none ">
-                    <li>
-                      <a>Link 1</a>
-                    </li>
-                    <li>
-                      <a>Link 2</a>
-                    </li>
-                  </ul>
-                </details>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </header>
-      <div className="flex">
-        <nav className=" h-[calc(100vh-80px)]   flex flex-col  items-start gap-5 px-6 py-4   bg-gray-800 text-white w-1/6 relative">
-          <Link
-            className="mb-2 text-lg hover:text-gray-300  rounded-md "
-            to="leave-application"
-          >
-            Leave Application
-          </Link>
 
-          {role === "hr" ? (
-            <>
-              <Link
-                className="mb-2 text-lg hover:text-gray-300  rounded-md "
-                to="leave-approval"
-              >
-                Leave Approval
-              </Link>
-              <Link className="mb-2 text-lg hover:text-gray-300" to="">
-                My leave History
-              </Link>
-              <Link className="mb-2 text-lg hover:text-gray-300" to="">
-                Teams' leave History
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                className="mb-2 text-lg hover:text-gray-300"
-                to="request-history"
-              >
-                Request History
-              </Link>
-            </>
-          )}
-          <Link
-            className="absolute bottom-16 mb-2 text-lg hover:text-gray-300"
-            to="/"
-          >
-            Logout
-          </Link>
-        </nav>
-        <main className=" mx-auto w-4/6">
-          {/* <Outlet /> */}
-        </main>
-      </div>
+
+      <header className="h-20 bg-gray-darkest flex items-center justify-between pr-5 relative">
+      <div className="menu-toggle" onClick={menuToggleClick}>
+          <div className="hamburger"></div>
+        </div>
+        <NavProfile/>
+
+      
+      </header>
+
+
+      <div className="flex">
+  <nav className="h-[calc(100vh-80px)] bg-gray-darkest text-white w-[60%] md:w-[30%] lg:w-[22%] site-nav">
+    <ul className="flex flex-col gap-10">
+  {
+        navLinks.map((link,index)=>(
+          <MenuItem key={index} onClick={menuToggleClick} to={link.to} text={link.text} spanText={link.spanText}/>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <main className="w-full px-8">
+    <Outlet />
+  </main>
+</div>
+
     </div>
   );
 };

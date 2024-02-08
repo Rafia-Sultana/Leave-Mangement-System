@@ -45,7 +45,7 @@ const Request_History = () => {
       ) : (
         <div className="overflow-x-auto mt-10">
           <table className="w-full table-auto">
-            <thead className="bg-gray-200">
+            <thead className="bg-gray-lighter">
               <tr className="text-sm font-semibold text-gray-700">
                 <th className="py-2 ">Type of leave</th>
                 <th className="py-2 ">Start Date</th>
@@ -60,7 +60,7 @@ const Request_History = () => {
               {allFormData.map((item, index) => {
                 const { leaveType, from, to, numberOfDays, id } = item;
                 return (
-                  <tr key={index} className="even:bg-gray-100 ">
+                  <tr key={index} className="even:bg-gray-lightest ">
                     <td className="py-2 pl-12">{leaveType}</td>
                     <td className="py-2 pl-12">{from}</td>
                     <td className="py-2 pl-12">{to}</td>
@@ -69,24 +69,26 @@ const Request_History = () => {
                     <td className="py-2 pl-12">
                       {/* <button className="bg-blue-500 text-white py-1 px-2 rounded">View Details</button> */}
                       <Button
-                        bgColor="blue-500"
+                       
                         fontSize="normal"
-                        textColor="white"
+                        textColor="black"
                         btnText="view details"
                         width=""
                         type="button"
+                        bg="blue"
                         onClick={() => handleViewDetails(id)}
                       />
                     </td>
                     <td className="py-2 pl-12">
                       {/* <button className="bg-green-500 text-white py-1 px-2 rounded">View File</button> */}
                       <Button
-                        bgColor="green-500"
+                        
                         fontSize="normal"
-                        textColor="white"
+                        textColor="black"
                         btnText="view file"
                         width=""
                         type="button"
+                        bg="green"
                         onClick={() => handleViewFile(id)}
                       />
                     </td>
