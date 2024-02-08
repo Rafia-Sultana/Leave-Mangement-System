@@ -5,6 +5,9 @@ import Button from "../components/Button.jsx";
 import Overview from "./Overview.jsx";
 import '../assets/styles/Dashboard.css'
 import NavProfile from "../components/NavProfile.jsx";
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 
 const Dashboard = () => {
 
@@ -47,10 +50,13 @@ const MenuItem = ({onClick,to,text,spanText})=>(
       <div className="menu-toggle" onClick={menuToggleClick}>
           <div className="hamburger"></div>
         </div>
+        <div className="flex items-center justify-center gap-10">
+        <Badge badgeContent={4} color="primary">
+        <NotificationsNoneOutlinedIcon color="secondary"  fontSize="large"/>
+        </Badge>
         <NavProfile/>
-
-      
-      </header>
+        </div>
+  </header>
 
 
       <div className="flex">

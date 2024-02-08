@@ -41,8 +41,8 @@ localStorage.setItem('email',JSON.stringify(email));
 // }
   return (
     <div>
-      <div className="bg-gradient-to-tr from-green-200 to-green-400 h-screen w-full flex justify-center items-center">
-        <div className="bg-green-300 w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
+      <div className="bg-gradient-to-tr from-green-lightest to-green-lighter h-screen w-full flex justify-center items-center">
+        <div className="bg-green w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
           <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
             <h1 className="text-3xl">Hello</h1>
             <p className="text-5xl font-extrabold">Welcome!</p>

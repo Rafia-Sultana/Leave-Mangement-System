@@ -10,78 +10,52 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import Grid from '@mui/material/Grid';
+// import InputFields from "../components/InputFields/index.js";
 const Leave_Application = () => {
   // const { allFormData, setAllFormData } = useContext(MyContext);
 
-  // const initialState = {
-  //   leaveType: "",
-  //   from: "",
-  //   to: "",
-  //   numberOfDays: "",
-  //   join: "",
-  //   file: null,
-  //   reasonsForLeave: "",
-  //   delegetedFor: "",
-  // };
-  // const [formData, setFormData] = useState(initialState);
-  // const [loading,setLoading]= useState(false);
-  // const [totalDays,setTotalDays]= useState(null);
+  const initialState = {
+    leaveType: "",
+    from: "",
+    to: "",
+    numberOfDays: "",
+    join: "",
+    file: null,
+    reasonsForLeave: "",
+    delegatedFor: "",
+  };
+  const [formData, setFormData] = useState(initialState);
 
-  // const currentIdRef = useRef(1);
-  // const handleChange = (event) => {
-  //   const { name, value, type, files } = event.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: type === "file" ? console.log(files[0]) : value,
-  //   }));
-  // };
   const handleSubmit = (event) => {
-    // event.preventDefault();
-    // const currentFormData = { ...formData, id: currentIdRef.current };
-    // setFormData(initialState);
-    // setAllFormData((prevArray) => [...prevArray, currentFormData]);
-    // currentIdRef.current += 1;
+     event.preventDefault();
+console.log(formData);
   };
 
-  // useEffect(() => {
 
-  // }, [allFormData]);
-  // const {
-  //   leaveType,
-  //   from,
-
-  //   to,
-  //   numberOfDays,
-  //   join,
-  //   file,
-  //   reasonsForLeave,
-  //   delegetedFor,
-  // } = formData;
-  const handleDateChange = (date) => {
+  const handleFromDateChange = (date) => {
+    console.log(date);
+  };
+  const handleToDateChange = (date) => {
     console.log(date);
   };
 
-  // useEffect(()=>{
-  // if(from && to){
-  //   setTotalDays((new Date(to)-new Date(from))/(1000 * 60 * 60 * 24));
-  //   setLoading(false)
-  //  }else{
-  //  setLoading(!!from);
-  //  }
+const handleInputChange = (e)=>{
+const {name,value}= e.target;
+setFormData({...formData,[name]:value})
+}
+const leaveTypes = [
+ 
+  { label: "Sick Leave" },
+  { label: "Maternity/Paternity Leave" },
+  { label: "Parental Leave" },
+  { label: "Bereavement Leave" },
+  { label: "Personal Leave" },
+  { label: "Study/Exam Leave" },
+  { label: "Unpaid Leave" },
+  { label: "Other" },
+];
 
-  // },[from,to])
-
-  const leaveTypes = [
-    { label: "Vacation" },
-    { label: "Sick Leave" },
-    { label: "Maternity/Paternity Leave" },
-    { label: "Parental Leave" },
-    { label: "Bereavement Leave" },
-    { label: "Personal Leave" },
-    { label: "Study/Exam Leave" },
-    { label: "Unpaid Leave" },
-    { label: "Other" },
-  ];
 
   return (
     <div>
@@ -90,62 +64,71 @@ const Leave_Application = () => {
           Leave Application Form
         </h2>
         <form onSubmit={handleSubmit}>
-         <Stack 
-         direction={{xs:'column',sm:'row'}}
-         spacing={{xs:1,sm:2}}
-         >
- {/* <div className="grid grid-cols-1  md:grid-cols-3  gap-4 "> */}
-            
-            <Autocomplete
-              disablePortal
-              options={leaveTypes}
-              renderInput={(params) => (
-                <TextField {...params} label="Vacation" />
-              )}
-            />
-         
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker label="From" onChange={handleDateChange} />
-            </LocalizationProvider>
-          
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker label="To" onChange={handleDateChange} />
-            </LocalizationProvider>
-     
-        
-           
-            <TextField
-              id=""
-              label="Number of Days Applied"
-              variant="outlined"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <TextField
-              id=""
-              label="Date of Joining"
-              variant="outlined"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-      
+        <Grid container spacing={2}>
+  <Grid item xs={12} lg={4}  md={6}>
+    <Autocomplete
+      disablePortal
+      options={leaveTypes}
+      name="leaveType"
+      renderInput={(params) => (
+        <TextField {...params} label="Vacation" />
+      )}
 
-        
-       
-          
-            <TextField id="" label="In my absence my responsibilities will be delegated to my collegue" variant="outlined" />
-    
-         
-     
-       
-    
-          <TextField id="" label="Reasons for leave" variant="outlined" multiline rows={4} fullWidth/>
-        {/* </div> */}
-         </Stack>
+onChange={handleInputChange}
+    />
+  </Grid>
 
 
+{['From','To'].map((label,index)=>(
+  <Grid item xs={12} lg={4} md={6} key={index}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <DatePicker
+     label={label} 
+    onChange={label==='From'? handleFromDateChange: handleToDateChange }
+    sx={{width:'100%'}}
+   /*  { ...(label === 'From' ? { disablePast: true } : { disableFuture: true }) } */
+    />
+    </LocalizationProvider>
+
+  </Grid>
+))}
+
+
+{[
+  { label: 'Number of Days Applied',  readOnly: true },
+  { label: 'Date of Joining', readOnly: true },
+  { label: 'In my absence my responsibilities will be delegated to my colleague', name: 'delegatedFor', readOnly: false },
+].map((textFieldProps,index)=>(
+  <Grid item xs={12} lg={4}  md={6} key={index}>
+  <TextField
+    id=""
+    label={textFieldProps.label}
+    InputProps={{readOnly:textFieldProps.readOnly}}
+    variant="outlined"
+    fullWidth
+    onChange={handleInputChange}
+    name={textFieldProps.name}
+  />
+</Grid>
+))}
+
+
+  <Grid item xs={12}>
+    <TextField
+      id=""
+      label="Reasons for leave"
+      name="reasonsForLeave"
+      variant="outlined"
+      multiline
+      rows={4}
+      fullWidth
+      onChange={handleInputChange}
+    />
+  </Grid>
+</Grid>
+
+
+{/* <InputFields type/> */}
           <div className="mt-6">
             <Button
               fontSize="bold"
