@@ -2,10 +2,11 @@ import InputField from "../components/InputField.jsx";
 import Button from "../components/Button.jsx";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useSnackbar } from 'notistack';
 
 const Login = () => {
 const navigate = useNavigate();
+const { enqueueSnackbar } = useSnackbar();
 
    const initialState= {
     email:'',
@@ -21,9 +22,12 @@ const navigate = useNavigate();
    const handleSubmit = (event) => {
 
     event.preventDefault();
- 
     if(email && password){
-      navigate('/dashboard')
+      enqueueSnackbar('Logged In Succesfully!',{variant:'success'})
+
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 500);
    }
    else{
      console.error('email does not exist');
@@ -41,6 +45,7 @@ localStorage.setItem('email',JSON.stringify(email));
 // }
   return (
     <div>
+   
       <div className="bg-gradient-to-tr from-green-lightest to-green-lighter h-screen w-full flex justify-center items-center">
         <div className="bg-green w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
           <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
@@ -82,7 +87,7 @@ localStorage.setItem('email',JSON.stringify(email));
                 bg="green"
                 // onClick={handleSubmitClick}
               />
-          
+            
             </form>
   
           </div>

@@ -25,7 +25,7 @@ menuToggle.classList.toggle('open');
 const navLinks = [
   {to:'leave-application', text:'Leave Application'},
   {to: role==='hr'?'leave-approval':'request-history',text: role === "hr" ? "Leave Approval" : "Request History"  },
-  {to:'', text:role==='hr'  || 'employee'? "My leave History":'Leave History', spanText:'Team'
+  {to:'', text:role==='hr'  || 'employee'? "My leave History":'Leave History', spanText:role==="manager"?"Team":""
   
     
   }

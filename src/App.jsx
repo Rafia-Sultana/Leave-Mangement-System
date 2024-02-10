@@ -12,18 +12,25 @@ import { MyContext } from './context api/Context';
 import { useState } from 'react';
 import Employee_summary from './pages/Employee_summary';
 import Overview from './pages/Overview';
-
+import { SnackbarProvider} from 'notistack';
 function App() {
   const [allFormData,setAllFormData] = useState([]);
   return (
     <div className="">
+      
 <Router>
-
+<SnackbarProvider  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      autoHideDuration={2000}
+      maxSnack={3}
+      dense={true}
+      > 
+  
   <Routes>
+
 <Route path='/' element={<Login/>}></Route>
-
-
 <Route path='dashboard' element={<Dashboard/>} >
+
+
 <Route index element={<Overview />} />
 
 <Route
@@ -51,6 +58,7 @@ function App() {
 <Route path='*' element={<No_Match/>}></Route>
 
   </Routes>
+  </SnackbarProvider> 
 </Router>
     </div>
   );
