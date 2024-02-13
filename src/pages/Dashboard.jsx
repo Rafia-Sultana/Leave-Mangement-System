@@ -22,26 +22,47 @@ siteNav.classList.toggle('site-nav-open');
 menuToggle.classList.toggle('open');
 }
  
-const navLinks = [
-  {to:'leave-application', text:'Leave Application'},
-  {to: role==='hr'?'leave-approval':'request-history',text: role === "hr" ? "Leave Approval" : "Request History"  },
-  {to:'', text:role==='hr'  || 'employee'? "My leave History":'Leave History', spanText:role==="manager"?"Team":""
+// const navLinks = [
+//   {to:'leave-application', text:'Leave Application'},
+//   {to: role==='hr'?'leave-approval':'request-history',text: role === "hr" ? "Leave Request" : "Request History"  },
+//   {to:'', text:role==='hr'  || 'employee'? "My leave History":'Leave History', spanText:role==="manager"?"":""},
   
-    
-  }
-]
 
-const MenuItem = ({onClick,to,text,spanText})=>(
-<li onClick={onClick}>
-  <Link className="text-lg hover:text-gray-300 ml-4" to={to}>
-  {text}
-  {
-    spanText && <span className="text-xs">[{spanText}]</span>
-  }
-  </Link>
 
-</li>
-)
+// ]
+const createNavLink = (to,text) =>({to,text});
+const navLinks = {
+  employee: [
+    createNavLink('leave-application', 'Leave Application'),
+    createNavLink('request-history', 'Request History'),
+    createNavLink('', 'My Leave History')
+  ],
+  manager: [
+    { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('', 'My Leave History')] },
+    { category: 'Team', links: [createNavLink('request-history', 'Request History'), createNavLink('', 'Leave History')] }
+  ],
+  hr: [
+    { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('', 'My Leave History')] },
+    { category: 'Others', links: [createNavLink('request-history', 'Request History'), createNavLink('', 'Leave History')] }
+  ]
+};
+
+
+
+
+
+// const MenuItem = ({onClick,to,text,spanText})=>(
+// <li onClick={onClick}>
+//   {/* <p className="font-bold text-xl">Personal</p> */}
+//   <Link className="text-lg hover:text-gray-300 ml-4" to={to}>
+//   {text}
+//   {
+//     spanText && <span className="text-xs">[{spanText}]</span>
+//   }
+//   </Link>
+
+// </li>
+// )
   return (
     <div className=" ">
 
@@ -61,12 +82,24 @@ const MenuItem = ({onClick,to,text,spanText})=>(
 
       <div className="flex">
   <nav className="h-[calc(100vh-80px)] bg-gray-darkest text-white w-[60%] md:w-[30%] lg:w-[22%] site-nav">
-    <ul className="flex flex-col gap-10">
-  {
-        navLinks.map((link,index)=>(
-          <MenuItem key={index} onClick={menuToggleClick} to={link.to} text={link.text} spanText={link.spanText}/>
-        ))
-      }
+    <ul className="ml-[8%]">
+  
+{
+  navLinks[role]?.map((section,index)=>(
+    <li key={index} className="mb-8">
+      <p className="font-bold text-xl mb-2">{section.category || section?.text}</p>
+      <ul>
+      {section.links?.map((link, linkIndex) => (
+                    <li key={linkIndex} className="mb-1">
+                      <Link className=" hover:text-gray-300 ml-4 " to={link.to}>
+                        {link.text}
+                      </Link>
+                    </li>
+                  ))}
+      </ul>
+    </li>
+  ))
+}
     </ul>
   </nav>
 
