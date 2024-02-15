@@ -198,13 +198,35 @@ export const leaveInfo = [
   ];
 
 
-  export const manager_leave_data = {
-    my:[
+  export  const manager_leave_data = {
+    my:
       {
-
+ leave_details: [
+          {
+            id:1,
+            leaveType: "sick leave",
+            from: "10-7-2024",
+            to: "14-7-2024",
+            total: 5,
+            delegatedFor: "manager",
+            reasonsForLeave: "illness",
+            application_Date: "5-7-2024",
+            status: "Approved"
+          },
+          {id:2,
+            leaveType: "vacation",
+            from: "20-8-2024",
+            to: "27-8-2024",
+            total: 8,
+            delegatedFor: "manager",
+            reasonsForLeave: "holiday",
+            application_Date: "15-8-2024",
+            status: "Pending"
+          }
+        ]
       }
-    ],
-    Team: [
+    ,
+    team: [
       {
         emp_id: 1,
         details: {
@@ -215,15 +237,7 @@ export const leaveInfo = [
         },
         leave_details: [
           {
-            leaveType: "personal leave",
-            from: "5-5-2024",
-            to: "6-5-2024",
-            total: 2,
-            delegatedFor: "supervisor",
-            reasonsForLeave: "family event",
-            application_Date: "1-5-2024"
-          },
-          {
+            id:1,
             leaveType: "personal leave",
             from: "5-5-2024",
             to: "6-5-2024",
@@ -233,7 +247,17 @@ export const leaveInfo = [
             application_Date: "1-5-2024",
             status: "pending"
           },
-          {
+          {id:2,
+            leaveType: "personal leave",
+            from: "5-5-2024",
+            to: "6-5-2024",
+            total: 2,
+            delegatedFor: "supervisor",
+            reasonsForLeave: "family event",
+            application_Date: "1-5-2024",
+            status: "pending"
+          },
+          {id:3,
             leaveType: "remote work",
             from: "8-6-2024",
             to: "12-6-2024",
@@ -243,7 +267,7 @@ export const leaveInfo = [
             application_Date: "3-6-2024",
             status: "approved"
           },
-          {
+          {id:4,
             leaveType: "personal leave",
             from: "5-5-2024",
             to: "6-5-2024",
@@ -264,7 +288,7 @@ export const leaveInfo = [
           department: "Data Analytics"
         },
         leave_details: [
-          {
+          {id:1,
             leaveType: "sick leave",
             from: "10-7-2024",
             to: "14-7-2024",
@@ -274,7 +298,7 @@ export const leaveInfo = [
             application_Date: "5-7-2024",
             status: "approved"
           },
-          {
+          {id:2,
             leaveType: "vacation",
             from: "20-8-2024",
             to: "27-8-2024",

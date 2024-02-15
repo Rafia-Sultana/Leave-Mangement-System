@@ -24,6 +24,14 @@ export default {
         'lighter': '',
         'lightest': '',
       },
+      red: {
+        'darkest':'',
+        'dark':'',
+        'DEFAULT': '#ef4444',
+        'light': '#f87171',
+        'lighter': '',
+        'lightest': '',
+      },
 
     gray: {
         'darkest': '#111827',
@@ -33,7 +41,7 @@ export default {
         'light': '#f3f4f6',
         'lighter':'#f3f4f6',
         'lightest': '#e5e7eb',
-      }
+      },
 
     },
     extend: {},

@@ -38,8 +38,8 @@ const navLinks = {
     createNavLink('', 'My Leave History')
   ],
   manager: [
-    { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('', 'My Leave History')] },
-    { category: 'Team', links: [createNavLink('request-history', 'Request History'), createNavLink('', 'Leave History')] }
+    { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('manager_leave_history', 'My Leave History')] },
+    { category: 'Team', links: [createNavLink('request-history', 'Leave Request'), createNavLink('manager_team_leave_info', 'Leave History')] }
   ],
   hr: [
     { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('', 'My Leave History')] },

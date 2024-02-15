@@ -33,6 +33,13 @@ const Request_History = () => {
 
   return (
     <div>
+      <select className="select select-success w-full max-w-xs">
+  <option disabled selected>Filter by status</option>
+  <option className="text-blue">pending</option>
+  <option className="text-red">rejected</option>
+  <option className="text-green">approved</option>
+
+</select>
       {showPdfViewer ? (
         <div className="max-h-screen overflow-y-auto">
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
