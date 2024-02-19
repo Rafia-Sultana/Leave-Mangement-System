@@ -20,7 +20,9 @@ import Overview from "./pages/Overview";
 import { SnackbarProvider } from "notistack";
 import CommonTable from "./components/CommonTable";
 import {Manager_Leave_History} from './pages/Manager_Data';
+import {HR_Leave_History} from './pages/HR_Data';
 import {Manager_Team_Leave_Info} from './pages/Manager_Data';
+import {Manager_Leave_Request} from './pages/Manager_Data';
 function App() {
   const [allFormData, setAllFormData] = useState([]);
   return (
@@ -49,12 +51,13 @@ function App() {
                 path="request-history"
                 element={
                   <MyContext.Provider value={{ allFormData }}>
-                    <Request_History />
+                    <Manager_Leave_Request />
                     
                   </MyContext.Provider>
                 }
               />
               <Route   path="manager_leave_history" element={<Manager_Leave_History/>} />
+              <Route   path="hr_leave_history" element={<HR_Leave_History />} />
               <Route   path="manager_team_leave_info" element={<Manager_Team_Leave_Info/>} />
               <Route path="leave-approval" element={<Leave_Approval />}>
       <Route

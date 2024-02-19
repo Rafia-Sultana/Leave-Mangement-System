@@ -12,6 +12,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import FormateDate from "../utils/FormateDate.js";
+import Checkbox from '@mui/material/Checkbox';
 
 const Leave_Application = () => {
 const initialState = {
@@ -23,16 +24,23 @@ const initialState = {
     file: null,
     reasonsForLeave: "",
     delegatedFor: "",
+    dayOption:null,
+    // halfDay:false
   };
+  
   const [formData, setFormData] = useState(initialState);
   const { allFormData, setAllFormData } = useContext(MyContext);
   const [total_Days,setTotal_Days]=useState(null);
   const [loading,setLoading]= useState(null);
+  const [selectedOption,setSelectedOption]= useState('fullDay');
+  // const [checked,setChecked]= useState(false);
+
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setAllFormData((prevArray) => [...prevArray, formData]);
-    // setFormData(initialState);
+
   };
 
   const handleDateChange = (date, label) => {
@@ -43,10 +51,29 @@ const initialState = {
   };
 
   const handleInputChange = (e, newValue) => {
+    // console.log(newValue);
+    console.log(selectedOption);
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value, ...newValue });
+    setFormData(
+      { ...formData,
+      [name]: value, 
+      ...newValue,
+      numberOfDays:total_Days,
+      join: formData.to && getJoiningDate(formData.to),
+      dayOption:selectedOption
+    
+    }
+      
+      );
   };
 
+
+
+
+  
+// const handleCheckChange =(event)=>{
+//   setChecked(event.target.checked);
+// }
   const leaveTypes = [
     { label: "Sick Leave" },
     { label: "Maternity/Paternity Leave" },
@@ -70,17 +97,21 @@ const initialState = {
 
   useEffect(()=>{
 if(formData.to && formData.from)
-{let differences = (new Date(formData.to)-new Date(formData.from))/(1000 * 60 * 60 * 24);
+{let differences = (new Date(formData.to)- new Date(formData.from))/(1000 * 60 * 60 * 24);
 // console.log(differences);
 // console.log('object',new Date(formData.to).getDate()+1);
-setTotal_Days(differences);
+setTotal_Days(differences+1);
 }},[formData.to && formData.from]);
 
-const getJoiningDate = (date)=>{
-  const currentToDate = new Date(date);
+const getJoiningDate = (toDate)=>{
+  const currentToDate = new Date(toDate);
   const tomorrowToDate = new Date(currentToDate);
-  tomorrowToDate.setDate(currentToDate.getDate()+1);
+  return   FormateDate(new Date(tomorrowToDate.setDate(currentToDate.getDate()+1)));
 }
+
+// console.log(getJoiningDate('02-29-2024'));
+console.log(formData);
+// console.log(selectedOption);
 
   return (
     <div>
@@ -125,9 +156,10 @@ const getJoiningDate = (date)=>{
               </Grid>
             ))}
 
+
             {[
-              { label: "Number of Days Applied", readOnly: true },
               { label: "Date of Joining", readOnly: true },
+              { label: "Number of Days Applied", readOnly: true },
               // {
               //   label:
               //     "In my absence my responsibilities will be delegated to my colleague",
@@ -137,19 +169,51 @@ const getJoiningDate = (date)=>{
             ].map((textFieldProps, index) => (
               <Grid item xs={12} lg={4} md={6} key={index}>
                 <TextField
-                  id=""
-                  label={textFieldProps.label}
-              
-                  InputProps={{ readOnly: textFieldProps.readOnly }}
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleInputChange}
-                  name={textFieldProps.name}
-                  focused={textFieldProps.label === "Number of Days Applied" &&  formData.from &&  formData.to}
-                   value={textFieldProps.label === "Number of Days Applied"?total_Days: formData.to && ``}
-                />
+  id=""
+  label={textFieldProps.label}
+  InputProps={{ readOnly: textFieldProps.readOnly }}
+  variant="outlined"
+  fullWidth
+  focused={textFieldProps.label === "Number of Days Applied" && formData.from && formData.to}
+  value={textFieldProps.label === "Number of Days Applied" ? (total_Days !== null ? total_Days : '') : (formData.to && getJoiningDate(formData.to))}
+/>
+
               </Grid>
             ))}
+
+
+
+
+<Grid item xs={12} 
+// style={{ display: 'flex', alignItems: 'center',gap:'7%' }} 
+
+className={`${total_Days === 1 ? 'visible flex items-center gap-5' : 'hidden'}`}
+
+>
+
+{[
+  { name: 'firstHalfDay', label: '1st Half' },
+  { name: 'secondHalfDay', label: '2nd Half' },
+  { name: 'fullDay', label: 'Full Day' }
+].map((checkbox,index)=>(
+  <div className="" key={index} style={{ display: 'flex', alignItems: 'center' }}>
+
+<Checkbox
+// required
+InputProps={{'aria-label':'controlled'}}
+onChange={(e)=>{
+  if(e.target.checked){
+    setSelectedOption(checkbox.name)
+  }
+}}
+checked={selectedOption===checkbox.name}
+defaultChecked={checkbox.name==='fullDay'}
+
+/>
+<p>{checkbox.label}</p>    
+  </div>
+))}
+  </Grid>
    <Grid item xs={12} lg={4} md={6}>
                 <TextField
                   id=""
@@ -172,12 +236,14 @@ const getJoiningDate = (date)=>{
                 onChange={handleInputChange}
               />
             </Grid>
+
+ 
           </Grid>
 
           <div className="mt-6">
             <Button
               fontSize="bold"
-              textColor="green"
+              textColor="white"
               btnText="SUBMIT"
               width="full"
               type="submit"

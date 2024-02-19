@@ -42,7 +42,7 @@ const navLinks = {
     { category: 'Team', links: [createNavLink('request-history', 'Leave Request'), createNavLink('manager_team_leave_info', 'Leave History')] }
   ],
   hr: [
-    { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('', 'My Leave History')] },
+    { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('hr_leave_history', 'My Leave History')] },
     { category: 'Others', links: [createNavLink('request-history', 'Request History'), createNavLink('', 'Leave History')] }
   ]
 };
@@ -87,7 +87,7 @@ const navLinks = {
 {
   navLinks[role]?.map((section,index)=>(
     <li key={index} className="mb-8">
-      <p className="font-bold text-xl mb-2">{section.category || section?.text}</p>
+      <Link className="font-bold text-xl mb-2" to={section?.to}>{section.category || section?.text}</Link>
       <ul>
       {section.links?.map((link, linkIndex) => (
                     <li key={linkIndex} className="mb-1">
