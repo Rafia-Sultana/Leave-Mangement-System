@@ -69,7 +69,7 @@ export const Manager_Team_Leave_Info = () => {
   const { team } = manager_leave_data;
 
   const columns = [
-    { id: "emp_id", label: "Emp_Id", minWidth: 100 },
+    { id: "emp_id", label: "Serial No.", minWidth: 100 },
     { id: "name", label: "Name", minWidth: 170 },
     { id: "position", label: "Position", minWidth: 170 },
     { id: "department", label: "Department", minWidth: 170 },
@@ -175,7 +175,7 @@ export const Manager_Leave_Request = () => {
     setId(id);
   };
   const columns = [
-    { id: "emp_id", label: "Emp_Id", minWidth: 100 },
+    { id: "emp_id", label: "Serial No", minWidth: 100 },
     { id: "name", label: "Name", minWidth: 170 },
     { id: "leaveType", label: "Leave Type", minWidth: 100 },
     {

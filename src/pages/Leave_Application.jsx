@@ -126,7 +126,7 @@ console.log(formData);
                 disablePortal
                 options={leaveTypes}
                 renderInput={(params) => (
-                  <TextField {...params} label="Vacation" />
+                  <TextField {...params} label="Leave Type" />
                 )}
                 onChange={(e, newValue) => {
                   if (newValue) {

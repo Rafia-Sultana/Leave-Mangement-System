@@ -510,7 +510,34 @@ export const leaveInfo = [
         delegatedFor: "manager",
         reasonsForLeave: "illness",
         application_Date: "5-7-2024",
-        status: "approved"
+        status: "approved",
+        logs:[
+          {
+            "sender": "koushik vhai",
+            "date": "5-7-2024",
+            "status": "request more information",
+            "comments": "give some more files"
+          },
+          {
+            "sender": "Jane Doe",
+            "date": "5-8-2024",
+            "status": "request more information",
+            "comments": "Please provide clarification on section 2"
+          },
+          {
+            "sender": "John Smith",
+            "date": "5-9-2024",
+            "status": "approved",
+            "comments": "Looks good, proceed with implementation"
+          },
+          {
+            "sender": "Alex Johnson",
+            "date": "5-10-2024",
+            "status": "rejected",
+            "comments": "Not meeting requirements, please revise"
+          }
+        ]
+        
       },
       {
         id:2,
@@ -521,7 +548,34 @@ export const leaveInfo = [
         delegatedFor: "manager",
         reasonsForLeave: "holiday",
         application_Date: "15-8-2024",
-        status: "approved"
+        status: "approved" ,
+        logs:[
+          {
+            "sender": "Sarah Lee",
+            "date": "6-15-2024",
+            "status": "pending review",
+            "comments": "Awaiting feedback from the team"
+          },
+          {
+            "sender": "Michael Chen",
+            "date": "6-18-2024",
+            "status": "in progress",
+            "comments": "Started working on the assigned tasks"
+          },
+          {
+            "sender": "Emily Wang",
+            "date": "6-20-2024",
+            "status": "completed",
+            "comments": "All tasks finished successfully"
+          },
+          {
+            "sender": "David Brown",
+            "date": "6-22-2024",
+            "status": "pending approval",
+            "comments": "Ready for management review"
+          }
+        ]
+        
       }
     ]
 
