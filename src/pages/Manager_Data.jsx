@@ -9,6 +9,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from "../components/Button";
+import {employee_data} from "../utils/Dummy_Data";
+import Leave_Details from "./Leave_Details";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+
 
 export const Manager_Leave_History = () => {
   const { my } = manager_leave_data;
@@ -170,13 +174,10 @@ export const Manager_Team_Leave_Info = () => {
 
 export const Manager_Leave_Request = () => {
   const [id, setId] = useState(0);
-  const { team } = manager_leave_data;
-  const handleViewDetails = (id) => {
-    setId(id);
-  };
+  // const [empId, setempId] = useState(null);
+
   const columns = [
-    { id: "emp_id", label: "Serial No", minWidth: 100 },
-    { id: "name", label: "Name", minWidth: 170 },
+   
     { id: "leaveType", label: "Leave Type", minWidth: 100 },
     {
       id: "from",
@@ -210,83 +211,68 @@ export const Manager_Leave_Request = () => {
     },
   ];
   const columns2 = [
-    { id: "leaveType", label: "Leave Type", minWidth: 100 },
+    { id: "sender", label: "Sender", minWidth: 100 },
     {
-      id: "from",
-      label: "Start Date",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "to",
-      label: "End Date",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "total",
-      label: "Total Days",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "delegatedFor",
-      label: "Delegated For",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "reasonsForLeave",
-      label: "Reasons For Leave",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "application_Date",
-      label: "Application Date",
+      id: "date",
+      label: "Date",
       minWidth: 170,
       align: "right",
     },
     {
       id: "status",
-      label: "Leave Status",
+      label: "Status",
       minWidth: 170,
       align: "right",
     },
+    {
+      id: "comments",
+      label: "Comments",
+      minWidth: 170,
+      align: "right",
+    },
+    // {
+    //   id: "action",
+    //   label: "Action",
+    //   minWidth: 170,
+    //   align: "center",
+    // }
   ];
-  const extractBasicDetails = (team) => {
-    return team.map((employee) => {
-      let emp_id = employee.emp_id;
-      const { name, position} = employee.details;
-      const {leaveType, from, to, total, status }= employee.leave_details[employee.leave_details.length-1]
-      return { emp_id, name, position,leaveType, from, to, total, status};
-    });
-  };
+const rows =  employee_data.leave_details;
+const handleViewDetails = (id) =>{
+  setId(id);
+}
+const handleGoBack = () => {
+  setId(0);
+};
+
   return <div>
-    {id === 0 ? (
-        <CommonTable
-          columns={columns}
-          rows={extractBasicDetails(team)}
-          viewDetails={handleViewDetails}
-        />
+
+
+
+  {id === 0 ? (
+      <CommonTable columns={columns} rows={rows} viewDetails={handleViewDetails}/>
       ) : (
         <>
           <button
-            onClick={()=>setId(0)}
-            className="text-blue font-bold text-lg"
+            onClick={handleGoBack}
+            className="text-blue font-bold text-lg mt-5 mb-3"
           >
-            Go back
+           <KeyboardBackspaceIcon/>
           </button>
+          <Leave_Details  info={rows.find((emp_leave) => emp_leave.leave_id === id)} />
           <CommonTable
             columns={columns2}
-            rows={team.find((emp) => emp.emp_id === id)?.leave_details ?? []}
+            rows={rows.find((emp_leave) => emp_leave.leave_id === id)?.logs ?? []}
+            // viewDetails={handleViewEmpDetails}
           />
-          <Manager_Leave_Approval />
+   
         </>
       )}
-          {/* <Manager_Leave_Approval /> */}
+  
   </div>;
 };
+
+
 export const Manager_Leave_Approval = () => {
   const [selectedValue, setSelectedValue] = useState(null);
 

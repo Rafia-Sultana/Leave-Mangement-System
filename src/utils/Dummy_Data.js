@@ -203,7 +203,7 @@ export const leaveInfo = [
       {
  leave_details: [
           {
-            id:1,
+            leave_id:1,
             leaveType: "sick leave",
             from: "10-7-2024",
             to: "14-7-2024",
@@ -213,13 +213,13 @@ export const leaveInfo = [
             application_Date: "5-7-2024",
             status: "Approved"
           },
-          {id:2,
+          {leave_id:2,
             leaveType: "vacation",
             from: "20-8-2024",
             to: "27-8-2024",
             total: 8,
             delegatedFor: "manager",
-            reasonsForLeave: "holiday",
+            reasonsForLeave: "holleave_iday",
             application_Date: "15-8-2024",
             status: "Pending"
           }
@@ -237,7 +237,7 @@ export const leaveInfo = [
         },
         leave_details: [
           {
-            id:1,
+            leave_id:1,
             leaveType: "personal leave",
             from: "5-5-2024",
             to: "6-5-2024",
@@ -247,7 +247,7 @@ export const leaveInfo = [
             application_Date: "1-5-2024",
             status: "pending"
           },
-          {id:2,
+          {leave_id:2,
             leaveType: "personal leave",
             from: "5-5-2024",
             to: "6-5-2024",
@@ -257,7 +257,7 @@ export const leaveInfo = [
             application_Date: "1-5-2024",
             status: "pending"
           },
-          {id:3,
+          {leave_id:3,
             leaveType: "remote work",
             from: "8-6-2024",
             to: "12-6-2024",
@@ -267,7 +267,7 @@ export const leaveInfo = [
             application_Date: "3-6-2024",
             status: "approved"
           },
-          {id:4,
+          {leave_id:4,
             leaveType: "personal leave",
             from: "5-5-2024",
             to: "6-5-2024",
@@ -289,7 +289,7 @@ export const leaveInfo = [
         },
         leave_details: [
           {
-            id:1,
+            leave_id:1,
             leaveType: "sick leave",
             from: "10-7-2024",
             to: "14-7-2024",
@@ -300,13 +300,13 @@ export const leaveInfo = [
             status: "approved"
           },
           {
-            id:2,
+            leave_id:2,
             leaveType: "vacation",
             from: "20-8-2024",
             to: "27-8-2024",
             total: 8,
             delegatedFor: "manager",
-            reasonsForLeave: "holiday",
+            reasonsForLeave: "holleave_iday",
             application_Date: "15-8-2024",
             status: "approved"
           }
@@ -324,7 +324,7 @@ export const leaveInfo = [
     my: {
       leave_details: [
         {
-          id: 1,
+          leave_id: 1,
           leaveType: "sick leave",
           from: "10-7-2024",
           to: "14-7-2024",
@@ -335,13 +335,13 @@ export const leaveInfo = [
           status: "Approved"
         },
         {
-          id: 2,
+          leave_id: 2,
           leaveType: "vacation",
           from: "20-8-2024",
           to: "27-8-2024",
           total: 8,
           delegatedFor: "manager",
-          reasonsForLeave: "holiday",
+          reasonsForLeave: "holleave_iday",
           application_Date: "15-8-2024",
           status: "Pending"
         }
@@ -359,7 +359,7 @@ export const leaveInfo = [
           },
           leave_details: [
             {
-              id: 1,
+              leave_id: 1,
               leaveType: "personal leave",
               from: "5-5-2024",
               to: "6-5-2024",
@@ -370,7 +370,7 @@ export const leaveInfo = [
               status: "Pending"
             },
             {
-              id: 2,
+              leave_id: 2,
               leaveType: "remote work",
               from: "8-6-2024",
               to: "12-6-2024",
@@ -392,7 +392,7 @@ export const leaveInfo = [
         },
           leave_details: [
             {
-              id: 1,
+              leave_id: 1,
               leaveType: "sick leave",
               from: "10-7-2024",
               to: "14-7-2024",
@@ -403,13 +403,13 @@ export const leaveInfo = [
               status: "Approved"
             },
             {
-              id: 2,
+              leave_id: 2,
               leaveType: "vacation",
               from: "20-8-2024",
               to: "27-8-2024",
               total: 8,
               delegatedFor: "manager",
-              reasonsForLeave: "holiday",
+              reasonsForLeave: "holleave_iday",
               application_Date: "15-8-2024",
               status: "Approved"
             }
@@ -428,7 +428,7 @@ export const leaveInfo = [
           },
           leave_details: [
             {
-              id: 1,
+              leave_id: 1,
               leaveType: "personal leave",
               from: "5-5-2024",
               to: "6-5-2024",
@@ -439,7 +439,7 @@ export const leaveInfo = [
               status: "Pending"
             },
             {
-              id: 2,
+              leave_id: 2,
               leaveType: "remote work",
               from: "8-6-2024",
               to: "12-6-2024",
@@ -461,7 +461,7 @@ export const leaveInfo = [
         },
           leave_details: [
             {
-              id: 1,
+              leave_id: 1,
               leaveType: "sick leave",
               from: "10-7-2024",
               to: "14-7-2024",
@@ -472,13 +472,13 @@ export const leaveInfo = [
               status: "Approved"
             },
             {
-              id: 2,
+              leave_id: 2,
               leaveType: "vacation",
               from: "20-8-2024",
               to: "27-8-2024",
               total: 8,
               delegatedFor: "manager",
-              reasonsForLeave: "holiday",
+              reasonsForLeave: "holleave_iday",
               application_Date: "15-8-2024",
               status: "Approved"
             }
@@ -493,8 +493,9 @@ export const leaveInfo = [
 
 
 
-  export const employee_data={
-    profile:{
+  export const employee_data = {
+    emp_id:1,
+    details:{
           name: "Alice Smith",
           email: "alice.smith@example.com",
           position: "Data Analyst",
@@ -502,18 +503,24 @@ export const leaveInfo = [
     },
     leave_details: [
       {
-        id:1,
+        leave_id:1,
         leaveType: "sick leave",
         from: "10-7-2024",
         to: "14-7-2024",
         total: 5,
-        delegatedFor: "manager",
+        delegatedFor:{
+         name:'rumi bro',
+          email: "rumi.smith@example.com",
+          position: "manager",
+        }
+
+        ,
         reasonsForLeave: "illness",
         application_Date: "5-7-2024",
         status: "approved",
         logs:[
           {
-            "sender": "koushik vhai",
+            "sender": "jinan",
             "date": "5-7-2024",
             "status": "request more information",
             "comments": "give some more files"
@@ -522,7 +529,7 @@ export const leaveInfo = [
             "sender": "Jane Doe",
             "date": "5-8-2024",
             "status": "request more information",
-            "comments": "Please provide clarification on section 2"
+            "comments": "Please provleave_ide clarification on section 2"
           },
           {
             "sender": "John Smith",
@@ -537,16 +544,19 @@ export const leaveInfo = [
             "comments": "Not meeting requirements, please revise"
           }
         ]
-        
       },
       {
-        id:2,
+        leave_id:2,
         leaveType: "vacation",
         from: "20-8-2024",
         to: "27-8-2024",
         total: 8,
-        delegatedFor: "manager",
-        reasonsForLeave: "holiday",
+        delegatedFor:{
+          name:'Rumi bro',
+           email: "rumi.smith@example.com",
+           position: "manager",
+         },
+        reasonsForLeave: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, tempora. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae incidunt nisi nostrum odio, saepe tempora voluptas labore perferendis ipsum unde!",
         application_Date: "15-8-2024",
         status: "approved" ,
         logs:[
@@ -569,7 +579,7 @@ export const leaveInfo = [
             "comments": "All tasks finished successfully"
           },
           {
-            "sender": "David Brown",
+            "sender": "Davleave_id Brown",
             "date": "6-22-2024",
             "status": "pending approval",
             "comments": "Ready for management review"
@@ -580,6 +590,9 @@ export const leaveInfo = [
     ]
 
   }
+
+
+
   
 
 

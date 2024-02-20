@@ -48,7 +48,7 @@ const CommonTable = ({columns,rows,viewDetails}) => {
                       return (
                         <TableCell key={column.id} align={column.align} style={cellStyle}>
                           {value || <button 
-                          onClick={()=>viewDetails(row.emp_id)}
+                          onClick={()=>viewDetails(row.emp_id || row.leave_id || 2)}
                           className="bg-green p-2 rounded text-white text-center lg:mx-[25%]">View Details</button>}
                         </TableCell>
                       );

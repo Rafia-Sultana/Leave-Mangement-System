@@ -23,6 +23,8 @@ import {Manager_Leave_History} from './pages/Manager_Data';
 import {HR_Leave_History} from './pages/HR_Data';
 import {Manager_Team_Leave_Info} from './pages/Manager_Data';
 import {Manager_Leave_Request} from './pages/Manager_Data';
+import { Employee_Leave_Request } from "./pages/Employee_Data";
+import { Employee_Leave_History } from "./pages/Employee_Data";
 function App() {
   const [allFormData, setAllFormData] = useState([]);
   return (
@@ -51,7 +53,7 @@ function App() {
                 path="request-history"
                 element={
                   <MyContext.Provider value={{ allFormData }}>
-                    <Manager_Leave_Request />
+                    <Employee_Leave_Request />
                     
                   </MyContext.Provider>
                 }
@@ -59,6 +61,7 @@ function App() {
               <Route   path="manager_leave_history" element={<Manager_Leave_History/>} />
               <Route   path="hr_leave_history" element={<HR_Leave_History />} />
               <Route   path="manager_team_leave_info" element={<Manager_Team_Leave_Info/>} />
+              <Route   path="employee-leave-history" element={<Employee_Leave_History/>} />
               <Route path="leave-approval" element={<Leave_Approval />}>
       <Route
                   path="view-details"
