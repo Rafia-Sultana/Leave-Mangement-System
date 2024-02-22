@@ -4,7 +4,7 @@ import { FormControl } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 
-const SelectInput = ({ options, placeholder }) => {
+const SelectInput = ({ options, placeholder ,getSelectedValue }) => {
 
   return (
     <div>
@@ -13,15 +13,15 @@ const SelectInput = ({ options, placeholder }) => {
           displayEmpty
           input={<OutlinedInput />}
           renderValue={(selected) => {
-            if (!selected || selected.length === 0) {
+      
+  if (!selected) {
+           
               return <em>{placeholder}</em>;
             }
+            getSelectedValue(selected)
             return selected;
           }}
         >
-          <MenuItem disabled value="">
-            <em>{placeholder}</em>
-          </MenuItem>
           {options.map((name) => (
             <MenuItem key={name} value={name}>
               {name}

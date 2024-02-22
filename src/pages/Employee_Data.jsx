@@ -83,11 +83,17 @@ export const Employee_Leave_Request = () => {
   return (
     <div>
       {id === 0 ? (
+       <>
+     
+       <h2 className="text-2xl text-center font-semibold text-gray-darker underline decoration-2  decoration-green-dark underline-offset-8 mt-5 mb-10">
+       Employee Request History
+        </h2>
         <CommonTable
           columns={columns}
           rows={rows}
           viewDetails={handleViewDetails}
         />
+       </>
       ) : (
         <>
           <button
@@ -160,14 +166,36 @@ export const Employee_Leave_History = () =>{
 
 
 //filter 
-const options = [
+const leaveStatusOptions = [
     'pending','approved','rejected' 
 ]
+const leaveTypesOptions = [
+   "Sick Leave" ,
+   "Maternity/Paternity Leave" ,
+   "Parental Leave" ,
+   "Bereavement Leave" ,
+   "Personal Leave" ,
+   "Study/Exam Leave" ,
+ "Unpaid Leave" ,
+   "Other" ,
+];
+const getSelectedStatus= (selected) => {
+// console.log(selected);
+}
+const getSelectedType= (selected) => {
+// console.log(selected);
+}
   return (
     <div>
       {id === 0 ? (
      <>
-        <SelectInput options={options} placeholder={'filter by type'}  />
+        <h2 className="text-2xl text-center font-semibold text-gray-darker underline decoration-2  decoration-green-dark underline-offset-8 mt-5 mb-2">
+       Employee Leave History
+        </h2>
+<div className="flex">
+<SelectInput options={leaveStatusOptions} placeholder={'filter by status'} getSelectedValue={getSelectedStatus} />
+        <SelectInput options={leaveTypesOptions} placeholder={'filter by type'}  getSelectedValue={getSelectedType} />
+</div>
         <CommonTable
           columns={columns}
           rows={rows}

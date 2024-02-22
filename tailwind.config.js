@@ -11,7 +11,7 @@ export default {
       green: {
         'darkest':'',
         'dark':'#65a30d',
-        'DEFAULT': '#84BE3F',
+        'DEFAULT': '#71BC78',
         'light': '#bbf7d0',
         'lighter': '#dcfce7',
         'lightest': '#f0fdf4',

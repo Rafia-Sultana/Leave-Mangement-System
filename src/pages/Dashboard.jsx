@@ -43,7 +43,7 @@ const navLinks = {
   ],
   hr: [
     { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('hr_leave_history', 'My Leave History')] },
-    { category: 'Others', links: [createNavLink('request-history', 'Request History'), createNavLink('', 'Leave History')] }
+    { category: 'Others', links: [createNavLink('hr-leave-request', 'Request History'), createNavLink('', 'Leave History')] }
   ]
 };
 
@@ -63,6 +63,7 @@ const navLinks = {
 
 // </li>
 // )
+
   return (
     <div className=" ">
 
@@ -83,16 +84,21 @@ const navLinks = {
       <div className="flex">
   <nav className="h-[calc(100vh-80px)] bg-gray-darkest text-white w-[60%] md:w-[30%] lg:w-[22%] site-nav">
     <ul className="ml-[8%]">
-  
+   <li  className=" hover:text-gray font-bold text-xl mb-6" >
+   <Link to='/dashboard'>
+                        Home
+                      </Link>
+   </li>
+            
 {
   navLinks[role]?.map((section,index)=>(
     <li key={index} className="mb-8">
-      <Link className="font-bold text-xl mb-2" to={section?.to}>{section.category || section?.text}</Link>
+      <Link className="font-bold text-xl mb-2 hover:text-gray" to={section?.to}>{section.category || section?.text}</Link>
       <ul>
       {section.links?.map((link, linkIndex) => (
-                    <li key={linkIndex} className="mb-1">
-                      <Link className=" hover:text-gray-300 ml-4 " to={link.to}>
-                        {link.text}
+                    <li key={linkIndex} className="mb-1" >
+                      <Link className=" hover:text-gray ml-4 " to={link.to}>
+                        {link.text }
                       </Link>
                     </li>
                   ))}

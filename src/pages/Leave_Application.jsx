@@ -13,8 +13,14 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import FormateDate from "../utils/FormateDate.js";
 import Checkbox from '@mui/material/Checkbox';
+import { department_list } from '../utils/Dummy_Data.js';
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from 'notistack';
+
 
 const Leave_Application = () => {
+  const navigate = useNavigate();
+const { enqueueSnackbar } = useSnackbar();
 const initialState = {
     leaveType: null,
     from: "",
@@ -23,7 +29,7 @@ const initialState = {
     join: "",
     file: null,
     reasonsForLeave: "",
-    delegatedFor: "",
+    delegatedFor: null,
     dayOption:null,
     // halfDay:false
   };
@@ -41,6 +47,19 @@ const initialState = {
     event.preventDefault();
     setAllFormData((prevArray) => [...prevArray, formData]);
 
+    if(formData){
+      enqueueSnackbar('Submitted Succesfully!',{variant:'success'})
+
+      setTimeout(() => {
+        navigate('/dashboard/request-history')
+      }, 500);
+   }
+   else{
+     console.error('email does not exist');
+   }
+
+
+
   };
 
   const handleDateChange = (date, label) => {
@@ -51,8 +70,8 @@ const initialState = {
   };
 
   const handleInputChange = (e, newValue) => {
-    // console.log(newValue);
-    console.log(selectedOption);
+    
+    // console.log(selectedOption);
     const { name, value } = e.target;
     setFormData(
       { ...formData,
@@ -74,7 +93,7 @@ const initialState = {
 // const handleCheckChange =(event)=>{
 //   setChecked(event.target.checked);
 // }
-  const leaveTypes = [
+const leaveTypes = [
     { label: "Sick Leave" },
     { label: "Maternity/Paternity Leave" },
     { label: "Parental Leave" },
@@ -84,6 +103,10 @@ const initialState = {
     { label: "Unpaid Leave" },
     { label: "Other" },
   ];
+
+  const allNames = Object.values(department_list).flatMap(team => team.map(member => member.name));
+
+
   const disablePreviousDates = (date) => {
     return (
       new Date(formData.from) > new Date(FormateDate(date && new Date(date.$d)))
@@ -109,9 +132,7 @@ const getJoiningDate = (toDate)=>{
   return   FormateDate(new Date(tomorrowToDate.setDate(currentToDate.getDate()+1)));
 }
 
-// console.log(getJoiningDate('02-29-2024'));
-console.log(formData);
-// console.log(selectedOption);
+
 
   return (
     <div>
@@ -215,14 +236,30 @@ defaultChecked={checkbox.name==='fullDay'}
 ))}
   </Grid>
    <Grid item xs={12} lg={4} md={6}>
-                <TextField
+                {/* <TextField
                   id=""
                   label= "In my absence my responsibilities will be delegated to my colleague"
                   variant="outlined"
                   fullWidth
                   onChange={handleInputChange}
                   name="delegatedFor"
-                />
+                /> */}
+                  <Autocomplete
+                disablePortal
+                options={allNames}
+                renderInput={(params) => (
+                  <TextField {...params} label="In my absence my responsibilities will be delegated to my colleague" />
+                )}
+                onChange={(e, newValue) => {
+                  
+                  if (newValue) {
+                    handleInputChange(e, { delegatedFor: newValue });
+                  }
+                }}
+                isOptionEqualToValue={(option, value) => {
+                  option.label === value.label;
+                }}
+              />
               </Grid>
             <Grid item xs={12}>
               <TextField

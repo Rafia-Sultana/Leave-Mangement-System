@@ -317,9 +317,6 @@ export const leaveInfo = [
   }
   
 
-
-
-
   export const HR_leave_data = {
     my: {
       leave_details: [
@@ -491,8 +488,6 @@ export const leaveInfo = [
   };
 
 
-
-
   export const employee_data = {
     emp_id:1,
     details:{
@@ -591,6 +586,17 @@ export const leaveInfo = [
 
   }
 
+
+  export const department_list = {
+  research_development_team:[
+    {id:1, name:'rokeya', position:'jr. engineer'},
+    {id:2, name:'abira', position:'sr. engineer'}
+  ],
+  planning_team:[
+    {id:1, name:'shanti', position:'jr. planner'},
+    {id:2, name:'nira', position:'sr. planner'}
+  ]
+  }
 
 
   

@@ -265,6 +265,7 @@ const handleGoBack = () => {
             rows={rows.find((emp_leave) => emp_leave.leave_id === id)?.logs ?? []}
             // viewDetails={handleViewEmpDetails}
           />
+          <Manager_Leave_Approval/>
    
         </>
       )}
@@ -294,7 +295,7 @@ export const Manager_Leave_Approval = () => {
           row
           aria-labelledby="demo-row-radio-buttons-group-label"
           name="row-radio-buttons-group"
-          className="flex gap-20"
+          className="flex "
         >
           <FormControlLabel
             control={<Radio {...controlProps("approved")} color="success" />}
