@@ -1,14 +1,37 @@
-import React from "react";
-import Calender from "../components/Calender.jsx";
+import React,{useEffect, useState} from "react";
+import Calendar from "../components/Calendar.jsx";
 import RadialChart from "../components/RadialChart.jsx";
+import employee from "../services/employee.jsx";
+
 
 const Overview = () => {
-  const data = [
-    { label: "Total Leaves", value: "50 days" },
-    { label: "Approved", value: "50 days" },
-    { label: "Pending", value: "50 days" },
-    { label: "Rejected", value: "50 days" },
-  ];
+  const [summary, setSummary] = useState(null);
+  const userInfoData = JSON.parse(localStorage.getItem('userInfo'));
+  const userId = userInfoData?.emp_id;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const leaveSummaryData = await employee.leaveRequestSummary(userId);
+        setSummary(leaveSummaryData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
+
+  let data = [];
+  if (summary) {
+    data = Object.entries(summary).map(([label, value]) => ({
+      label: label.charAt(0).toUpperCase() + label.slice(1),
+      value: value + " days"
+    }));
+  }
+
   return (
     <div className="">
       <div className=" relative grid grid-cols-2 lg:grid-cols-4  lg:rounded-lg w-full bg-green-lightest p-2 my-12">
@@ -29,8 +52,7 @@ const Overview = () => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <RadialChart />
-
-        <Calender />
+        <Calendar />
       </div>
     </div>
   );

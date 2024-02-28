@@ -260,12 +260,15 @@ const handleGoBack = () => {
            <KeyboardBackspaceIcon/>
           </button>
           <Leave_Details  info={rows.find((emp_leave) => emp_leave.leave_id === id)} />
-          <CommonTable
+          {/* <CommonTable
             columns={columns2}
             rows={rows.find((emp_leave) => emp_leave.leave_id === id)?.logs ?? []}
             // viewDetails={handleViewEmpDetails}
-          />
-          <Manager_Leave_Approval/>
+          /> */}
+         <div className="mt-8">
+         <Manager_Leave_Approval/>
+         </div>
+
    
         </>
       )}

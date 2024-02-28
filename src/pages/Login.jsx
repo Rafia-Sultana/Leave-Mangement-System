@@ -1,11 +1,15 @@
+import React, { useContext } from "react";
 import InputField from "../components/InputField.jsx";
 import Button from "../components/Button.jsx";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from 'notistack';
 import authJWT from "../services/auth.jsx";
+import Cookies from 'js-cookie';
+import { UserContext } from "../context api/Context.jsx";
 
 const Login = () => {
+  const {setUserInfo}= useContext(UserContext);
 const navigate = useNavigate();
 const { enqueueSnackbar } = useSnackbar();
 
@@ -23,22 +27,37 @@ const { enqueueSnackbar } = useSnackbar();
    const handleSubmit = async (event) => {
 
     event.preventDefault();
-    if(email && password){
+    // localStorage.setItem('email',JSON.stringify(email));
+    // navigate('/dashboard')
+    let data = await authJWT.login(logInData);
+     let {token, userInfo} = data;
+     
+     if(userInfo){
+      localStorage.setItem('userInfo',JSON.stringify(userInfo));
+    //  setUserInfo((prev)=>[...prev, userInfo]);
+      setUserInfo(userInfo);
       enqueueSnackbar('Logged In Succesfully!',{variant:'success'})
 
       setTimeout(() => {
-        navigate('/dashboard')
+         navigate('/dashboard')
       }, 500);
    }
    else{
      console.error('email does not exist');
    }
+ 
+     if(token){
+      Cookies.set('accessToken', token);
+     }
+     else{
+      // navigate('/')
+      console.error(console.error());
+     }
 
- await authJWT.login(logInData);
   };
 
 useEffect(()=>{
-localStorage.setItem('email',JSON.stringify(email));
+// localStorage.setItem('email',JSON.stringify(email));
 // console.log(logInData);
 },[logInData]);
 

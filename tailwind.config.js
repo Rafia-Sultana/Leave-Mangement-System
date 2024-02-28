@@ -20,8 +20,8 @@ export default {
         'darkest':'',
         'dark':'',
         'DEFAULT': '#3b82f6',
-        'light': '#00b3b3',
-        'lighter': '',
+        'light': '#7BD3FF',
+        'lighter': '#E8F7FF',
         'lightest': '',
       },
       red: {
@@ -44,7 +44,17 @@ export default {
       },
 
     },
-    extend: {},
+
+    // fontFamily:{
+    //   sans: ['Graphik', 'sans-serif'],
+    //   serif: ['poppins', 'serif'],
+    // },
+    extend: {
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        genre: ["Genre", "sans-serif"],
+      },
+    },
   },
   plugins: [require('daisyui')],
 }

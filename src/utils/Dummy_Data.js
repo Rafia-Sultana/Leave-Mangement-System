@@ -1,6 +1,11 @@
-export const userInfo = [
+export const usersInfo = [
     {
      email:'a@gmail.com',
+     role:'employee'
+
+     },
+    {
+     email:'magfurrume.tiller@gmail.com',
      role:'employee'
 
      },
@@ -524,7 +529,7 @@ export const leaveInfo = [
             "sender": "Jane Doe",
             "date": "5-8-2024",
             "status": "request more information",
-            "comments": "Please provleave_ide clarification on section 2"
+            "comments": "Please provide clarification on section 2"
           },
           {
             "sender": "John Smith",

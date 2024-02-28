@@ -59,6 +59,10 @@
 .active{
    color: #00b3b3;
 }
+.fc-event-title{
+    color: rgb(150, 255, 12);
+}
+
 @media (max-width: 768px) {
     /* .container{
         display: flex;
