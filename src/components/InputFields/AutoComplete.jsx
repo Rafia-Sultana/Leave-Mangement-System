@@ -10,7 +10,8 @@ const AutoComplete = ({options,label,handleInputChange,field}) => {
                 options={options}
                 getOptionLabel={(option) => option.leave_name || option.employee_name}
                 renderInput={(params) => (
-                  <TextField {...params} label={label} />
+                  <TextField {...params}
+                   label={label}/>
                 )}
                 onChange={(e, newValue) => {
                   if (newValue) {

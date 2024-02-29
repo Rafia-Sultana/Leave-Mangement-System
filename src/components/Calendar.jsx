@@ -12,18 +12,28 @@ const Calendar = () => {
   const calendarRef = useRef(null);
   const userInfoData = JSON.parse(localStorage.getItem('userInfo'));
   const userId = userInfoData?.emp_id;
+
+
+  const getMonthNumber = () =>{
+    const calendarApi = calendarRef.current.getApi();
+    const currentDate = calendarApi.getDate();
+    const monthNumber = currentDate.getMonth()+1;
+    setcurrentMonthNumber(monthNumber);
+    return monthNumber;
+  }
+
   useEffect(()=>{
    
      const fetchData = async()=>
      {
 try {
+  const monthNumber = getMonthNumber();
   const holidays = await employee.calenderHoilday();
   const leaveDates = await employee.leaveDates(userId);
- 
-  const  leaveDatesByMonth =  await employee.leaveDatesByMonth(userId,currentMonthNumber);
+  const  leaveDatesByMonth =  await employee.leaveDatesByMonth(userId,monthNumber);
   const holidayEvents = holidays?.map((date)=> createEventObject('Holiday',date,'red'));
-  const leaveEvents = leaveDates?.map(({leave_type,leave_date})=>createEventObject(leave_type,leave_date,'blue'));
-  const  leaveDatesByMonthEvents = leaveDatesByMonth.map(({leave_type,leave_date})=>createEventObject(leave_type,leave_date,'blue'));
+  const leaveEvents = leaveDates?.map(({leave_type,leave_date,color})=>createEventObject(leave_type,leave_date,color));
+  const  leaveDatesByMonthEvents = leaveDatesByMonth.map(({leave_type,leave_date,color})=>createEventObject(leave_type,leave_date,color));
 
   setEvents([...holidayEvents,...leaveEvents,...leaveDatesByMonthEvents])
 } catch (error) {
@@ -34,28 +44,28 @@ try {
   },[currentMonthNumber]);
 
 
+ 
+ 
+
   useEffect(()=>{
     if (calendarRef.current) {
-
+        
       const prevButton = document.querySelector('.fc-prev-button');
       const nextButton = document.querySelector('.fc-next-button');
 
       prevButton.addEventListener('click', handleButtonClick);
       nextButton.addEventListener('click', handleButtonClick);
+      
     }
     
   },[calendarRef.current])
 
   const handleButtonClick = () => {
-   
-    const calendarApi = calendarRef.current.getApi();
-    const currentDate = calendarApi.getDate();
-    const monthNumber = currentDate.getMonth()+1;
-    setcurrentMonthNumber(monthNumber);
-    
+   getMonthNumber();
   };
 
   const createEventObject = (title,start,backgroundColor) =>({
+
     title:title,
     start:start,
     allDay:true,

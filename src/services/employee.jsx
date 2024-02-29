@@ -30,9 +30,10 @@ const getRequest = async (url, errorMessage) => {
     } else handleRequestError(error, errorMessage);
   }
 };
-const postRequest = async (url, errorMessage) => {
+const postRequest = async (url, params,errorMessage) => {
   try {
-    const response = await axiosInstance.post(url);
+    const response = await axiosInstance.post(url,params);
+    console.log(response.data);
     return response.data;
   } catch (error) {
  handleRequestError(error, errorMessage);
@@ -66,6 +67,7 @@ const employee = {
   },
 
   leaveDatesByMonth: async (userId, monthId) => {
+    console.log(monthId);
     return getRequest(
       `/leave/dates/${userId}?month=${monthId}`,
       "Error fetching leave dates by month data:"
@@ -89,6 +91,13 @@ const employee = {
       "Error fetching get Team Members Of User:"
     );
   },
+
+  postLeaveApplication: async(leaveInfo) =>{
+    // console.log('leaveInfo',leaveInfo);
+    return postRequest(
+      `/leave/apply`,  leaveInfo, "Error fetching to post leave infos Of User:" 
+    )
+  }
 
 };
 

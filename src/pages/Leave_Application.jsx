@@ -34,8 +34,8 @@ const Leave_Application = () => {
   const initialState = {
     emp_id:userId,
     leave_type_id: null,
-    from: "",
-    to: "",
+    start_date: "",
+    end_date: "",
     duration: "",
     joining_date: "",
     file: null,
@@ -52,69 +52,48 @@ const Leave_Application = () => {
   const [teamMembersList, setTeamMembersList] = useState(null);
 
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-
-    if (formData) {
-      enqueueSnackbar("Submitted Succesfully!", { variant: "success" });
-
-      setTimeout(() => {
-        navigate("/dashboard/request-history");
-      }, 500);
-    } else {
-      console.error("email does not exist");
-    }
-  };
+  
 
 
   const handleDateChange = (date, label) => {
     setFormData((prevState) => ({
       ...prevState,
-      [label.toLowerCase()]: FormateDate(date && new Date(date.$d)),
-    }));
-  };
-
+      [label]: (date.$d).toISOString(),
+   }));
+};
 
   const disablePreviousDates = (date) => {
     return (
-      new Date(formData.from) > new Date(FormateDate(date && new Date(date.$d)))
+      new Date(formData.start_date) > new Date(FormateDate(date && new Date(date.$d)))
     );
   };
   const disableFuturDates = (date) => {
     return (
-      new Date(formData.to) < new Date(FormateDate(date && new Date(date.$d)))
+      new Date(formData.end_date) < new Date(FormateDate(date && new Date(date.$d)))
     );
   };
 
-  // useEffect(() => {
-   
-  //   if (formData.to && formData.from) {
-  //     let differences =
-  //       (new Date(formData.to) - new Date(formData.from)) /
-  //       (1000 * 60 * 60 * 24);
-  
-  //     setTotal_Days(differences + 1);
-  //   }
-  // }, [formData.to && formData.from]);
+ 
 
-  const getJoiningDate = (toDate) => {
+const getJoiningDate = (toDate) => {
     const currentToDate = new Date(toDate);
     const tomorrowToDate = new Date(currentToDate);
-    return FormateDate(
-      new Date(tomorrowToDate.setDate(currentToDate.getDate() + 1))
+    return (
+      new Date(tomorrowToDate.setDate(currentToDate.getDate() + 1)).toISOString()
     );
   };
+
 const getTotalDays = () =>{
-  if (formData.to && formData.from) {
+  if (formData.end_date && formData.start_date) {
     let differences =
-    (new Date(formData.to) - new Date(formData.from)) /
+    (new Date(formData.end_date) - new Date(formData.start_date)) /
     (1000 * 60 * 60 * 24);
     setTotal_Days(differences + 1)
     return (differences + 1)
   }
 
 }
+
 useEffect(()=>{
 const fetchData = async()=>{
   let leaveTypeData = await employee.getLeaveTypes();
@@ -128,7 +107,9 @@ fetchData();
 
 
 const handleInputChange = (e, newValue, field) => {
-  const { name, value } = e.target;
+
+  const { name, value } = e?.target ;
+  // console.log(e.target);
   const updatedFields = {};
 
     switch (field) {
@@ -136,11 +117,12 @@ const handleInputChange = (e, newValue, field) => {
         updatedFields[field] = newValue.id !== undefined ? newValue.id : formData[field];
         break;
       case 'delegated_to':
-        updatedFields[field] = newValue.employee_name !== undefined ? newValue.employee_name : formData[field];
+        
+        updatedFields[field] = newValue.emp_id !== undefined ? newValue.emp_id : formData[field];
         break;
       // Add more cases for additional dynamic fields if needed
       default:
-        updatedFields[field] = formData[field];
+       updatedFields[field] = formData[field];
         break;
     }
 
@@ -153,13 +135,47 @@ const handleInputChange = (e, newValue, field) => {
 };
 
 
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  if (formData) {
+    enqueueSnackbar("Submitted Succesfully!", { variant: "success" });
+
+    setTimeout(() => {
+      navigate("/dashboard/request-history");
+    }, 500);
+  } else {
+    console.error("email does not exist");
+  }
+
+
+const result = await employee.postLeaveApplication(
+  {...formData,   
+   duration: getTotalDays(),
+    joining_date: formData.end_date && getJoiningDate(formData.end_date),
+    // dayOption: selectedOption,
+    application_date: (new Date().toISOString())
+  
+  }
+)
+console.log(result);
+};
 useEffect(()=>{
   console.log({...formData,   
   duration: getTotalDays(),
-  joining_date: formData.to && getJoiningDate(formData.to),
+  joining_date: formData.end_date && getJoiningDate(formData.end_date),
   // dayOption: selectedOption,
-  application_date: FormateDate(new Date())});
+  application_date: (new Date().toISOString())
+
+});
 },[formData])
+
+
+
+
+
+
+
   return (
     <div>
       <div className="p-6 rounded-md shadow-md">
@@ -177,20 +193,20 @@ useEffect(()=>{
               />
             </Grid>
 
-             {["From", "To"].map((label, index) => (
+             {["start_date", "end_date"].map((label, index) => (
              <Grid item xs={12} lg={4} md={6} key={index}>
         
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    label={label}
+                    label={(label.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))}
                     onChange={(date) => handleDateChange(date, label)}
                     sx={{ width: "100%" }}
-                    {...(label === "To" &&
-                      formData.from && {
+                    {...(label === "end_date" &&
+                      formData.start_date && {
                         shouldDisableDate: disablePreviousDates,
                       })}
-                    {...(label === "From" &&
-                      formData.to && { shouldDisableDate: disableFuturDates })}
+                    {...(label === "start_date" &&
+                      formData.end_date && { shouldDisableDate: disableFuturDates })}
                   />
                 </LocalizationProvider>
               </Grid>
@@ -209,15 +225,15 @@ useEffect(()=>{
                   fullWidth
                   focused={
                     textFieldProps.label === "Number of Days Applied" &&
-                    formData.from &&
-                    formData.to
+                    formData.start_date &&
+                    formData.end_date
                   }
                   value={
                     textFieldProps.label === "Number of Days Applied"
                       ? total_Days !== null
                         ? total_Days
                         : ""
-                      : formData.to && getJoiningDate(formData.to)
+                      : formData.end_date && FormateDate(new Date(getJoiningDate(formData.end_date)))
                   }
                 />
               </Grid>
@@ -259,23 +275,29 @@ useEffect(()=>{
               <AutoComplete
                 options={teamMembersList}
                 label={
-                  "In my absence my responsibilities will be delegated to my colleague"
+                  "Delegated to my colleague"
                 }
                 field={'delegated_to'}
                 handleInputChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                id=""
-                label="Reasons for leave"
-                name="reason"
-                variant="outlined"
-                multiline
-                rows={4}
-                fullWidth
-                onChange={handleInputChange}
-              />
+            <TextField
+  id=""
+  label="Reasons for leave"
+  name="reason"
+  variant="outlined"
+  multiline
+  rows={4}
+  value={formData.reason}
+  fullWidth
+  onChange={(e) => {
+    if (e.target.name) {
+      setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    }
+  }}
+/>
+              
             </Grid>
             <Grid item xs={12}>
 

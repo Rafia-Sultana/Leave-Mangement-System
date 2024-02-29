@@ -4,8 +4,21 @@ import employee from "../services/employee.jsx";
 import authJWT from "../services/auth.jsx";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import SettingsIcon from '@mui/icons-material/Settings';
+import { pink } from '@mui/material/colors';
+import SvgIcon from '@mui/material/SvgIcon';
+
 
 const NavProfile = () => {
+  
+  function HomeIcon(props) {
+    return (
+      <SvgIcon {...props}>
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+      </SvgIcon>
+    );
+  }
+
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
@@ -28,9 +41,9 @@ const NavProfile = () => {
     }
   }, [userId]);
 
-  // await authJWT.logOut();
+
   const handleLogout = async () => {
-    // console.log('object');
+    
     let logOutData = await employee.logOut();
     let shortToken = logOutData.token;
     Cookies.set("accessToken", shortToken);
@@ -58,7 +71,12 @@ const NavProfile = () => {
                 </summary>
                 <ul className="relative z-50 bg-base-100 rounded-t-none">
                   <li>
-                    <a onClick={handleLogout}>Logout</a>
+                 
+                    
+                    <a onClick={handleLogout}>Profile</a>
+                  
+                    <a >Settings</a>
+                    <a >Logout</a>
                   </li>
                   <li>
                     <a></a>
