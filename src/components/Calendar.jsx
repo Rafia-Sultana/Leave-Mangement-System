@@ -31,6 +31,7 @@ try {
   const holidays = await employee.calenderHoilday();
   const leaveDates = await employee.leaveDates(userId);
   const  leaveDatesByMonth =  await employee.leaveDatesByMonth(userId,monthNumber);
+  // console.log(leaveDatesByMonth);
   const holidayEvents = holidays?.map((date)=> createEventObject('Holiday',date,'red'));
   const leaveEvents = leaveDates?.map(({leave_type,leave_date,color})=>createEventObject(leave_type,leave_date,color));
   const  leaveDatesByMonthEvents = leaveDatesByMonth.map(({leave_type,leave_date,color})=>createEventObject(leave_type,leave_date,color));
@@ -52,6 +53,7 @@ try {
         
       const prevButton = document.querySelector('.fc-prev-button');
       const nextButton = document.querySelector('.fc-next-button');
+    
 
       prevButton.addEventListener('click', handleButtonClick);
       nextButton.addEventListener('click', handleButtonClick);
@@ -76,7 +78,7 @@ try {
 
 
     return (
-<div>
+<div className=''>
 
             <FullCalendar
             ref={calendarRef}
@@ -85,8 +87,15 @@ try {
             selectable={true}
             editable={true}
             events={events}
-            
-          
+  
+            height={500}
+            headerToolbar={
+              {
+                start:'prev',
+                center:'title',
+                end:'next'
+ }
+            }
             />
 </div>
           

@@ -2,6 +2,10 @@ import React, { useContext, useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
  import { usersInfo } from "../utils/Dummy_Data.js";
 import Button from "../components/Button.jsx";
+
+import { Tooltip } from "@mui/material";
+import { Box } from "@mui/material";
+
 import Overview from "./Overview.jsx";
 import '../assets/styles/Dashboard.css'
 import NavProfile from "../components/NavProfile.jsx";
@@ -10,6 +14,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import { UserContext } from "../context api/Context.jsx";
 import employee from "../services/employee.jsx";
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 
 
 const Dashboard = () => {
@@ -33,14 +38,7 @@ siteNav.classList.toggle('site-nav-open');
 menuToggle.classList.toggle('open');
 }
  
-// const navLinks = [
-//   {to:'leave-application', text:'Leave Application'},
-//   {to: role==='hr'?'leave-approval':'request-history',text: role === "hr" ? "Leave Request" : "Request History"  },
-//   {to:'', text:role==='hr'  || 'employee'? "My leave History":'Leave History', spanText:role==="manager"?"":""},
-  
 
-
-// ]
 const createNavLink = (to,text) =>({to,text});
 const navLinks = {
   employee: [
@@ -62,33 +60,26 @@ const navLinks = {
 
 
 
-// const MenuItem = ({onClick,to,text,spanText})=>(
-// <li onClick={onClick}>
-//   {/* <p className="font-bold text-xl">Personal</p> */}
-//   <Link className="text-lg hover:text-gray-300 ml-4" to={to}>
-//   {text}
-//   {
-//     spanText && <span className="text-xs">[{spanText}]</span>
-//   }
-//   </Link>
-
-// </li>
-// )
 
   return (
     <div className="font-poppins">
 
 
-      <header className="h-20 bg-blue-lighter flex items-center justify-between pr-5 relative">
-        {/* <p className="text-5xl font-thin   hidden md:block">LMS</p>
-        <p className="text-3xl font-thin ">Leave Managment System</p> */}
+      <header className="h-20 bg-blue-lighter flex items-center justify-between  relative">
+    
 
-      <div className="menu-toggle" onClick={menuToggleClick}>
+    <div className="flex items-center">
+    <div className="menu-toggle" onClick={menuToggleClick}>
           <div className="hamburger"></div>
         </div>
-        <div className="flex items-center justify-center  ">
-        <Badge badgeContent={4} color="primary">
-        <NotificationsNoneOutlinedIcon color="secondary"  fontSize="large"/>
+        <p className="text-2xl">LMS</p>
+        <p className="hidden lg:block text-2xl absolute left-96">Leave Management System</p>
+ 
+       
+    </div>
+        <div className="flex items-center  gap-4 sm:gap:10 pr-5">
+        <Badge color="primary" overlap="circular" variant="dot">
+        <NotificationsOutlinedIcon  fontSize="large"/>
         </Badge>
         <NavProfile/>
         </div>
@@ -97,17 +88,14 @@ const navLinks = {
 
       <div className="flex">
   <nav className="h-[calc(100vh-80px)]  bg-blue-lighter text-white w-[60%] md:w-[30%] lg:w-[20%]  site-nav border border-t-white">
-    <ul className="flex flex-col justify-center items-center w-[80%] gap-8">
-   {/* <li  className=" mb-6 hover:text-gray  bg-blue-light  rounded w-1/2" >
-   <Link to='/dashboard'>
-                        Home
-                      </Link>
-   </li> */}
-            
+    <ul className="flex flex-col justify-center items-center  gap-8">
+      <Link className="mt-10 w-[80%]  xl:w-[60%] bg-blue-light rounded flex justify-center items-center py-1"  to={'/dashboard'}>Dashboard</Link>
+  
 {
   navLinks[role]?.map((section,index)=>(
-    <li key={index} className="first:mt-5">
-      <Link className="  hover:text-gray  bg-blue-light  rounded px-6 py-2" to={section?.to}  >{section.category || section?.text}    </Link>
+    <li key={index} className=" w-[80%]  xl:w-[60%] bg-blue-light rounded flex justify-center items-center py-1 " >
+     
+      <Link className="  hover:text-gray" to={section?.to}  >{section.category || section?.text}    </Link>
       <ul>
       {section.links?.map((link, linkIndex) => (
                     <li key={linkIndex} className="mb-1" >

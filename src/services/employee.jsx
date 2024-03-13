@@ -1,18 +1,21 @@
 import { BASE_URL } from "./auth";
 import axios from "axios";
 import Cookies from "js-cookie";
-// import { useNavigate } from "react-router-dom";
 
-export const token = Cookies.get("accessToken");
-// const navigate = useNavigate();
+
+const getToken = ()=>{
+  return  localStorage.getItem('accessToken');
+}
+
 // Reusable Axios instance with default headers
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${Cookies.get("accessToken")}`,
-  },
+},
 });
+
+
 
 // Error handling function
 const handleRequestError = (error, errorMessage) => {
@@ -23,7 +26,12 @@ const handleRequestError = (error, errorMessage) => {
 // Function to make GET requests
 const getRequest = async (url, errorMessage) => {
   try {
-    const response = await axiosInstance.get(url);
+    const token = getToken(); 
+    const response = await axiosInstance.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response.data.error == "Token expired") {
@@ -32,7 +40,12 @@ const getRequest = async (url, errorMessage) => {
 };
 const postRequest = async (url, params,errorMessage) => {
   try {
-    const response = await axiosInstance.post(url,params);
+    const token = getToken(); 
+    const response = await axiosInstance.post(url, params, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -67,7 +80,7 @@ const employee = {
   },
 
   leaveDatesByMonth: async (userId, monthId) => {
-    console.log(monthId);
+    // console.log(monthId);
     return getRequest(
       `/leave/dates/${userId}?month=${monthId}`,
       "Error fetching leave dates by month data:"
@@ -81,7 +94,7 @@ const employee = {
 
   // http://192.168.0.40:4040/api/auth/logout
   logOut: async () => {
-   return postRequest("/auth/logout", "Error Fetching while log out ");
+   return postRequest("/auth/logout",{}, "Error Fetching while log out ");
   },
 
   // http://ip:4040/api/employee/teammembers/{userId}
@@ -97,6 +110,13 @@ const employee = {
     return postRequest(
       `/leave/apply`,  leaveInfo, "Error fetching to post leave infos Of User:" 
     )
+  }
+,
+
+  // http://ip:4040/api/leave/emp_history/{userId}
+  getEmployeeRequestHistory: async(userId)=>{
+    
+  return getRequest(`/leave/emp_history/${userId}`,"Error Fetching to get employee request history")
   }
 
 };

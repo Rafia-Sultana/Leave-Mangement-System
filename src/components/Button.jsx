@@ -1,6 +1,6 @@
 import React from 'react';
-
-const Button = ({bg,fontSize,textColor,btnText,width,type,onClick}) => {
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+const Button = ({bg,fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIcon,padding=3}) => {
 
     return (
         
@@ -8,8 +8,10 @@ const Button = ({bg,fontSize,textColor,btnText,width,type,onClick}) => {
            type={type}
            onClick={onClick}
           
-            className={`bg-green font-${fontSize} text-${textColor} text-${btnText} w-${width} focus:outline-none rounded p-3` }
-           >{btnText}</button>
+            className={` font-${fontSize} text-${textColor} w-${width}   border-r-black focus:outline-none rounded p-${padding} bg-${bg}` }
+           >
+           {BtnIcon && <BtnIcon />}
+            {btnText}</button>
      
     );
 };

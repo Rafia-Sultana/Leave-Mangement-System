@@ -8,6 +8,7 @@ export default {
     colors:{
       white:'#FFFFFF',
       black:'#000000',
+      red:'#991b1b',
       green: {
         'darkest':'',
         'dark':'#65a30d',
@@ -18,20 +19,13 @@ export default {
       },
       blue: {
         'darkest':'',
-        'dark':'',
+        'dark':'#2b84b1',
         'DEFAULT': '#3b82f6',
         'light': '#7BD3FF',
         'lighter': '#E8F7FF',
-        'lightest': '',
+        'lightest': '#71D0FF',
       },
-      red: {
-        'darkest':'',
-        'dark':'',
-        'DEFAULT': '#ef4444',
-        'light': '#f87171',
-        'lighter': '',
-        'lightest': '',
-      },
+    
 
     gray: {
         'darkest': '#111827',
@@ -42,13 +36,21 @@ export default {
         'lighter':'#f3f4f6',
         'lightest': '#e5e7eb',
       },
+      red: {
+        'darkest': '#7f1d1d',
+        'dark': '#c53030',
+        'DEFAULT': '#991b1b', 
+        'light': '#f87171',
+        'lighter': '#fca5a5',
+        'lightest': '#fee2e2',
+      },
+      
+      
+
 
     },
 
-    // fontFamily:{
-    //   sans: ['Graphik', 'sans-serif'],
-    //   serif: ['poppins', 'serif'],
-    // },
+
     extend: {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],

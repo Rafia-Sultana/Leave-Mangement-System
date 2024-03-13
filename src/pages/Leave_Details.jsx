@@ -1,39 +1,41 @@
 import React from 'react';
 import Card from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
-import Box from '@mui/material/Box';
-const Leave_Details = ({info}) => {
-    const {delegatedFor,reasonsForLeave,application_Date,status}= info;
-    const {name,email,position}=delegatedFor;
-    return (
-        <Card className=' w-full lg:w-1/2 relative' >
-             <CardContent className='border border-blue-light m-5 p-5 rounded-md'  >
-     <Box>
-      <Typography variant="h6" fontWeight="bold">Reasons For Leave</Typography>
-      <Typography>{reasonsForLeave}</Typography>
+import { Box } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import Modal from '../components/Modal';
 
-      <Box className='flex flex-col lg:flex-row justify-between lg:gap-10 mt-2'>
-        <Box>
-          <Typography variant="h6" fontWeight="bold">Delegated To</Typography>
-          <Typography>{name}</Typography>
-          <Typography variant="body2">{position}</Typography>
-          <Typography variant="body2">{email}</Typography>
+const Leave_Details = ({ info }) => {
+  const { delegated_to, reason, application_date, leave_status } = info;
+
+  return (
+    <Card className='w-full'>
+      <CardContent className='border border-blue-light m-5 p-5 rounded-md'>
+        <Box className="grid  grid-cols-1 md:grid-cols-2 gap-5 ">
+          <div className="md:col-span-2">
+          <p className='font-semibold'>Reasons For Leave</p>
+          <p className='text-sm' >{reason}</p>
+          </div>
+
+ 
+            <div className=''>
+              <p className='font-semibold'>Delegated To</p>
+              <p className='text-sm'>{delegated_to}</p>
+              {/* <p>{position}</p>
+              <p>{email}</p> */}
+            </div>
+
+            <div className=''>
+              <p className='font-semibold'>Application Date</p>
+              <p className='text-sm'>{application_date}</p>
+            </div>
         </Box>
-        
-        <Box className='mt-2'>
-          <Typography variant="h6" fontWeight="bold">Application Date</Typography>
-          <Typography>{application_Date}</Typography>
-        </Box>
-      </Box>
-    </Box>
 
-        <Chip label={status} color="success" className='absolute right-0 top-0' />
-
+        {/* <Chip label={leave_status} color="success" className='absolute right-3 top-10' /> */}
       </CardContent>
-        </Card>
-    );
+    </Card>
+  );
 };
 
 export default Leave_Details;

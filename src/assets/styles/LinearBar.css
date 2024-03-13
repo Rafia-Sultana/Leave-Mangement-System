@@ -1,0 +1,16 @@
+.bar {
+    animation-name: grow;
+    animation-duration: 2s; 
+
+  }
+  
+  @keyframes grow {
+    0% {
+      translate: -100%;
+    }
+    
+    100% {
+      translate: 0px;
+    }
+  }
+

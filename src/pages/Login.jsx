@@ -23,43 +23,63 @@ const { enqueueSnackbar } = useSnackbar();
     setLogInData((prevFormData)=> ({...prevFormData, [name]:value}))
   }
 
-  const {email,password}=logInData;
+  useEffect(()=>{
+    // localStorage.setItem('email',JSON.stringify(email));
+    // console.log(logInData);
+    },[logInData]);
+
+
+
+
    const handleSubmit = async (event) => {
 
     event.preventDefault();
-    // localStorage.setItem('email',JSON.stringify(email));
-    // navigate('/dashboard')
-    let data = await authJWT.login(logInData);
-     let {token, userInfo} = data;
+  
+    try {
+      const data = await authJWT.login(logInData);
+      const { token, userInfo } = data;
+      if (userInfo && token) {
+        localStorage.setItem('accessToken', token);
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        setUserInfo(userInfo);
+        // enqueueSnackbar('Logged In Successfully!', { variant: 'success' });
+        navigate('/dashboard');
+      } else {
+        localStorage.removeItem('acccessToken')
+        enqueueSnackbar('Invalid email or password', { variant: 'error' });
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      enqueueSnackbar('Error logging in. Please try again.', {variant: 'error' });
+    }
+  //   let data = await authJWT.login(logInData);
+  //    let {token, userInfo} = data;
      
-     if(userInfo){
-      localStorage.setItem('userInfo',JSON.stringify(userInfo));
-    //  setUserInfo((prev)=>[...prev, userInfo]);
-      setUserInfo(userInfo);
-      enqueueSnackbar('Logged In Succesfully!',{variant:'success'})
+  //    if(userInfo){
+  //     localStorage.setItem('userInfo',JSON.stringify(userInfo));
+  //   //  setUserInfo((prev)=>[...prev, userInfo]);
+  //     setUserInfo(userInfo);
+  //     enqueueSnackbar('Logged In Succesfully!',{variant:'success'})
 
-      setTimeout(() => {
-         navigate('/dashboard')
-      }, 500);
-   }
-   else{
-     console.error('email does not exist');
-   }
+  //     setTimeout(() => {
+  //        navigate('/dashboard')
+  //     }, 500);
+  //  }
+  //  else{
+  //    console.error('email does not exist');
+  //  }
  
-     if(token){
-      Cookies.set('accessToken', token);
-     }
-     else{
-      // navigate('/')
-      console.error(console.error());
-     }
+  //    if(token){
+  //     Cookies.set('accessToken', token);
+  //    }
+  //    else{
+  //     // navigate('/')
+  //     console.error(console.error());
+  //    }
 
   };
 
-useEffect(()=>{
-// localStorage.setItem('email',JSON.stringify(email));
-// console.log(logInData);
-},[logInData]);
+
 
 // const handleSubmitClick=()=>{
 

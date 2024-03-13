@@ -8,7 +8,9 @@ import Spinner from "../components/Spinner.jsx";
 import Stack from "@mui/material/Stack";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
 import TextField from "@mui/material/TextField";
 // import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
@@ -22,6 +24,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SwitchInput from "../components/InputFields/SwitchInput.jsx";
 import employee from "../services/employee.jsx";
+import dayjs from "dayjs";
 
 
 const Leave_Application = () => {
@@ -50,6 +53,7 @@ const Leave_Application = () => {
   const [selectedOption, setSelectedOption] = useState("fullDay");
   const [leaveTypes, setLeaveTypes] = useState(null);
   const [teamMembersList, setTeamMembersList] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState(null);
 
 
   
@@ -88,8 +92,8 @@ const getTotalDays = () =>{
     let differences =
     (new Date(formData.end_date) - new Date(formData.start_date)) /
     (1000 * 60 * 60 * 24);
-    setTotal_Days(differences + 1)
-    return (differences + 1)
+    setTotal_Days(Math.abs(differences))
+    return (Math.abs(differences ))
   }
 
 }
@@ -136,6 +140,11 @@ const handleInputChange = (e, newValue, field) => {
 
 
 
+const handleFileUpload = (e) =>{
+const file = e.target.files[0];
+setSelectedFiles(file);
+}
+
 const handleSubmit = async (event) => {
   event.preventDefault();
   if (formData) {
@@ -160,15 +169,19 @@ const result = await employee.postLeaveApplication(
 )
 console.log(result);
 };
-useEffect(()=>{
-  console.log({...formData,   
-  duration: getTotalDays(),
-  joining_date: formData.end_date && getJoiningDate(formData.end_date),
-  // dayOption: selectedOption,
-  application_date: (new Date().toISOString())
 
-});
-},[formData])
+
+
+useEffect(()=>{
+//   console.log({...formData,   
+//   duration: getTotalDays(),
+//   joining_date: formData.end_date && getJoiningDate(formData.end_date),
+//   // dayOption: selectedOption,
+//   file:selectedFiles,
+//   application_date: (new Date().toISOString())
+
+// });
+},[formData,selectedFiles])
 
 
 
@@ -177,9 +190,10 @@ useEffect(()=>{
 
 
   return (
-    <div>
-      <div className="p-6 rounded-md shadow-md">
-        <h2 className="text-2xl text-center font-semibold text-gray-darker underline decoration-2  decoration-green-dark underline-offset-8  mb-10">
+   
+      <div className="p-10 rounded-md shadow-xl">
+        <h2 className="text-2xl text-center font-semibold text-gray-darker
+         underline decoration-2  decoration-blue-dark underline-offset-8  mb-16">
           Leave Application Form
         </h2>
         <form onSubmit={handleSubmit}>
@@ -197,10 +211,12 @@ useEffect(()=>{
              <Grid item xs={12} lg={4} md={6} key={index}>
         
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
+                  <DateTimePicker
                     label={(label.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))}
                     onChange={(date) => handleDateChange(date, label)}
                     sx={{ width: "100%" }}
+                    minTime={dayjs().set('hour', 12)}
+                    maxTime={dayjs().set('hour', 12)}
                     {...(label === "end_date" &&
                       formData.start_date && {
                         shouldDisableDate: disablePreviousDates,
@@ -239,7 +255,7 @@ useEffect(()=>{
               </Grid>
             ))}
 
-            <Grid
+            {/* <Grid
               item
               xs={12}
               className={`${
@@ -270,7 +286,7 @@ useEffect(()=>{
                   <p>{checkbox.label}</p>
                 </div>
               ))}
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} lg={4} md={6}>
               <AutoComplete
                 options={teamMembersList}
@@ -305,7 +321,8 @@ useEffect(()=>{
               <TextField
       type="file"
       variant="outlined"
-     
+      multiple
+     onChange={handleFileUpload}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start"  >
@@ -330,7 +347,7 @@ useEffect(()=>{
           </div>
         </form>
       </div>
-    </div>
+
   );
 };
 
