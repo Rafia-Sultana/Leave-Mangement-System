@@ -1,9 +1,9 @@
 import React from 'react';
-
-const CheckBoxInput = () => {
+import Checkbox from '@mui/material/Checkbox';
+const CheckBoxInput = ({onchange}) => {
     return (
         <div>
-            
+            <Checkbox size='small' onChange={onchange}  />
         </div>
     );
 };

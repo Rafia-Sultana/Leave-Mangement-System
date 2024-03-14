@@ -341,6 +341,7 @@ useEffect(()=>{
               textColor="white"
               btnText="SUBMIT"
               width="full"
+              p={3}
               type="submit"
               bg="green"
             ></Button>

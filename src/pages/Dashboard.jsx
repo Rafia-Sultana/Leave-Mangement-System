@@ -44,7 +44,7 @@ const navLinks = {
   employee: [
     createNavLink('leave-application', 'Leave Application'),
     createNavLink('request-history', 'Request History'),
-    createNavLink('employee-leave-history', 'My Leave History')
+    // createNavLink('employee-leave-history', 'My Leave History')
   ],
   manager: [
     { category: 'Personal', links: [createNavLink('leave-application', 'Leave Application'), createNavLink('manager_leave_history', 'My Leave History')] },

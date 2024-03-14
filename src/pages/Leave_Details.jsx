@@ -11,7 +11,7 @@ const Leave_Details = ({ info }) => {
 
   return (
     <Card className='w-full'>
-      <CardContent className='border border-blue-light m-5 p-5 rounded-md'>
+      <CardContent className='border border-blue-light mx-2 mb-2 rounded-md'>
         <Box className="grid  grid-cols-1 md:grid-cols-2 gap-5 ">
           <div className="md:col-span-2">
           <p className='font-semibold'>Reasons For Leave</p>

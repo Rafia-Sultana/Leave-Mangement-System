@@ -8,8 +8,9 @@ const SelectInput = ({ options, placeholder ,getSelectedValue }) => {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
+      <FormControl sx={{ m: 1, width: 200, height:30 }}>
         <Select
+         size='small'
           displayEmpty
           input={<OutlinedInput />}
           renderValue={(selected) => {

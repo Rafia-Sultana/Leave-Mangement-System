@@ -12,8 +12,7 @@ import Button from "./Button";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
   <>
@@ -21,32 +20,30 @@ const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
       textColor={"green"}
       btnIcon={RemoveRedEyeOutlinedIcon}
       onClick={viewDetails}
-      padding={1}
+      p={1}
     />
     <Button
       textColor={"red"}
       btnIcon={DeleteOutlineOutlinedIcon}
       onClick={onDelete}
-      padding={1}
+      p={1}
     />
     <Button
       btnIcon={ModeEditOutlinedIcon}
       textColor={"blue"}
       onClick={onEdit}
-      padding={1}
+      p={1}
     />
   </>
 );
 
 const CommonTable = ({ columns, rows, viewDetails }) => {
-
   const [showButtonsMap, setShowButtonsMap] = useState({});
 
-
   const toggleShowButtons = (index) => {
-    setShowButtonsMap((prevState) => (
-      { 
-        [index]: !prevState[index]
+    setShowButtonsMap((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
     }));
   };
 
@@ -74,66 +71,89 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
             </TableHead>
             <TableBody>
               {rows.map((row, index) => {
-                const isLastRow = rows.length-1;
+                const isLastRow = index === rows.length - 1;
+             
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {columns.map((column) => {
                       const value = row[column.id];
-                      if (column.id === "action"  ) {
+
+                      if (column.id === "action") {
                         return (
                           <TableCell align="center">
-                            <Box className={` hidden  xl:block`}>
-                              <ActionButtons
-                           
-                                viewDetails={() => viewDetails(index)}
-                                onDelete={() => console.log("Delete", index)}
-                                onEdit={() => console.log("Edit", index)}
-                              />
-                            </Box>
-                            <Box className="relative block xl:hidden ">
+                            {row.leave_status === "Pending" ? (
+                              <>
+                                <Box className={` hidden  xl:block`}>
+                                  <ActionButtons
+                                    viewDetails={() => viewDetails(index)}
+                                    onDelete={() =>
+                                      console.log("Delete", index)
+                                    }
+                                    onEdit={() => console.log("Edit", index)}
+                                  />
+                                </Box>
+
+                                <Box className="relative block xl:hidden ">
+                                  <Button
+                                    onClick={() => toggleShowButtons(index)}
+                                    btnIcon={MoreHorizIcon}
+                                    textColor={
+                                      showButtonsMap[index] === true
+                                        ? "blue-light"
+                                        : "blue"
+                                    }
+                                    p={1}
+                                  />
+                                  {showButtonsMap[index] && (
+                                    <div
+                                      className={`${
+                                        index == isLastRow ? "-top-24" : "top-6"
+                                      } absolute    right-0  bottom-0 h-20 w-10 z-50 bg-white rounded-lg shadow-md`}
+                                    >
+                                      <ActionButtons
+                                        viewDetails={() => viewDetails(index)}
+                                        onDelete={() =>
+                                          console.log("Delete", index)
+                                        }
+                                        onEdit={() =>
+                                          console.log("Edit", index)
+                                        }
+                                      />
+                                    </div>
+                                  )}
+                                </Box>
+                              </>
+                            ) : (
                               <Button
-                                onClick={() => toggleShowButtons(index)}
-                                btnIcon={MoreHorizIcon}
-                                textColor={showButtonsMap[index] === true ? 'blue-light':'blue'}
-                                padding={1}
+                                textColor={"green"}
+                                btnIcon={RemoveRedEyeOutlinedIcon}
+                                onClick={() => viewDetails(index)}
+                                p={1}
                               />
-                              {showButtonsMap[index] && (
-                             <div className={`${index==isLastRow? '-top-24':'top-6'} absolute 
-                             right-0 
-                             bottom-0 h-24 z-50 bg-white rounded-lg shadow-md`}>
-                                 <ActionButtons
-                                  viewDetails={() => viewDetails(index)}
-                                  onDelete={() => console.log("Delete", index)}
-                                  onEdit={() => console.log("Edit", index)}
-                           
-                                />
-                             </div>
-                              )}
-                            </Box>
-                          </TableCell>
-                        );
-                      } else {
-                        let cellStyle = {};
-                        if (value === "Approved") {
-                          cellStyle.color = "green";
-                          cellStyle.fontWeight = "bold";
-                        } else if (value === "Pending") {
-                          cellStyle.color = "orange";
-                          cellStyle.fontWeight = "bold";
-                        } else if (value === "Rejected") {
-                          cellStyle.color = "red";
-                          cellStyle.fontWeight = "bold";
-                        }
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={cellStyle}
-                          >
-                            {value || "--"}
+                            )}
                           </TableCell>
                         );
                       }
+                      let cellStyle = {};
+                      if (value === "Approved") {
+                        cellStyle.color = "green";
+                        cellStyle.fontWeight = "bold";
+                      } else if (value === "Pending") {
+                        cellStyle.color = "orange";
+                        cellStyle.fontWeight = "bold";
+                      } else if (value === "Rejected") {
+                        cellStyle.color = "red";
+                        cellStyle.fontWeight = "bold";
+                      }
+                      return (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={cellStyle}
+                        >
+                          {value || "--"}
+                        </TableCell>
+                      );
                     })}
                   </TableRow>
                 );
