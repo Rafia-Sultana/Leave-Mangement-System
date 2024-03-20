@@ -1,6 +1,6 @@
 import CommonTable from "../components/CommonTable";
 import { manager_leave_data } from "../utils/Dummy_Data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
@@ -12,6 +12,9 @@ import Button from "../components/Button";
 import {employee_data} from "../utils/Dummy_Data";
 import Leave_Details from "./Leave_Details";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import employee from "../services/employee";
+import Modal from "../components/Modal";
+import RadioInput from "../components/InputFields/RadioInput";
 
 
 export const Manager_Leave_History = () => {
@@ -73,10 +76,10 @@ export const Manager_Team_Leave_Info = () => {
   const { team } = manager_leave_data;
 
   const columns = [
-    { id: "emp_id", label: "Serial No.", minWidth: 100 },
+    // { id: "emp_id", label: "Serial No.", minWidth: 100 },
     { id: "name", label: "Name", minWidth: 170 },
     { id: "position", label: "Position", minWidth: 170 },
-    { id: "department", label: "Department", minWidth: 170 },
+  { id: "total_days", label: "Total Days", minWidth: 170 },
 
     {
       id: "action",
@@ -105,29 +108,35 @@ export const Manager_Team_Leave_Info = () => {
       minWidth: 170,
       align: "right",
     },
-    {
-      id: "delegatedFor",
-      label: "Delegated For",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "reasonsForLeave",
-      label: "Reasons For Leave",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "application_Date",
-      label: "Application Date",
-      minWidth: 170,
-      align: "right",
-    },
+    // {
+    //   id: "delegatedFor",
+    //   label: "Delegated For",
+    //   minWidth: 170,
+    //   align: "right",
+    // },
+    // {
+    //   id: "reasonsForLeave",
+    //   label: "Reasons For Leave",
+    //   minWidth: 170,
+    //   align: "right",
+    // },
+    // {
+    //   id: "application_Date",
+    //   label: "Application Date",
+    //   minWidth: 170,
+    //   align: "right",
+    // },
     {
       id: "status",
       label: "Leave Status",
       minWidth: 170,
       align: "right",
+    },
+    {
+      id: "action",
+      label: "Action",
+      minWidth: 170,
+      align: "center",
     },
   ];
   const handleViewDetails = (id) => {
@@ -174,31 +183,37 @@ export const Manager_Team_Leave_Info = () => {
 
 export const Manager_Leave_Request = () => {
   const [id, setId] = useState(0);
+  const [rows, setRows] = useState([]);
+  const [open, setOpen] = useState(false);
+
   // const [empId, setempId] = useState(null);
 
   const columns = [
    
-    { id: "leaveType", label: "Leave Type", minWidth: 100 },
+    
+    { id: "employee_name", label: "Name", minWidth: 100 },
+    { id: "employee_designation", label: "Designation", minWidth: 100 },
+    { id: "leave_type", label: "Leave Type", minWidth: 100 },
     {
-      id: "from",
+      id: "start_date",
       label: "Start Date",
       minWidth: 170,
       align: "right",
     },
     {
-      id: "to",
+      id: "end_date",
       label: "End Date",
       minWidth: 170,
       align: "right",
     },
     {
-      id: "total",
+      id: "total_days",
       label: "Total Days",
       minWidth: 170,
       align: "right",
     },
     {
-      id: "status",
+      id: "leave_status",
       label: "Leave Status",
       minWidth: 170,
       align: "right",
@@ -237,101 +252,73 @@ export const Manager_Leave_Request = () => {
     //   align: "center",
     // }
   ];
-const rows =  employee_data.leave_details;
-const handleViewDetails = (id) =>{
-  setId(id);
-}
-const handleGoBack = () => {
-  setId(0);
+
+const handleClickOpen = (value) => {
+  setId(value);
+  setOpen(true);
+};
+const handleClose = () => {
+  setOpen(false);
 };
 
+useEffect(()=>{
+const fetchData = async ()=>{
+ const LeaveRequstData = await employee.getLeaveRequestOfTeamByTeamLead();
+ setRows(LeaveRequstData);
+}
+fetchData();
+},[])
   return <div>
 
-
-
-  {id === 0 ? (
-      <CommonTable columns={columns} rows={rows} viewDetails={handleViewDetails}/>
-      ) : (
-        <>
-          <button
-            onClick={handleGoBack}
-            className="text-blue font-bold text-lg mt-5 mb-3"
-          >
-           <KeyboardBackspaceIcon/>
-          </button>
-          <Leave_Details  info={rows.find((emp_leave) => emp_leave.leave_id === id)} />
-          {/* <CommonTable
-            columns={columns2}
-            rows={rows.find((emp_leave) => emp_leave.leave_id === id)?.logs ?? []}
-            // viewDetails={handleViewEmpDetails}
-          /> */}
-         <div className="mt-8">
-         <Manager_Leave_Approval/>
-         </div>
-
-   
-        </>
+<CommonTable columns={columns} rows={rows} viewDetails={handleClickOpen}/>
+ {open && (
+        <Modal open={open} handleClose={handleClose} historyData={rows[id]} />
       )}
-  
+      
   </div>;
 };
 
 
 export const Manager_Leave_Approval = () => {
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedValue, setSelectedValue] = useState('a');
 
-  const handleChange = (e) => {
-    setSelectedValue(e.target.value);
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
   };
-  const controlProps = (item) => ({
-    onChange: handleChange,
-    checked: selectedValue === item,
-    value: item,
-    name: "color-radio-button-demo",
-    inputProps: { "aria-label": item },
-  });
+
+ 
   return (
-    <div className="flex flex-col gap-5">
-      <FormControl>
-        <FormLabel id="demo-row-radio-buttons-group-label">Leave</FormLabel>
-        <RadioGroup
-          row
-          aria-labelledby="demo-row-radio-buttons-group-label"
-          name="row-radio-buttons-group"
-          className="flex "
-        >
-          <FormControlLabel
-            control={<Radio {...controlProps("approved")} color="success" />}
-            label="Approved"
-          ></FormControlLabel>
-          <FormControlLabel
-            control={
-              <Radio
-                {...controlProps("request_more_information")}
-                color="warning"
-              />
-            }
-            label="Request More Information"
-          ></FormControlLabel>
-          <FormControlLabel
-            control={<Radio {...controlProps("rejected")} color="error" />}
-            label="Rejected"
-          ></FormControlLabel>
-        </RadioGroup>
-      </FormControl>
+    <div className="">
+{/* 
+     
+      <Radio
+        checked={selectedValue === 'b'}
+        onChange={handleChange}
+        value="b"
+        name="radio-buttons"
+        inputProps={{ 'aria-label': 'B' }}
+      /> */}
+     <div className="flex flex-col md:flex-row">
+     <RadioInput label="Approved" onchange={handleChange} setSelectedValue={setSelectedValue} selectedValue={selectedValue}/>
+      <RadioInput label="Request More Information" onchange={handleChange} setSelectedValue={setSelectedValue} selectedValue={selectedValue}/>
+      <RadioInput label="Rejected"  onchange={handleChange} setSelectedValue={setSelectedValue} selectedValue={selectedValue} />
+     </div>
+
+     
       <TextField
           id="outlined-multiline-static"
       multiline
           rows={4}
           fullWidth
-          placeholder="add comment"/>
+          placeholder="Add comment ..."/>
            <Button
               fontSize="bold"
-              textColor="white"
+              textColor="black"
               btnText="SUBMIT"
               width="full"
               type="submit"
-              bg="green"
+              bg="blue-dark"
+              p={3}
             ></Button>
     </div>
   );

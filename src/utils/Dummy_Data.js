@@ -287,9 +287,9 @@ export const leaveInfo = [
       {
         emp_id: 2,
         details: {
-          name: "Alice Smith",
+          name: "Sadman",
           email: "alice.smith@example.com",
-          position: "Data Analyst",
+          position: "UI/UX designer",
           department: "Data Analytics"
         },
         leave_details: [
@@ -504,6 +504,8 @@ export const leaveInfo = [
     leave_details: [
       {
         leave_id:1,
+        name:'Raj',
+        designation:'Software Engineer',
         leaveType: "sick leave",
         from: "10-7-2024",
         to: "14-7-2024",
@@ -517,7 +519,7 @@ export const leaveInfo = [
         ,
         reasonsForLeave: "illness",
         application_Date: "5-7-2024",
-        status: "approved",
+        status: "Pending",
         logs:[
           {
             "sender": "jinan",
@@ -551,6 +553,8 @@ export const leaveInfo = [
         from: "20-8-2024",
         to: "27-8-2024",
         total: 8,
+        name:'Sadman',
+        designation:'UX Designer',
         delegatedFor:{
           name:'Rumi bro',
            email: "rumi.smith@example.com",
@@ -558,7 +562,7 @@ export const leaveInfo = [
          },
         reasonsForLeave: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, tempora. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae incidunt nisi nostrum odio, saepe tempora voluptas labore perferendis ipsum unde!",
         application_Date: "15-8-2024",
-        status: "approved" ,
+        status: "Pending",
         logs:[
           {
             "sender": "Sarah Lee",

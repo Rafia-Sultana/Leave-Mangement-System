@@ -10,7 +10,7 @@ const InputField = ({type,placeholder,name,onChange,value}) => {
             type={type}
             onChange={onChange}
             placeholder={placeholder}
-            className=' w-full h-12 rounded-md border border-gray placeholder-gray focus:outline-none focus:border-green p-2'
+            className=' w-full h-12 rounded-md border border-gray placeholder-gray focus:outline-none focus:border-green p-2 caret-green-dark'
             />
         </div>
     );

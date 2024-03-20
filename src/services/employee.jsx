@@ -1,6 +1,6 @@
 import { BASE_URL } from "./auth";
 import axios from "axios";
-import Cookies from "js-cookie";
+
 
 
 const getToken = ()=>{
@@ -23,8 +23,9 @@ const handleRequestError = (error, errorMessage) => {
   throw error;
 };
 
-// Function to make GET requests
+// Function to make GET requests http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
 const getRequest = async (url, errorMessage) => {
+  // console.log(url);
   try {
     const token = getToken(); 
     const response = await axiosInstance.get(url, {
@@ -32,6 +33,7 @@ const getRequest = async (url, errorMessage) => {
         Authorization: `Bearer ${token}`,
       },
     });
+//  console.log(response.data);
     return response.data;
   } catch (error) {
     if (error.response.data.error == "Token expired") {
@@ -46,7 +48,7 @@ const postRequest = async (url, params,errorMessage) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
  handleRequestError(error, errorMessage);
@@ -118,6 +120,22 @@ const employee = {
     
   return getRequest(`/leave/emp_history/${userId}`,"Error Fetching to get employee request history")
   }
+,
+  //http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
+  getLog: async(applicationId) => {
+    return getRequest(`/leave/log/${applicationId}`,"Error Fetching to get employee log");
+  },
+
+
+// ----------------------- Team Lead ----------------------------
+
+
+
+
+  // http://ip:4040/api/leave/application/team/pending
+    getLeaveRequestOfTeamByTeamLead:  async() => {
+    return getRequest(`/leave/application/team/pending`, "Error Fetching to get Leave Request Of Team By TeamLead")
+    }
 
 };
 

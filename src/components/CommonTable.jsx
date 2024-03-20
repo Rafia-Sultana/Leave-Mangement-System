@@ -13,6 +13,7 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Container from '@mui/material/Container';
 
 const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
   <>
@@ -38,8 +39,12 @@ const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
 );
 
 const CommonTable = ({ columns, rows, viewDetails }) => {
-  const [showButtonsMap, setShowButtonsMap] = useState({});
+  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
 
+  const role = userInfoData.role;
+
+  const [showButtonsMap, setShowButtonsMap] = useState({});
+ 
   const toggleShowButtons = (index) => {
     setShowButtonsMap((prevState) => ({
       ...prevState,
@@ -48,7 +53,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
   };
 
   return (
-    <div>
+ 
       <Paper sx={{ width: "100%", marginTop: "2%", marginBottom: "2%" }}>
         <TableContainer sx={{ maxHeight: 750 }}>
           <Table stickyHeader aria-label="sticky-table">
@@ -72,6 +77,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
             <TableBody>
               {rows.map((row, index) => {
                 const isLastRow = index === rows.length - 1;
+              
              
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
@@ -81,8 +87,8 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                       if (column.id === "action") {
                         return (
                           <TableCell align="center">
-                            {row.leave_status === "Pending" ? (
-                              <>
+                            {row.leave_status === "Pending" && role === 'Employee' ? (
+                              <Container>
                                 <Box className={` hidden  xl:block`}>
                                   <ActionButtons
                                     viewDetails={() => viewDetails(index)}
@@ -122,7 +128,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                                     </div>
                                   )}
                                 </Box>
-                              </>
+                              </Container>
                             ) : (
                               <Button
                                 textColor={"green"}
@@ -162,7 +168,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
           </Table>
         </TableContainer>
       </Paper>
-    </div>
+
   );
 };
 

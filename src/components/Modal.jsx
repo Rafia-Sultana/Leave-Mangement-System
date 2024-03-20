@@ -9,8 +9,12 @@ import Leave_Details from '../pages/Leave_Details';
 import CommonTable from './CommonTable';
 import {employee_data} from '../utils/Dummy_Data'
 import Button from './Button';
+import employee from '../services/employee';
+import { Manager_Leave_Approval } from '../pages/Manager_Data';
 
 const Modal = ({open,handleClose,historyData}) => {
+  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
+  const role = userInfoData.role;
   const rows = employee_data.leave_details[0].logs;
   const columns2 = [
     { id: "sender", label: "Sender", minWidth: 100 },
@@ -57,12 +61,19 @@ const Modal = ({open,handleClose,historyData}) => {
          
           <DialogContentText id="alert-dialog-description">
           <Leave_Details info={historyData}/>
-          <CommonTable
-        columns={columns2}
-        rows={rows}
-        viewDetails={handleClickOpen}
-      
-      />
+          {
+            role === 'Employee' ? 
+            <CommonTable
+            columns={columns2}
+            rows={rows}
+            viewDetails={handleClickOpen}
+          
+          />
+          :<>
+          <Manager_Leave_Approval/>
+          </>
+          }
+         
           </DialogContentText>
         </DialogContent>
         <DialogActions>

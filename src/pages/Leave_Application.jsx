@@ -56,6 +56,7 @@ const Leave_Application = () => {
   const [selectedFiles, setSelectedFiles] = useState(null);
 
 
+
   
 
 
@@ -147,27 +148,31 @@ setSelectedFiles(file);
 
 const handleSubmit = async (event) => {
   event.preventDefault();
+  const result = await employee.postLeaveApplication(
+    {...formData,   
+     duration: getTotalDays(),
+      joining_date: formData.end_date && getJoiningDate(formData.end_date),
+      // dayOption: selectedOption,
+      application_date: (new Date().toISOString())
+    
+    }
+    
+  );
+
+
   if (formData) {
     enqueueSnackbar("Submitted Succesfully!", { variant: "success" });
 
     setTimeout(() => {
-      navigate("/dashboard/request-history");
+      navigate("/dashboard/request-history",{state:{result}});
     }, 500);
   } else {
     console.error("email does not exist");
   }
 
 
-const result = await employee.postLeaveApplication(
-  {...formData,   
-   duration: getTotalDays(),
-    joining_date: formData.end_date && getJoiningDate(formData.end_date),
-    // dayOption: selectedOption,
-    application_date: (new Date().toISOString())
-  
-  }
-)
-console.log(result);
+
+// console.log(result);
 };
 
 
@@ -181,6 +186,7 @@ useEffect(()=>{
 //   application_date: (new Date().toISOString())
 
 // });
+
 },[formData,selectedFiles])
 
 
