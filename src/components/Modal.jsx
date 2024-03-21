@@ -10,11 +10,16 @@ import CommonTable from './CommonTable';
 import {employee_data} from '../utils/Dummy_Data'
 import Button from './Button';
 import employee from '../services/employee';
+import { useLocation } from 'react-router-dom';
 import { Manager_Leave_Approval } from '../pages/Manager_Data';
 
 const Modal = ({open,handleClose,historyData}) => {
+  const location = useLocation();
+  console.log(location.pathname);
+
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
+  console.log(role);
   const rows = employee_data.leave_details[0].logs;
   const columns2 = [
     { id: "sender", label: "Sender", minWidth: 100 },
@@ -62,7 +67,7 @@ const Modal = ({open,handleClose,historyData}) => {
           <DialogContentText id="alert-dialog-description">
           <Leave_Details info={historyData}/>
           {
-            role === 'Employee' ? 
+            role === 'Employee' || role === 'Team Lead' && location.pathname === '/dashboard/manager_leave_history'? 
             <CommonTable
             columns={columns2}
             rows={rows}

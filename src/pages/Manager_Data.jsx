@@ -15,59 +15,14 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import employee from "../services/employee";
 import Modal from "../components/Modal";
 import RadioInput from "../components/InputFields/RadioInput";
+import { Employee_Leave_Request } from "./Employee_Data";
 
 
 export const Manager_Leave_History = () => {
-  const { my } = manager_leave_data;
-
-  const columns = [
-    { id: "leaveType", label: "Leave Type", minWidth: 100 },
-    {
-      id: "from",
-      label: "Start Date",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "to",
-      label: "End Date",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "total",
-      label: "Total Days",
-      minWidth: 170,
-      align: "right",
-      //   format: (value) => value.toFixed(0),
-    },
-    {
-      id: "status",
-      label: "Leave Status",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "action",
-      label: "Action",
-      minWidth: 170,
-      align: "center",
-    },
-  ];
-  const rows = my.leave_details.map(
-    ({ leaveType, from, to, total, status }) => ({
-      leaveType,
-      from,
-      to,
-      total,
-      status,
-    })
-  );
-
+ 
   return (
     <div>
-      <p>hello Manager_Leave_History</p>
-      <CommonTable columns={columns} rows={rows} />
+   <Employee_Leave_Request/>
     </div>
   );
 };
@@ -280,28 +235,24 @@ fetchData();
 
 
 export const Manager_Leave_Approval = () => {
-  const [selectedValue, setSelectedValue] = useState('a');
+  const [selectedValue, setSelectedValue] = useState('Pending');
 
   const handleChange = (event) => {
-    setSelectedValue(event.target.value);
+  setSelectedValue(event.target.value);
   };
 
- 
+
   return (
-    <div className="">
-{/* 
-     
-      <Radio
-        checked={selectedValue === 'b'}
-        onChange={handleChange}
-        value="b"
-        name="radio-buttons"
-        inputProps={{ 'aria-label': 'B' }}
-      /> */}
-     <div className="flex flex-col md:flex-row">
-     <RadioInput label="Approved" onchange={handleChange} setSelectedValue={setSelectedValue} selectedValue={selectedValue}/>
-      <RadioInput label="Request More Information" onchange={handleChange} setSelectedValue={setSelectedValue} selectedValue={selectedValue}/>
-      <RadioInput label="Rejected"  onchange={handleChange} setSelectedValue={setSelectedValue} selectedValue={selectedValue} />
+    <div className="flex flex-col space-y-4">
+
+     <div className="flex flex-col md:flex-row ">
+
+      <RadioInput label="Pending"  value={"Pending"}  color={"warning"}
+       onchange={handleChange}  selectedValue={selectedValue}/>
+            <RadioInput label="Approved" value={"Approved"} color={"success"}
+     onchange={handleChange}  selectedValue={selectedValue}/>
+      <RadioInput label="Rejected" value={"Rejected"} color={"error"}
+        onchange={handleChange}  selectedValue={selectedValue} />
      </div>
 
      
@@ -312,12 +263,12 @@ export const Manager_Leave_Approval = () => {
           fullWidth
           placeholder="Add comment ..."/>
            <Button
-              fontSize="bold"
-              textColor="black"
+              fontSize="semibold"
+              textColor="white"
               btnText="SUBMIT"
               width="full"
               type="submit"
-              bg="blue-dark"
+              bg="green"
               p={3}
             ></Button>
     </div>

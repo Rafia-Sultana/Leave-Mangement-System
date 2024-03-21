@@ -1,15 +1,16 @@
 import Radio from "@mui/material/Radio";
 
-const RadioInput = ({label,onchange,setSelectedValue, selectedValue}) => {
+const RadioInput = ({label,onchange, selectedValue,value,color}) => {
     return (
     <div className="">
      
         <Radio
-        checked={selectedValue === 'a'}
+        checked={selectedValue=== value}
         onChange={onchange}
-        value="a"
+        value={value}
+        color={color}
         name="radio-buttons"
-        inputProps={{ 'aria-label': 'A' }}
+        
        
       />
         <label htmlFor="">{label}</label>

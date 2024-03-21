@@ -42,7 +42,7 @@ const Dashboard = () => {
         category: "Personal",
         links: [
           createNavLink("leave-application", "Leave Application"),
-          createNavLink("manager_leave_history", "My Leave History"),
+          createNavLink("manager_leave_history", "Leave Request"),
         ],
       },
       {

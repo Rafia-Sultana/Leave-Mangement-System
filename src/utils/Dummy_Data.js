@@ -524,25 +524,25 @@ export const leaveInfo = [
           {
             "sender": "jinan",
             "date": "5-7-2024",
-            "status": "request more information",
-            "comments": "give some more files"
+            "status": "Pending",
+            "comments": "request more information"
           },
           {
             "sender": "Jane Doe",
             "date": "5-8-2024",
-            "status": "request more information",
-            "comments": "Please provide clarification on section 2"
+            "status": "Pending",
+            "comments": "request more information"
           },
           {
             "sender": "John Smith",
             "date": "5-9-2024",
-            "status": "approved",
+            "status": "Approved",
             "comments": "Looks good, proceed with implementation"
           },
           {
             "sender": "Alex Johnson",
             "date": "5-10-2024",
-            "status": "rejected",
+            "status": "Rejected",
             "comments": "Not meeting requirements, please revise"
           }
         ]

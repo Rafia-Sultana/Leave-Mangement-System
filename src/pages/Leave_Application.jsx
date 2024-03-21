@@ -1,33 +1,23 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, {  useEffect, useState} from "react";
 import Button from "../components/Button.jsx";
-import InputField from "../components/InputField.jsx";
-import Label from "../components/Label.jsx";
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import Spinner from "../components/Spinner.jsx";
-import Stack from "@mui/material/Stack";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
 import TextField from "@mui/material/TextField";
-// import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import FormateDate from "../utils/FormateDate.js";
-import Checkbox from "@mui/material/Checkbox";
-import { department_list } from "../utils/Dummy_Data.js";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import AutoComplete from "../components/InputFields/AutoComplete.jsx";
 import InputAdornment from '@mui/material/InputAdornment';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import SwitchInput from "../components/InputFields/SwitchInput.jsx";
 import employee from "../services/employee.jsx";
 import dayjs from "dayjs";
 
 
 const Leave_Application = () => {
+  const {state} = useLocation();
+
+
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -35,18 +25,19 @@ const Leave_Application = () => {
   const userId = userInfoData?.emp_id;
 
   const initialState = {
-    emp_id:userId,
-    leave_type_id: null,
-    start_date: "",
-    end_date: "",
+    emp_id: userId,
+    leave_type_id: state?.leave_type_id || null,
+    leave_name: state?.leave_name || null,
+    start_date: state?.start_date || "",
+    end_date: state?.end_date || "",
     duration: "",
     joining_date: "",
     file: null,
-    reason: "",
+    reason: state?.reason || "",
     delegated_to: null,
-    // dayOption: null,
-    application_date:''
+    application_date: "",
   };
+  
 
   const [formData, setFormData] = useState(initialState);
   const [total_Days, setTotal_Days] = useState(null);
@@ -112,7 +103,7 @@ fetchData();
 
 
 const handleInputChange = (e, newValue, field) => {
-
+console.log(newValue);
   const { name, value } = e?.target ;
   // console.log(e.target);
   const updatedFields = {};
@@ -137,6 +128,7 @@ const handleInputChange = (e, newValue, field) => {
     [name]: value,
     ...updatedFields
   }));
+
 };
 
 
@@ -164,28 +156,19 @@ const handleSubmit = async (event) => {
     enqueueSnackbar("Submitted Succesfully!", { variant: "success" });
 
     setTimeout(() => {
-      navigate("/dashboard/request-history",{state:{result}});
+      navigate("/dashboard/request-history");
     }, 500);
   } else {
     console.error("email does not exist");
   }
 
-
-
-// console.log(result);
 };
 
 
+console.log(formData);
 
 useEffect(()=>{
-//   console.log({...formData,   
-//   duration: getTotalDays(),
-//   joining_date: formData.end_date && getJoiningDate(formData.end_date),
-//   // dayOption: selectedOption,
-//   file:selectedFiles,
-//   application_date: (new Date().toISOString())
 
-// });
 
 },[formData,selectedFiles])
 
@@ -210,6 +193,7 @@ useEffect(()=>{
                 label={"Leave Type"}
                 field={'leave_type_id'}
                 handleInputChange={handleInputChange}
+          // value={state?.leave_name}
               />
             </Grid>
 
@@ -221,6 +205,7 @@ useEffect(()=>{
                     label={(label.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))}
                     onChange={(date) => handleDateChange(date, label)}
                     sx={{ width: "100%" }}
+                  //  value={formData[label]}
                     minTime={dayjs().set('hour', 12)}
                     maxTime={dayjs().set('hour', 12)}
                     {...(label === "end_date" &&
@@ -229,6 +214,7 @@ useEffect(()=>{
                       })}
                     {...(label === "start_date" &&
                       formData.end_date && { shouldDisableDate: disableFuturDates })}
+                     
                   />
                 </LocalizationProvider>
               </Grid>

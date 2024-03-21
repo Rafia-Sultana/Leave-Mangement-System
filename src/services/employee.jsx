@@ -115,10 +115,10 @@ const employee = {
   }
 ,
 
-  // http://ip:4040/api/leave/emp_history/{userId}
+  // http://ip:4040/api/leave/emp_history/{userId} http://IP:4040/api/leave/history/emp/{UserId}
   getEmployeeRequestHistory: async(userId)=>{
     
-  return getRequest(`/leave/emp_history/${userId}`,"Error Fetching to get employee request history")
+  return getRequest(`/leave/history/emp/${userId}`,"Error Fetching to get employee request history")
   }
 ,
   //http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D

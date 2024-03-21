@@ -117,7 +117,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
        underline decoration-2 decoration-blue-dark 
        underline-offset-8 mt-5 mb-1"
       >
-        Employee Request History
+       Request History
       </h2>
 
       <div className="flex  flex-col md:flex-row justify-between relative">
