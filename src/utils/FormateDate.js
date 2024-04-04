@@ -4,3 +4,6 @@
     // console.log(typeof formattedDate);
   return formattedDate;
 }
+export function getYear(date){
+  return `${date.getFullYear()}`
+}

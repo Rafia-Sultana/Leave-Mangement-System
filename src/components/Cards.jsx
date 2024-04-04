@@ -40,6 +40,7 @@ const Cards = () => {
         value: `${value} ${value>1? 'days':'day'}`
       }));
     }
+   
     return (
         <div className=" relative grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap:4  xl:gap-10    lg:rounded-lg w-full  p-2 my-12">
         <div className="absolute lg:hidden  top-1/2 -translate-y-1/2 left-[8%] w-[84%]  h-[1px] bg-black opacity-50">

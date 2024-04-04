@@ -9,7 +9,8 @@ const LottiePlayers = ({src,height,width}) => {
         loop
         autoplay
         speed={5}
-       style={{ height: "300px", width: "300px", marginTop: "100px" }}
+  
+       style={{ height: "300px", width: "200px", marginTop: "100px" }}
       />
   
     );

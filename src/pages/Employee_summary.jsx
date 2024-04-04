@@ -93,12 +93,12 @@ const Employee_summary = () => {
       <Button
    
         fontSize="bold"
-        textColor="white"
+        textColor="black"
         btnText="submit"
         width="full"
         type="submit"
      onClick={handleSubmitClick}
-     bg="green"
+  
       />
     </div>
   );

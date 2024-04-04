@@ -82,7 +82,7 @@ const Request_History = () => {
                         btnText="view details"
                         width=""
                         type="button"
-                        bg="blue"
+                       
                         onClick={() => handleViewDetails(id)}
                       />
                     </td>
@@ -95,7 +95,7 @@ const Request_History = () => {
                         btnText="view file"
                         width=""
                         type="button"
-                        bg="green"
+                       
                         onClick={() => handleViewFile(id)}
                       />
                     </td>

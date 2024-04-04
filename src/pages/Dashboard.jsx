@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { usersInfo } from "../utils/Dummy_Data.js";
 import Button from "../components/Button.jsx";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Tooltip } from "@mui/material";
 import { Box } from "@mui/material";
-
+import { NavLink } from 'react-router-dom';
 import Overview from "./Overview.jsx";
 import "../assets/styles/Dashboard.css";
 import NavProfile from "../components/NavProfile.jsx";
@@ -19,7 +19,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 const Dashboard = () => {
   const [open, setOpen] = useState({});
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
-
+const location = useLocation()
   const role = userInfoData.role;
   const userId = userInfoData.emp_id;
 
@@ -53,7 +53,7 @@ const Dashboard = () => {
         ],
       },
     ],
-    HR: [
+    "HR": [
       {
         category: "Personal",
         links: [
@@ -65,7 +65,7 @@ const Dashboard = () => {
         category: "Others",
         links: [
           createNavLink("hr-leave-request", "Request History"),
-          createNavLink("", "Leave History"),
+          createNavLink("hr_others_leave_history", "Leave History"),
         ],
       },
     ],
@@ -74,6 +74,10 @@ const Dashboard = () => {
   const handleMoreIconClick = (index) => {
     setOpen({ [index]: !open[index] });
   };
+const isNavActive = (to) =>{
+
+return location.pathname === to;
+}
 
   return (
     <div className="font-poppins">
@@ -82,7 +86,8 @@ const Dashboard = () => {
           <div className="menu-toggle" onClick={menuToggleClick}>
             <div className="hamburger"></div>
           </div>
-          <p className="text-2xl">LMS</p>
+          <p className="text-3xl font-black" style={{fontFamily:'Biggy John'}}>LMS</p>
+          {/* <p className="mt-2 text-sm"  style={{fontFamily:'Nova Flat'}}>Tiller</p> */}
           <p className="hidden lg:block text-2xl absolute left-96">
             Leave Management System
           </p>
@@ -97,48 +102,56 @@ const Dashboard = () => {
 
       <div className="flex">
         <nav className="h-[calc(100vh-80px)]  bg-blue-lighter text-white w-[60%] md:w-[30%] lg:w-[20%]  site-nav border border-t-white">
-          <ul className="flex flex-col justify-center items-center  gap-8">
-            <Link
-              className="mt-10 w-[80%]  xl:w-[60%] bg-blue-light rounded flex justify-center items-center py-1"
-              to={"/dashboard"}
-            >
-              Dashboard
-            </Link>
+          <ul className="flex flex-col items-center  gap-8">
+            <li className="mt-10 w-[80%]  xl:w-[60%] bg-blue-light rounded flex justify-center items-center py-1 ">
+          
+           
+              <NavLink to={"/dashboard"}  style={{
+                color: isNavActive("/dashboard") ? 'black' : 'white',
+              }}>Dashboard</ NavLink >
+            </li>
 
             {navLinks[role]?.map((section, index) => (
-              <li
+              <ul
                 key={index}
                 className=" w-[80%]  xl:w-[60%] bg-blue-light rounded flex justify-center items-center py-1 "
               >
-                <Link className="  hover:text-gray" to={section?.to}>
-                  {section?.text}
-                </Link>
-                <ul>
-                  <Link onClick={() => handleMoreIconClick(index)}>
-                    {section.category}
-                    {section.category &&  <ExpandMoreIcon /> } 
-                  </Link>
-
-                  {section.links?.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <Link
-                        className={`ml-2 my-1 border-l px-1 text-sm ${
-                          open[index] ? "block" : "hidden"
-                        }`}
-                        to={link.to}
-                      >
-                        {link.text}
-                        
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
+                <li>
+            
+                  <NavLink className="" to={section?.to}>
+                    {section?.text}
+                  </NavLink>
+                </li>
+                <li className="">
+                  <li className="">
+                    {" "}
+                    <p onClick={() => handleMoreIconClick(index)}>
+                      {section.category}
+                      {section.category && <ExpandMoreIcon />}
+                    </p>
+                  </li>
+                  <li className="border-l">
+                    {section.links?.map((link, linkIndex) => (
+                      <li key={linkIndex}>
+                        <NavLink
+                          className={`ml-2 my-1  text-sm ${
+                            open[index] ? "block" : "hidden"
+                          }`}
+                          to={link.to}
+                          
+                        >
+                          {link.text}
+                        </NavLink>
+                      </li>
+                    ))}
+                  </li>
+                </li>
+              </ul>
             ))}
           </ul>
         </nav>
 
-        <main className="w-full px-8">
+        <main className="w-full px-8 ">
           <Outlet />
         </main>
       </div>

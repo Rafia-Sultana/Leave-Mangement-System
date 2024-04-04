@@ -10,22 +10,22 @@ const Leave_Details = ({ info }) => {
   
   const isSmallScreen  = useMediaQuery('(max-width:600px)');
   const { delegated_to, reason, application_date, leave_status,start_date,end_date,total_days,application_id} = info;
-
-  useEffect(() => {
-    
-    const fetchData = async () => {
-    const logData = await employee.getLog(application_id);
-    console.log(logData);
-  };
   
-    fetchData();
-  }, []);
+  // useEffect(() => {
+    
+  //   const fetchData = async () => {
+  //   const logData = await employee.getLog(application_id);
+  //   console.log('logData',logData);
+  // };
+  
+  //   fetchData();
+  // }, []);
   
 
   return (
     <Card className='w-full'>
       <CardContent className='border border-blue-light mx-2 mb-2 rounded-md'>
-        <Box className="grid  grid-cols-1 md:grid-cols-2 gap-5 ">
+        <Box className="grid  grid-cols-2 gap-5 ">
           <div className="md:col-span-2">
           <p className='font-semibold'>Reasons For Leave</p>
           <p className='text-sm'>{reason}</p>

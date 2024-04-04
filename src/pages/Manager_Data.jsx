@@ -1,22 +1,15 @@
 import CommonTable from "../components/CommonTable";
-import { manager_leave_data } from "../utils/Dummy_Data";
+
 import { useEffect, useState } from "react";
-import Radio from "@mui/material/Radio";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+
 import Button from "../components/Button";
-import {employee_data} from "../utils/Dummy_Data";
-import Leave_Details from "./Leave_Details";
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import TextInput from "../components/InputFields/TextInput";
 import employee from "../services/employee";
 import Modal from "../components/Modal";
 import RadioInput from "../components/InputFields/RadioInput";
 import { Employee_Leave_Request } from "./Employee_Data";
-
+import useMediaQuery from '@mui/material/useMediaQuery';
+import LottiePlayers from "../components/LottiePlayers";
 
 export const Manager_Leave_History = () => {
  
@@ -27,14 +20,31 @@ export const Manager_Leave_History = () => {
   );
 };
 export const Manager_Team_Leave_Info = () => {
+ 
+
   const [id, setId] = useState(0);
-  const { team } = manager_leave_data;
+  const [empId, setEmpId] = useState(0);
+  const [rows, setRows] = useState([]);
+  const [rows2, setRows2] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const isSmallScreen = useMediaQuery('(max-width:600px)');
+
+  const handleClickOpen = (value) => {
+    setId(value);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   const columns = [
-    // { id: "emp_id", label: "Serial No.", minWidth: 100 },
-    { id: "name", label: "Name", minWidth: 170 },
-    { id: "position", label: "Position", minWidth: 170 },
-  { id: "total_days", label: "Total Days", minWidth: 170 },
+
+    { id: "employee_name", label: "Name", minWidth: 170 },
+    { id: "employee_designation", label: "Designation ", minWidth: 170 },
+  { id: "total_leave_days", label: "Total Days", minWidth: 170 },
 
     {
       id: "action",
@@ -43,95 +53,79 @@ export const Manager_Team_Leave_Info = () => {
       align: "center",
     },
   ];
-  const columns2 = [
-    { id: "leaveType", label: "Leave Type", minWidth: 100 },
+  const columns2 =  [
+    { id: "leave_name", label: "Leave Type", minWidth: 100 },
+    { id: "start_date", label: "Start Date", minWidth: 170, align: "center" },
+    { id: "end_date", label: "End Date", minWidth: 170, align: "center" },
+    { id: "total_days", label: "Total Days", minWidth: 170, align: "center" },
     {
-      id: "from",
-      label: "Start Date",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "to",
-      label: "End Date",
-      minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "total",
-      label: "Total Days",
-      minWidth: 170,
-      align: "right",
-    },
-    // {
-    //   id: "delegatedFor",
-    //   label: "Delegated For",
-    //   minWidth: 170,
-    //   align: "right",
-    // },
-    // {
-    //   id: "reasonsForLeave",
-    //   label: "Reasons For Leave",
-    //   minWidth: 170,
-    //   align: "right",
-    // },
-    // {
-    //   id: "application_Date",
-    //   label: "Application Date",
-    //   minWidth: 170,
-    //   align: "right",
-    // },
-    {
-      id: "status",
+      id: "leave_status",
       label: "Leave Status",
       minWidth: 170,
-      align: "right",
-    },
-    {
-      id: "action",
-      label: "Action",
-      minWidth: 170,
       align: "center",
     },
+    { id: "action", label: "Action", minWidth: 170, align: "center" },
   ];
-  const handleViewDetails = (id) => {
-    setId(id);
+  const handleViewDetails = async (index,emp_id) => {
+    setEmpId(emp_id);
+    const teammembersLeaveInfos = await employee.getEmployeeRequestHistory(emp_id);
+    setRows2(teammembersLeaveInfos);
+
   };
+  
   const handleGoBack = () => {
-    setId(0);
+    setEmpId(0);
   };
-  const extractBasicDetails = (team) => {
-    return team.map((employee) => {
-      let emp_id = employee.emp_id;
-      const { name, position, department } = employee.details;
-      return { emp_id, name, position, department };
-    });
-  };
+
+  useEffect(()=>{
+    const fetchDataOfTeamLeave = async ()=>{
+ const teamMembersDetails = await employee.getLeaveHistroryOfTeam();
+
+setRows(teamMembersDetails)
+    }
+    fetchDataOfTeamLeave();
+  },[])
+
+  const smallScreenColumns = columns2.filter(column => 
+    column.id === "leave_name" || column.id === "leave_status" || column.id === "action"
+  );
+
   return (
     <div>
-      <p>hello Manager_Team_Leave_History</p>
+   <h2
+        className="text-2xl text-center font-semibold text-gray-darker
+       underline decoration-2 decoration-blue-dark 
+       underline-offset-8 mt-5"
+      >
+       Team Leave History
+      </h2>
+      {
 
-      {id === 0 ? (
+        rows.length ===0 ?
+     
+      <LottiePlayers
+            src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json"
+        
+          />:
+        empId===0?
         <CommonTable
-          columns={columns}
-          rows={extractBasicDetails(team)}
-          viewDetails={handleViewDetails}
-        />
-      ) : (
-        <>
-          <button
-            onClick={handleGoBack}
-            className="text-blue font-bold text-lg"
-          >
-            Go back
-          </button>
-          <CommonTable
-            columns={columns2}
-            rows={team.find((emp) => emp.emp_id === id)?.leave_details ?? []}
+            columns={columns}
+            rows={rows}
+            viewDetails={handleViewDetails}
           />
-          {/* <Manager_Leave_Approval /> */}
-        </>
+          :
+          <>
+          <Button btnText={'Go Back'} textColor={'blue'} onClick={handleGoBack} ></Button>
+            <CommonTable
+            columns={isSmallScreen? smallScreenColumns: columns2}
+            rows={rows2}
+            viewDetails={handleClickOpen}
+          />
+             {open && (
+        <Modal open={open} handleClose={handleClose} historyData={rows2[id]} />
       )}
+          </>
+      }
     </div>
   );
 };
@@ -141,13 +135,14 @@ export const Manager_Leave_Request = () => {
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
 
-  // const [empId, setempId] = useState(null);
+
+//  console.log(rows);
 
   const columns = [
    
     
     { id: "employee_name", label: "Name", minWidth: 100 },
-    { id: "employee_designation", label: "Designation", minWidth: 100 },
+   { id: "delegated_to", label: "Delegated To", minWidth: 100 },
     { id: "leave_type", label: "Leave Type", minWidth: 100 },
     {
       id: "start_date",
@@ -219,33 +214,87 @@ const handleClose = () => {
 useEffect(()=>{
 const fetchData = async ()=>{
  const LeaveRequstData = await employee.getLeaveRequestOfTeamByTeamLead();
+
  setRows(LeaveRequstData);
 }
 fetchData();
 },[])
+const isSmallScreen = useMediaQuery('(max-width:600px)');
+const smallScreenColumns = columns.filter(column => 
+  column.id === "employee_name" || column.id === "leave_status" || column.id === "action"
+);
   return <div>
+     <h2
+        className="text-2xl text-center font-semibold text-gray-darker
+       underline decoration-2 decoration-blue-dark 
+       underline-offset-8 mt-5 mb-1"
+      >
+      Team's Request History
+      </h2>
+      {
+        rows.length === 0?
+        <LottiePlayers
+        src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json"
+     
+      />:
+<CommonTable columns={isSmallScreen?smallScreenColumns:columns} rows={rows} 
+viewDetails={handleClickOpen}/>
+      }
 
-<CommonTable columns={columns} rows={rows} viewDetails={handleClickOpen}/>
  {open && (
-        <Modal open={open} handleClose={handleClose} historyData={rows[id]} />
+        <Modal open={open} 
+        handleClose={handleClose} 
+        historyData={rows[id]} />
       )}
       
   </div>;
 };
 
 
-export const Manager_Leave_Approval = () => {
+export const Manager_Leave_Approval = ({applicationId}) => {
+  
   const [selectedValue, setSelectedValue] = useState('Pending');
+  const [comments,setComments]= useState(null);
+  const [logData, setLogData]= useState({});
+  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
+    const role = userInfoData.role;
+  
 
   const handleChange = (event) => {
   setSelectedValue(event.target.value);
   };
+  const handleCommentSection =(event)=>{
+    setComments(event.target.value);
+  }
+
+
+    const deciosnByTeamLead = {
+      application_id:applicationId,
+      leave_status:selectedValue,
+      comments:comments,
+      // sent_by: role,
+      sent_to: selectedValue === 'Approved'? 'HR':'Applicant',
+      processing_time:new Date().toISOString(),
+  }
+//  console.log(postByTeamLead);
+
+const handleSubmit = async () =>{
+  const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
+  // if(result){
+  //   setLogTable((prev)=> [...prev,deciosnByTeamLead])
+  // }
+  // console.log(result);
+}
 
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div
+ className="flex flex-col space-y-4"
+     >
 
-     <div className="flex flex-col md:flex-row ">
+     <div
+     className="flex flex-col md:flex-row "
+      >
 
       <RadioInput label="Pending"  value={"Pending"}  color={"warning"}
        onchange={handleChange}  selectedValue={selectedValue}/>
@@ -256,20 +305,27 @@ export const Manager_Leave_Approval = () => {
      </div>
 
      
-      <TextField
+      {/* <TextField
           id="outlined-multiline-static"
       multiline
           rows={4}
           fullWidth
-          placeholder="Add comment ..."/>
+          placeholder="Add comment ..."/> */}
+          <TextInput
+           rows={4}
+           multiline={true}
+           onchange={handleCommentSection}
+             placeholder="Add comment ..."
+          />
            <Button
               fontSize="semibold"
               textColor="white"
               btnText="SUBMIT"
               width="full"
               type="submit"
-              bg="green"
-              p={3}
+              backgroundColor="bg-green"
+              padding={'p-3'}
+              onClick={handleSubmit}
             ></Button>
     </div>
   );

@@ -63,7 +63,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
       const requestHistoryData = await employee.getEmployeeRequestHistory(
         userId
       );
-      console.log(requestHistoryData);
+      // console.log(requestHistoryData);
       setRows(requestHistoryData);
       setLoading(false);
     };
@@ -72,27 +72,43 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
     }
   }, [userId]);
 
-  const leaveStatusOptions = ["Pending", "Approved", "Rejected"];
+  const leaveStatusOptions = ["Pending",
+   "Approved", "Rejected",
+ "All"
+  
+  ];
   const leaveTypesOptions = [
     "Sick Leave",
     "Annual Leave",
     "Paternity Leave",
     "Maternity Leave",
     "Unpaid Leave",
+    "All"
   ];
-  // console.log('rows.length',rows.length);
+
   const filteredRows = useMemo(() => {
     let filtered = rows;
-    if (!showAll) {
+
       if (selectedStatus) {
+       
         filtered = filtered.filter(
           (row) => row.leave_status === selectedStatus
         );
-      }
+       }
       if (selectedType) {
         filtered = filtered.filter((row) => row.leave_name === selectedType);
       }
-    }
+     
+    
+      if(selectedType==="All" && selectedStatus==="All"){
+      return rows;
+      }
+      if(selectedStatus==="Pending"&& selectedType==="All"){
+        filtered = filtered.filter(
+          (row) => row.leave_status === "Pending"
+        );
+      }
+ 
 
     return filtered;
   }, [rows, selectedStatus, selectedType, showAll]);
@@ -111,7 +127,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
 
 
   return (
-    <div>
+    <div className="">
       <h2
         className="text-2xl text-center font-semibold text-gray-darker
        underline decoration-2 decoration-blue-dark 
@@ -133,10 +149,10 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
             getSelectedValue={getSelectedType}
           />
         </div>
-        <div className="flex  items-center md:absolute top-8 right-0">
+        {/* <div className="flex  items-center md:absolute top-8 right-0">
           <CheckBoxInput onchange={handleShowAll}></CheckBoxInput>
           <label>Show All</label>
-        </div>
+        </div> */}
       </div>
       {filteredRows.length >= 1 ? (
         <div className="">
@@ -163,8 +179,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
           {/* for no data found purpose */}
           <LottiePlayers
             src="https://lottie.host/213f7823-b3fe-4df0-9b2b-f10f412b9519/jONQ1jwzN4.json"
-            height="300px"
-            width="300px"
+           
           />
         </>
       )}

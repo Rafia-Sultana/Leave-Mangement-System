@@ -26,6 +26,7 @@ import { Manager_Leave_Request } from "./pages/Manager_Data";
 import { Employee_Leave_Request } from "./pages/Employee_Data";
 import { Employee_Leave_History } from "./pages/Employee_Data";
 import { UserProvider } from "./context api/Context.jsx";
+import {HR_others_leave_history} from './pages/HR_Data.jsx'
 
 function App() {
   // const [allFormData, setAllFormData] = useState([]);
@@ -72,6 +73,7 @@ function App() {
                 />
                 <Route path="hr_leave_history" element={<HR_Leave_History />} />
                 <Route path="hr-leave-request" element={<HR_Leave_Request />} />
+                <Route path="hr_others_leave_history" element={<HR_others_leave_history />} />
                 <Route
                   path="manager_team_leave_info"
                   element={<Manager_Team_Leave_Info />}

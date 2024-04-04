@@ -2,7 +2,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
 const AutoComplete = ({options,label,handleInputChange,field,value}) => {
-// console.log('value', value);
+
     return (
         <div>
               <Autocomplete
@@ -18,9 +18,10 @@ const AutoComplete = ({options,label,handleInputChange,field,value}) => {
                    handleInputChange(e, newValue,field);
                   }
                 }}
-                value={value}
+               value={value}
                 isOptionEqualToValue={(option, value) => {
-                  option.label === value.label;
+                 
+                  return   option.label === value.label;
                 }}
               />
         </div>

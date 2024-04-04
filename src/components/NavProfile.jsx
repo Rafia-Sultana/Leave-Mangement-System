@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 const NavProfile = () => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
+  const [rotateIcon, setRotateIcon] = useState(false);
 
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
@@ -48,6 +49,7 @@ const NavProfile = () => {
 
   const handleRightMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    setRotateIcon(!rotateIcon)
   };
 
   return (
@@ -68,7 +70,7 @@ const NavProfile = () => {
           {userData ? (
             <div className="hidden sm:block">
               <p className="font-semibold text-sm text-[#303030]">
-                {userData.name}{" "}
+                {userData.name}
               </p>
               <p className="font-thin text-xs text-[#6D6D6D]">
                 {userData.designations?.[0]?.designation}
@@ -77,9 +79,9 @@ const NavProfile = () => {
           ) : (
             <div className="loading"></div>
           )}
-          <div className="hidden sm:block">
-            <ExpandMoreIcon />
-          </div>
+       
+            <ExpandMoreIcon    className={`${rotateIcon? ' rotate-180':'transition-all duration-1000 ease-linear'} hidden sm:block`}/> 
+ 
         </div>
 
         <div
@@ -87,7 +89,7 @@ const NavProfile = () => {
             isMenuOpen ? "block" : "hidden"
           }`}
         >
-          <ul className="bg-blue-lighter text-sm font-thin rounded-lg p-2 flex flex-col gap-1">
+          <ul className="bg-blue-lighter text-sm font-thin rounded-lg p-2 flex flex-col gap-1 cursor-pointer">
             <li className="flex items-center">
               <PersonOutlineIcon sx={{ fontSize: 20 }} />
               <span className="ml-2">Profile</span>

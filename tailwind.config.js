@@ -55,6 +55,7 @@ export default {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
         genre: ["Genre", "sans-serif"],
+        biggyJohn:["Biggy John", "sans-serif"]
       },
     },
   },

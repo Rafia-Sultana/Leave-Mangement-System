@@ -14,7 +14,8 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Container from "@mui/material/Container";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
   <>
@@ -22,26 +23,28 @@ const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
       textColor={"green"}
       btnIcon={RemoveRedEyeOutlinedIcon}
       onClick={viewDetails}
-      p={1}
+      padding={'p-1'}
     />
     <Button
       textColor={"red"}
       btnIcon={DeleteOutlineOutlinedIcon}
       onClick={onDelete}
-      p={1}
+      padding={'p-1'}
     />
     <Button
       btnIcon={ModeEditOutlinedIcon}
       textColor={"blue"}
       onClick={onEdit}
-      p={1}
+      padding={'p-1'}
     />
   </>
 );
 
 const CommonTable = ({ columns, rows, viewDetails }) => {
+  // console.log(rows);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
+  const location = useLocation();
  
   const navigate = useNavigate();
   const [showButtonsMap, setShowButtonsMap] = useState({});
@@ -53,7 +56,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
   };
 
   return (
-    <Paper sx={{ width: "100%", marginTop: "2%", marginBottom: "2%" }}>
+    <Paper sx={{ width: "100%", marginTop: "2%", marginBottom: "2%"}}>
       <TableContainer sx={{ maxHeight: 750 }}>
         <Table stickyHeader aria-label="sticky-table">
           <TableHead>
@@ -77,6 +80,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
             {rows.map((row, index) => {
               const isLastRow = index === rows.length - 1;
               // console.log(isLastRow,index);
+              
 
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
@@ -87,7 +91,11 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                       return (
                         <TableCell align="center">
                           {row.leave_status === "Pending" &&
-                          role === "Employee" ? (
+                          role === "Employee" 
+                          || location.pathname === '/dashboard/manager_leave_history'
+                          || location.pathname === '/dashboard/hr_leave_history'
+                          
+                          ? (
                             <Container>
                               <Box className={` hidden  xl:block`}>
                                 <ActionButtons
@@ -109,7 +117,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                                       ? "blue-light"
                                       : "blue"
                                   }
-                                  p={1}
+                                  padding={'p-1'}
                                 />
                                 {showButtonsMap[index] && (
                                   <div
@@ -124,7 +132,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                                       }
                                       onEdit={() => {
                                         console.log("Edit", index)
-                                        navigate("/dashboard/leave-application")
+                                        navigate("/dashboard/leave-application",{state:row})
                                       }}
                                     />
                                   </div>
@@ -135,8 +143,8 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                             <Button
                               textColor={"green"}
                               btnIcon={RemoveRedEyeOutlinedIcon}
-                              onClick={() => viewDetails(index)}
-                              p={1}
+                              onClick={() => viewDetails(index, row?.emp_id)}
+                              padding={'p-1'}
                             />
                           )}
                         </TableCell>

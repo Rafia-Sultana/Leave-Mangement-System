@@ -117,24 +117,50 @@ const employee = {
 
   // http://ip:4040/api/leave/emp_history/{userId} http://IP:4040/api/leave/history/emp/{UserId}
   getEmployeeRequestHistory: async(userId)=>{
-    
+   
   return getRequest(`/leave/history/emp/${userId}`,"Error Fetching to get employee request history")
   }
 ,
+
   //http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
   getLog: async(applicationId) => {
     return getRequest(`/leave/log/${applicationId}`,"Error Fetching to get employee log");
   },
-
 
 // ----------------------- Team Lead ----------------------------
 
 
 
 
-  // http://ip:4040/api/leave/application/team/pending
+  // http://ip:4040/api/leave/pendingapplication?for=teamLead
     getLeaveRequestOfTeamByTeamLead:  async() => {
-    return getRequest(`/leave/application/team/pending`, "Error Fetching to get Leave Request Of Team By TeamLead")
+    return getRequest(`/leave/pendingapplication?for=teamLead`, "Error Fetching to get Leave Request Of Team By TeamLead")
+    }
+,
+    //http://ip:4040/api/leave/history/team
+    getLeaveHistroryOfTeam : async() => {
+    return getRequest(`/leave/history/team`,
+     "Error Fetching to get Leave Request Of Team By TeamLead"
+     )
+    }
+    ,
+    //http://ip:4040/api/leave/decision?by=teamLead
+    postDecisionByTeamLead : async (decison) => {
+    return postRequest(`/leave/decision?by=teamLead`,decison, "Error Fetching to get decision By TeamLead")
+    },
+
+
+    // ----------------------- HR ----------------------------
+
+    // http://ip:4040/api/leave/decision?by=hr
+    postDecisionByHR : async (decison) => {
+    return postRequest(`/leave/decision?by=hr`,decison, "Error Fetching to get decision By HR")
+    },
+
+    //http://ip:4040/api/leave/pendingapplication?for=hr
+
+    getLeaveRequestOfEmployeesByHR:  async() => {
+    return getRequest(`/leave/pendingapplication?for=hr`, "Error Fetching to get Leave Request Of Employee By HR")
     }
 
 };

@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import authJWT from "../services/auth.jsx";
 import Cookies from 'js-cookie';
 import { UserContext } from "../context api/Context.jsx";
+import {getYear} from "../utils/FormateDate.js";
 
 const Login = () => {
   const {setUserInfo}= useContext(UserContext);
@@ -86,19 +87,19 @@ const { enqueueSnackbar } = useSnackbar();
 
 // }
 
-function getGreetings() {
-  const currentTime = new Date();
-  const currentHour =  currentTime.getHours();
- if(currentHour >= 5 && currentHour<12){
-  return 'Morning'
- }
- else if(currentHour>=12 && currentHour<18){
-return 'Afternoon'
- }
- else{
-  return 'Evening'
- }
-}
+// function getGreetings() {
+//   const currentTime = new Date();
+//   const currentHour =  currentTime.getHours();
+//  if(currentHour >= 5 && currentHour<12){
+//   return 'Morning'
+//  }
+//  else if(currentHour>=12 && currentHour<18){
+// return 'Afternoon'
+//  }
+//  else{
+//   return 'Evening'
+//  }
+// }
 
 
 
@@ -108,8 +109,8 @@ return 'Afternoon'
       <div className="bg-[#dff1e0] h-screen w-full flex flex-col   justify-center items-center relative">
         <div className="bg-green  w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
           <div className=" md:w-1/2 hidden md:flex flex-col justify-center  text-white pl-4">
-          <p className="text-2xl font-semibold">Good {getGreetings()}...
-          <br/>
+          <p className="text-2xl font-semibold">
+       
           Manage Your Leave Effortlessly!
           
           </p>
@@ -149,8 +150,8 @@ return 'Afternoon'
                 btnText="Submit"
                 width="full"
                 type='submit'
-                bg="green"
-                p={5}
+                backgroundColor={'bg-green'}
+                padding={'p-3'}
                 // onClick={handleSubmitClick}
               />
             
@@ -158,7 +159,7 @@ return 'Afternoon'
   
           </div>
         </div>
-        <p className="absolute bottom-5">Legal and policies 2024 Tiller. All rights Reserved.</p>
+        <p className="absolute bottom-5">Copyright © {getYear(new Date())} Tiller | All rights Reserved.</p>
       </div>
 
     </div>

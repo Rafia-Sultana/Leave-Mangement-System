@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({bg,fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIcon,p}) => {
+const Button = ({fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIcon,padding,backgroundColor}) => {
 
     return (
         
@@ -9,7 +9,7 @@ const Button = ({bg,fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIc
            onClick={onClick}
           
             className={` font-${fontSize} text-${textColor} w-${width} 
-              border-r-black focus:outline-none rounded p-${p} bg-${bg}` }
+              border-r-black focus:outline-none rounded ${padding}  ${backgroundColor}` }
            >
            {BtnIcon && <BtnIcon />}
             {btnText}</button>
