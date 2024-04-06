@@ -15,6 +15,9 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import { UserContext } from "../context api/Context.jsx";
 import employee from "../services/employee.jsx";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import team from '../assets/styles/svg/team.svg'
+import personal from '../assets/styles/svg/personal.svg'
+import dashboard from '../assets/styles/svg/dashboard.svg'
 
 const Dashboard = () => {
   const [open, setOpen] = useState({});
@@ -44,6 +47,7 @@ const location = useLocation()
           createNavLink("leave-application", "Leave Application"),
           createNavLink("manager_leave_history", "Leave Request"),
         ],
+        icon:personal
       },
       {
         category: "Team",
@@ -51,6 +55,7 @@ const location = useLocation()
           createNavLink("manager-leave-request", "Leave Request"),
           createNavLink("manager_team_leave_info", "Leave History"),
         ],
+        icon:team
       },
     ],
     "HR": [
@@ -75,13 +80,14 @@ const location = useLocation()
     setOpen({ [index]: !open[index] });
   };
 const isNavActive = (to) =>{
+console.log(location.pathname === to);
 
 return location.pathname === to;
 }
 
   return (
     <div className="font-poppins">
-      <header className="h-20 bg-blue-lighter flex items-center justify-between  relative">
+      <header className="h-20 bg-[#DCF3FF] flex items-center justify-between  relative">
         <div className="flex items-center">
           <div className="menu-toggle" onClick={menuToggleClick}>
             <div className="hamburger"></div>
@@ -101,20 +107,21 @@ return location.pathname === to;
       </header>
 
       <div className="flex">
-        <nav className="h-[calc(100vh-80px)]  bg-blue-lighter text-white w-[60%] md:w-[30%] lg:w-[20%]  site-nav border border-t-white">
+        <nav className="h-[calc(100vh-80px)]  bg-[#DCF3FF] text-black w-[60%] md:w-[30%] lg:w-[20%]  site-nav  border-t-white">
           <ul className="flex flex-col items-center  gap-8">
-            <li className="mt-10 w-[80%]  xl:w-[60%] bg-blue-light rounded flex justify-center items-center py-1 ">
+            <li className="mt-10 w-[80%]  xl:w-[60%] bg-[#DCF3FF] rounded flex justify-start items-center gap-3 py-1 ">
           
-           
+            <img src={dashboard} alt="" className="w-6 h-6" />
               <NavLink to={"/dashboard"}  style={{
-                color: isNavActive("/dashboard") ? 'black' : 'white',
+                color: isNavActive("/dashboard") ? 'white' : 'black',
+                backgroundColor:isNavActive("/dashboard") ? '#7BD3FF' : 'transparent',
               }}>Dashboard</ NavLink >
             </li>
 
             {navLinks[role]?.map((section, index) => (
               <ul
                 key={index}
-                className=" w-[80%]  xl:w-[60%] bg-blue-light rounded flex justify-center items-center py-1 "
+                className=" w-[80%]  xl:w-[60%]  rounded flex justify-start items-center py-1 "
               >
                 <li>
             
@@ -122,20 +129,18 @@ return location.pathname === to;
                     {section?.text}
                   </NavLink>
                 </li>
-                <li className="">
+                <li className="flex gap-3">
+           
+                   
+              <img src={section.icon} alt="" className="w-6 h-6" />
+                    
+            
                   <li className="">
-                    {" "}
-                    <p onClick={() => handleMoreIconClick(index)}>
-                      {section.category}
-                      {section.category && <ExpandMoreIcon />}
-                    </p>
-                  </li>
-                  <li className="border-l">
+              <li className="font-bold"> {section.category}</li>
                     {section.links?.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         <NavLink
-                          className={`ml-2 my-1  text-sm ${
-                            open[index] ? "block" : "hidden"
+                          className={`ml-2 my-1  text-sm 
                           }`}
                           to={link.to}
                           

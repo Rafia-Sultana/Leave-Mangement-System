@@ -15,6 +15,8 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Container from "@mui/material/Container";
 import { useNavigate, useLocation } from "react-router-dom";
+import { enqueueSnackbar } from 'notistack';
+import FormateDate from "../utils/FormateDate";
 
 
 const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
@@ -30,6 +32,7 @@ const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
       btnIcon={DeleteOutlineOutlinedIcon}
       onClick={onDelete}
       padding={'p-1'}
+
     />
     <Button
       btnIcon={ModeEditOutlinedIcon}
@@ -59,6 +62,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
     <Paper sx={{ width: "100%", marginTop: "2%", marginBottom: "2%"}}>
       <TableContainer sx={{ maxHeight: 750 }}>
         <Table stickyHeader aria-label="sticky-table">
+      
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -100,7 +104,10 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                               <Box className={` hidden  xl:block`}>
                                 <ActionButtons
                                   viewDetails={() => viewDetails(index)}
-                                  onDelete={() => console.log("Delete", index)}
+                                  onDelete={() => {
+                                    console.log("Delete", index)
+                                   enqueueSnackbar(`SuccessFully Deleted on ${FormateDate(new Date())}!`, { variant: 'error' })
+                                  }}
                                   onEdit={() => {
                                     console.log("Edit", index)
                                     navigate("/dashboard/leave-application",{state:row})

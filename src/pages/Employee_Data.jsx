@@ -20,9 +20,9 @@ export const Employee_Leave_Request = () => {
   const [id, setId] = useState(0);
 
   const [rows, setRows] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState(null);
-  const [selectedType, setSelectedType] = useState(null);
-  const [showAll, setShowAll] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedType, setSelectedType] = useState("All");
+  // const [showAll, setShowAll] = useState(false);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -89,29 +89,18 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
   const filteredRows = useMemo(() => {
     let filtered = rows;
 
-      if (selectedStatus) {
-       
-        filtered = filtered.filter(
-          (row) => row.leave_status === selectedStatus
-        );
-       }
-      if (selectedType) {
-        filtered = filtered.filter((row) => row.leave_name === selectedType);
-      }
-     
-    
-      if(selectedType==="All" && selectedStatus==="All"){
-      return rows;
-      }
-      if(selectedStatus==="Pending"&& selectedType==="All"){
-        filtered = filtered.filter(
-          (row) => row.leave_status === "Pending"
-        );
-      }
- 
 
-    return filtered;
-  }, [rows, selectedStatus, selectedType, showAll]);
+  if (selectedStatus !== "All") {
+    filtered = filtered.filter((row) => row.leave_status === selectedStatus);
+  }
+
+  if (selectedType !== "All") {
+    filtered = filtered.filter((row) => row.leave_name === selectedType);
+  }
+
+  return filtered;
+ 
+  }, [rows, selectedStatus, selectedType]);
 
   const getSelectedStatus = (status) => {
     setSelectedStatus(status);
@@ -121,9 +110,9 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
     setSelectedType(type);
   };
 
-  const handleShowAll = (e) => {
-    setShowAll(e.target.checked);
-  };
+  // const handleShowAll = (e) => {
+  //   setShowAll(e.target.checked);
+  // };
 
 
   return (

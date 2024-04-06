@@ -92,6 +92,8 @@
    
 } 
 .active{
-    color:black
+    color:white;
+    background-color: #7BD3FF;
+   
 }
 

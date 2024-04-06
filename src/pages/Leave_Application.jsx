@@ -21,7 +21,7 @@ const Leave_Application = () => {
 
   const { enqueueSnackbar } = useSnackbar();
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
-  console.log(userInfoData);
+  
   const userId = userInfoData?.emp_id;
 
   const initialState = {
@@ -87,7 +87,7 @@ const Leave_Application = () => {
     const fetchData = async () => {
       let leaveTypeData = await employee.getLeaveTypes();
       let teamMembersList = await employee.getTeamMembersOfUser(userId);
-      console.log(teamMembersList);
+      // console.log(teamMembersList);
       setTeamMembersList(teamMembersList);
       setLeaveTypes(leaveTypeData);
     };
@@ -182,7 +182,7 @@ const Leave_Application = () => {
               label={"Leave Type"}
               field={"leave_type_id"}
               handleInputChange={handleInputChange}
-              value={selectedOptionOfLeaveName || null}
+              value={selectedOptionOfLeaveName }
             />
           </Grid>
 
@@ -244,7 +244,7 @@ const Leave_Application = () => {
               label={"Delegated to my colleague"}
               field={"delegated_to"}
               handleInputChange={handleInputChange}
-              value={selectedOptionOfDelegatedCollegueName || null}
+              value={selectedOptionOfDelegatedCollegueName}
             />
           </Grid>
 
