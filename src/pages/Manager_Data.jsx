@@ -6,29 +6,34 @@ import Button from "../components/Button";
 import TextInput from "../components/InputFields/TextInput";
 import employee from "../services/employee";
 import Modal from "../components/Modal";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RadioInput from "../components/InputFields/RadioInput";
 import { Employee_Leave_Request } from "./Employee_Data";
-import useMediaQuery from '@mui/material/useMediaQuery';
+import useMediaQuery from "@mui/material/useMediaQuery";
 import LottiePlayers from "../components/LottiePlayers";
+import Cards from "../components/Cards";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import Avatar from "@mui/material/Avatar";
+import { useLocation, useNavigate } from "react-router-dom";
+import Leave_Application from "./Leave_Application";
 
 export const Manager_Leave_History = () => {
- 
   return (
     <div>
-   <Employee_Leave_Request/>
+      <Employee_Leave_Request />
     </div>
   );
 };
 export const Manager_Team_Leave_Info = () => {
+  const navigate = useNavigate();
+
+
+  const [rows, setRows] = useState([]);
+
+  const [open, setOpen] = useState(false);
  
 
-  const [id, setId] = useState(0);
-  const [empId, setEmpId] = useState(0);
-  const [rows, setRows] = useState([]);
-  const [rows2, setRows2] = useState([]);
-  const [open, setOpen] = useState(false);
-
-  const isSmallScreen = useMediaQuery('(max-width:600px)');
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   const handleClickOpen = (value) => {
     setId(value);
@@ -39,12 +44,10 @@ export const Manager_Team_Leave_Info = () => {
     setOpen(false);
   };
 
-
   const columns = [
-
     { id: "employee_name", label: "Name", minWidth: 170 },
     { id: "employee_designation", label: "Designation ", minWidth: 170 },
-  { id: "total_leave_days", label: "Total Days", minWidth: 170 },
+    { id: "total_leave_days", label: "Total Days", minWidth: 170 },
 
     {
       id: "action",
@@ -53,7 +56,74 @@ export const Manager_Team_Leave_Info = () => {
       align: "center",
     },
   ];
-  const columns2 =  [
+ 
+  const handleViewDetails = async (index, emp_id) => {
+
+    navigate('/dashboard/manager_view_each_teamMember_leave_info',{state:{empId:emp_id}})
+  };
+
+
+  useEffect(() => {
+    const fetchDataOfTeamLeave = async () => {
+      const teamMembersDetails = await employee.getLeaveHistroryOfTeam();
+      console.log(teamMembersDetails);
+      setRows(teamMembersDetails);
+    };
+    fetchDataOfTeamLeave();
+  }, []);
+
+
+ 
+
+  return (
+    <div>
+      {rows.length === 0 ? (
+        <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
+      ) : 
+      
+        <div className="">
+          <h2
+            className="text-2xl text-center font-semibold text-gray-darker
+       underline decoration-2 decoration-blue-dark 
+       underline-offset-8 mt-5"
+          >
+            Team Leave History
+          </h2>
+          <CommonTable
+            columns={columns}
+            rows={rows}
+            viewDetails={handleViewDetails}
+          />
+        </div>
+    
+      
+      }
+    </div>
+  );
+};
+
+
+export const Manager_View_Each_TeamMember_Leave_Info = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const  empId = location.state.empId;
+  const [id, setId] = useState(0);
+  const [rows2, setRows2] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [employeeBasicData, setEmployeeBasicData] = useState(null);
+
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+
+  const handleClickOpen = (value) => {
+    setId(value);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const columns2 = [
     { id: "leave_name", label: "Leave Type", minWidth: 100 },
     { id: "start_date", label: "Start Date", minWidth: 170, align: "center" },
     { id: "end_date", label: "End Date", minWidth: 170, align: "center" },
@@ -66,66 +136,66 @@ export const Manager_Team_Leave_Info = () => {
     },
     { id: "action", label: "Action", minWidth: 170, align: "center" },
   ];
-  const handleViewDetails = async (index,emp_id) => {
-    setEmpId(emp_id);
-    const teammembersLeaveInfos = await employee.getEmployeeRequestHistory(emp_id);
-    setRows2(teammembersLeaveInfos);
 
-  };
-  
+  useEffect(() => {
+    const fecthData = async () => {
+      const teammembersLeaveInfos = await employee.getTeamRequestHistory(
+        empId
+      );
+     
+      const employeeBasicData = await employee.basicInfo(empId);
+      setEmployeeBasicData(employeeBasicData);
+      setRows2(teammembersLeaveInfos);
+    };
+    fecthData();
+  }, []);
+
   const handleGoBack = () => {
-    setEmpId(0);
+  navigate(-1);
   };
 
-  useEffect(()=>{
-    const fetchDataOfTeamLeave = async ()=>{
- const teamMembersDetails = await employee.getLeaveHistroryOfTeam();
-
-setRows(teamMembersDetails)
-    }
-    fetchDataOfTeamLeave();
-  },[])
-
-  const smallScreenColumns = columns2.filter(column => 
-    column.id === "leave_name" || column.id === "leave_status" || column.id === "action"
+  const smallScreenColumns = columns2.filter(
+    (column) =>
+      column.id === "leave_name" ||
+      column.id === "leave_status" ||
+      column.id === "action"
   );
-
   return (
     <div>
-   <h2
-        className="text-2xl text-center font-semibold text-gray-darker
-       underline decoration-2 decoration-blue-dark 
-       underline-offset-8 mt-5"
-      >
-       Team Leave History
-      </h2>
-      {
+      <div className="flex justify-between mt-10">
+        <div className="flex gap-4 items-center">
+          <Avatar
+            alt={employeeBasicData?.name}
+            src="/static/images/avatar/1.jpg"
+            sx={{ width: 50, height: 50, backgroundColor: "#2b84b1" }}
+          />
+          <div className="">
+            <p className="font-semibold">{employeeBasicData?.name}</p>
+            <p className="text-sm">
+              {employeeBasicData?.designations[0].designation}
+            </p>
+          </div>
+        </div>
+        <Button
+          btnText={"Go Back"}
+          backgroundColor={"bg-[#2b84b1]"}
+          padding={"p-3"}
+          textColor={"white"}
+          onClick={handleGoBack}
+        ></Button>
+      </div>
 
-        rows.length ===0 ?
-     
-      <LottiePlayers
-            src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json"
-        
-          />:
-        empId===0?
+      <div className="">
+        <Cards empId={empId}/>
         <CommonTable
-            columns={columns}
-            rows={rows}
-            viewDetails={handleViewDetails}
-          />
-          :
-          <>
-          <Button btnText={'Go Back'} textColor={'blue'} onClick={handleGoBack} ></Button>
-            <CommonTable
-            columns={isSmallScreen? smallScreenColumns: columns2}
-            rows={rows2}
-            viewDetails={handleClickOpen}
-          />
-             {open && (
+          columns={isSmallScreen ? smallScreenColumns : columns2}
+          rows={rows2}
+          viewDetails={handleClickOpen}
+        />
+      </div>
+      {open && (
         <Modal open={open} handleClose={handleClose} historyData={rows2[id]} />
       )}
-          </>
-      }
     </div>
   );
 };
@@ -135,15 +205,12 @@ export const Manager_Leave_Request = () => {
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
 
-
-//  console.log(rows);
+  
 
   const columns = [
-   
-    
     { id: "employee_name", label: "Name", minWidth: 100 },
-   { id: "delegated_to", label: "Delegated To", minWidth: 100 },
-    { id: "leave_type", label: "Leave Type", minWidth: 100 },
+    { id: "delegated_to", label: "Delegated To", minWidth: 100 },
+    { id: "leave_name", label: "Leave Type", minWidth: 100 },
     {
       id: "start_date",
       label: "Start Date",
@@ -203,130 +270,171 @@ export const Manager_Leave_Request = () => {
     // }
   ];
 
-const handleClickOpen = (value) => {
-  setId(value);
-  setOpen(true);
-};
-const handleClose = () => {
-  setOpen(false);
-};
+  const handleClickOpen = (value) => {
+    setId(value);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-useEffect(()=>{
-const fetchData = async ()=>{
- const LeaveRequstData = await employee.getLeaveRequestOfTeamByTeamLead();
-
- setRows(LeaveRequstData);
-}
-fetchData();
-},[])
-const isSmallScreen = useMediaQuery('(max-width:600px)');
-const smallScreenColumns = columns.filter(column => 
-  column.id === "employee_name" || column.id === "leave_status" || column.id === "action"
-);
-  return <div>
-     <h2
+  useEffect(() => {
+    const fetchData = async () => {
+      const LeaveRequstData = await employee.getLeaveRequestOfTeamByTeamLead();
+    
+      setRows(LeaveRequstData);
+    };
+    fetchData();
+  }, []);
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+  const smallScreenColumns = columns.filter(
+    (column) =>
+      column.id === "employee_name" ||
+      column.id === "leave_status" ||
+      column.id === "action"
+  );
+  return (
+    <div>
+      <h2
         className="text-2xl text-center font-semibold text-gray-darker
        underline decoration-2 decoration-blue-dark 
        underline-offset-8 mt-5 mb-1"
       >
-      Team's Request History
+        Team's Request History
       </h2>
-      {
-        rows.length === 0?
-        <LottiePlayers
-        src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json"
-     
-      />:
-<CommonTable columns={isSmallScreen?smallScreenColumns:columns} rows={rows} 
-viewDetails={handleClickOpen}/>
-      }
-
- {open && (
-        <Modal open={open} 
-        handleClose={handleClose} 
-        historyData={rows[id]} />
+      {rows.length === 0 ? (
+        <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
+      ) : (
+        <CommonTable
+          columns={isSmallScreen ? smallScreenColumns : columns}
+          rows={rows}
+          viewDetails={handleClickOpen}
+        />
       )}
-      
-  </div>;
-};
 
-
-export const Manager_Leave_Approval = ({applicationId}) => {
-  
-  const [selectedValue, setSelectedValue] = useState('Pending');
-  const [comments,setComments]= useState(null);
-  const [logData, setLogData]= useState({});
-  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
-    const role = userInfoData.role;
-  
-
-  const handleChange = (event) => {
-  setSelectedValue(event.target.value);
-  };
-  const handleCommentSection =(event)=>{
-    setComments(event.target.value);
-  }
-
-
-    const deciosnByTeamLead = {
-      application_id:applicationId,
-      leave_status:selectedValue,
-      comments:comments,
-      // sent_by: role,
-      sent_to: selectedValue === 'Approved'? 'HR':'Applicant',
-      processing_time:new Date().toISOString(),
-  }
-//  console.log(postByTeamLead);
-
-const handleSubmit = async () =>{
-  const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
-  // if(result){
-  //   setLogTable((prev)=> [...prev,deciosnByTeamLead])
-  // }
-  // console.log(result);
-}
-
-
-  return (
-    <div
- className="flex flex-col space-y-4"
-     >
-
-     <div
-     className="flex flex-col md:flex-row "
-      >
-
-      <RadioInput label="Pending"  value={"Pending"}  color={"warning"}
-       onchange={handleChange}  selectedValue={selectedValue}/>
-            <RadioInput label="Approved" value={"Approved"} color={"success"}
-     onchange={handleChange}  selectedValue={selectedValue}/>
-      <RadioInput label="Rejected" value={"Rejected"} color={"error"}
-        onchange={handleChange}  selectedValue={selectedValue} />
-     </div>
-
-     
-      {/* <TextField
-          id="outlined-multiline-static"
-      multiline
-          rows={4}
-          fullWidth
-          placeholder="Add comment ..."/> */}
-          <TextInput
-           rows={4}
-           multiline={true}
-           onchange={handleCommentSection}
-             placeholder="Add comment ..."
-          />
-           <Button
-              fontSize="semibold"
-              textColor="white"
-              btnText="SUBMIT"
-              width="full"
-              type="submit"
-              backgroundColor="bg-green"
-              padding={'p-3'}
-              onClick={handleSubmit}
-            ></Button>
+      {open && (
+        <Modal open={open} handleClose={handleClose} historyData={rows[id]} />
+      )}
     </div>
   );
 };
+
+export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
+  const [selectedValue, setSelectedValue] = useState("Pending");
+  const [comments, setComments] = useState(null);
+  const [logData, setLogData] = useState({});
+  const [isBtnDisable, setIsBtnDisable] = useState(true);
+  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
+  const role = userInfoData.role;
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+  const handleCommentSection = (event) => {
+    setComments(event.target.value);
+  };
+
+  const deciosnByTeamLead = {
+    application_id: applicationId,
+    leave_status: selectedValue,
+    comments: comments,
+    // sent_by: role,
+    sent_to: selectedValue === "Approved" ? "HR" : "Applicant",
+    processing_time: new Date().toISOString(),
+  };
+
+  // const handleSubmit = async () => {
+  //   const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
+  // };
+
+ 
+  const handleSendToHR = async () => {
+    console.log("handleSendToHR");
+    const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
+  };
+
+  const handleReturnToEmployee = () => {
+    console.log("returnToEmployee");
+  };
+
+  useEffect(() => {
+    if (selectedValue === "Approved") {
+      setIsBtnDisable(false);
+    } else {
+      setIsBtnDisable(true);
+    }
+  }, [selectedValue]);
+  return (
+    <div className="flex flex-col space-y-3">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-2">
+    
+        <div className="flex flex-col md:flex-row">
+          <RadioInput
+            label="Approved"
+            value={"Approved"}
+            color={"success"}
+            onchange={handleChange}
+            selectedValue={selectedValue}
+          />
+          <RadioInput
+            label="Rejected"
+            value={"Rejected"}
+            color={"error"}
+            onchange={handleChange}
+            selectedValue={selectedValue}
+          />
+        </div>
+
+        <Button
+          btnText={"Edit"}
+          btnIcon={EditOutlinedIcon}
+          textColor={"blue"}
+          onClick={editButton}
+        ></Button>
+      </div>
+
+      <div className="">
+        <TextInput
+          rows={4}
+          multiline={true}
+          onchange={handleCommentSection}
+          placeholder="Add comment ..."
+        />
+      </div>
+
+      <div className="flex gap-4 ">
+        <Button
+          fontSize="semibold"
+          textColor="white"
+          btnText="Send to HR"
+          width="full"
+          type="submit"
+          backgroundColor={isBtnDisable ? "bg-gray" : "bg-green"}
+          padding={"p-3"}
+          onClick={handleSendToHR}
+          disable={isBtnDisable}
+        ></Button>
+        <Button
+          fontSize="semibold"
+          textColor="white"
+          btnText="Return to Employee"
+          width="full"
+          type="submit"
+          backgroundColor={!isBtnDisable ? "bg-gray" : "bg-red"}
+          padding={"p-3"}
+          onClick={handleReturnToEmployee}
+          disable={!isBtnDisable}
+        ></Button>
+      </div>
+    </div>
+  );
+};
+
+
+export const Edit_Leave_Application =()=>{
+ return (
+    <div className="">
+      <Leave_Application/>
+    </div>
+  )
+}

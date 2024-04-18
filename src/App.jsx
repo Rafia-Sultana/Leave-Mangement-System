@@ -19,7 +19,7 @@ import Employee_summary from "./pages/Employee_summary";
 import Overview from "./pages/Overview";
 import { SnackbarProvider } from "notistack";
 import CommonTable from "./components/CommonTable";
-import { Manager_Leave_History } from "./pages/Manager_Data";
+import { Edit_Leave_Application, Manager_Leave_History, Manager_View_Each_TeamMember_Leave_Info } from "./pages/Manager_Data";
 import { HR_Leave_History, HR_Leave_Request } from "./pages/HR_Data";
 import { Manager_Team_Leave_Info } from "./pages/Manager_Data";
 import { Manager_Leave_Request } from "./pages/Manager_Data";
@@ -77,6 +77,14 @@ function App() {
                 <Route
                   path="manager_team_leave_info"
                   element={<Manager_Team_Leave_Info />}
+                />
+                <Route
+                  path="manager_view_each_teamMember_leave_info"
+                  element={<Manager_View_Each_TeamMember_Leave_Info />}
+                />
+                <Route
+                  path="manager_edit_leave_application"
+                  element={<Edit_Leave_Application  />}
                 />
                 <Route
                   path="manager-leave-request"

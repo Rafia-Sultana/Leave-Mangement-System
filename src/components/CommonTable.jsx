@@ -43,8 +43,8 @@ const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
   </>
 );
 
-const CommonTable = ({ columns, rows, viewDetails }) => {
-  // console.log(rows);
+const CommonTable = ({ columns, rows, viewDetails,handleDelete  }) => {
+ 
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
   const location = useLocation();
@@ -59,7 +59,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
   };
 
   return (
-    <Paper sx={{ width: "100%", marginTop: "2%", marginBottom: "2%"}}>
+    <Paper sx={{ width: "100%", marginBottom: "2%"}}>
       <TableContainer sx={{ maxHeight: 750 }}>
         <Table stickyHeader aria-label="sticky-table">
       
@@ -106,6 +106,7 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                                   viewDetails={() => viewDetails(index)}
                                   onDelete={() => {
                                     console.log("Delete", index)
+                                   handleDelete(index)
                                    enqueueSnackbar(`SuccessFully Deleted on ${FormateDate(new Date())}!`, { variant: 'error' })
                                   }}
                                   onEdit={() => {
@@ -135,7 +136,9 @@ const CommonTable = ({ columns, rows, viewDetails }) => {
                                     <ActionButtons
                                       viewDetails={() => viewDetails(index)}
                                       onDelete={() =>
-                                        console.log("Delete", index)
+                                       { console.log("Delete", index)
+                                       handleDelete(index)
+                                      }
                                       }
                                       onEdit={() => {
                                         console.log("Edit", index)

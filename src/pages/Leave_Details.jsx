@@ -1,26 +1,29 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Box } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import employee from '../services/employee';
+import AutoComplete from '../components/InputFields/AutoComplete';
 
 
-const Leave_Details = ({ info }) => {
-  
+const Leave_Details = ({ info,isclickedEditBtn }) => {
+  const [leaveTypes, setLeaveTypes] = useState(null);
   const isSmallScreen  = useMediaQuery('(max-width:600px)');
-  const { delegated_to, reason, application_date, leave_status,start_date,end_date,total_days,application_id} = info;
+  const { delegated_to,leave_name, reason, application_date, leave_status,start_date,end_date,total_days,application_id} = info;
   
-  // useEffect(() => {
+  useEffect(() => {
     
-  //   const fetchData = async () => {
-  //   const logData = await employee.getLog(application_id);
-  //   console.log('logData',logData);
-  // };
+    const fetchData = async () => {
+      let leaveTypeData = await employee.getLeaveTypes(); 
+      setLeaveTypes(leaveTypeData);
+  };
   
-  //   fetchData();
-  // }, []);
-  
+    fetchData();
+  }, []);
+   const handleInputChange = () =>{
+
+   }
 
   return (
     <Card className='w-full'>
@@ -33,6 +36,30 @@ const Leave_Details = ({ info }) => {
 
           {isSmallScreen && <>
           
+         
+            <div className=''>
+              <p className='font-semibold'>Total_Days</p>
+              <p className='text-sm'>{total_days}</p>
+            </div>
+          </>}
+         
+         { isclickedEditBtn? <div className="">
+
+         <AutoComplete
+              options={leaveTypes}
+              label={"Leave Type"}
+              field={"leave_type_id"}
+              handleInputChange={handleInputChange}
+              // value={selectedLeaveType || selectedOptionOfLeaveName || null}
+            />
+         </div>
+         
+         :
+                <div className=''>
+                <p className='font-semibold'>Leave Type</p>
+                <p className='text-sm'>{leave_name}</p>
+              </div>
+            }
             <div className=''>
               <p className='font-semibold'>Start Date</p>
               <p className='text-sm'>{start_date}</p>
@@ -41,11 +68,6 @@ const Leave_Details = ({ info }) => {
               <p className='font-semibold'>End Date</p>
               <p className='text-sm'>{end_date}</p>
             </div>
-            <div className=''>
-              <p className='font-semibold'>Total_Days</p>
-              <p className='text-sm'>{total_days}</p>
-            </div>
-          </>}
             <div className=''>
               <p className='font-semibold'>Delegated To</p>
               <p className='text-sm'>{delegated_to}</p>

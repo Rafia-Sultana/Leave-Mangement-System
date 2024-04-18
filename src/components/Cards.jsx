@@ -9,7 +9,8 @@ import pending from '../assets/styles/svg/pending.svg';
 import total from '../assets/styles/svg/total.svg';
 import reject from '../assets/styles/svg/reject.svg';
 
-const Cards = () => {
+const Cards = ({empId}) => {
+
     const [summary, setSummary] = useState(null);
     const userInfoData = JSON.parse(localStorage.getItem('userInfo'));
     const userId = userInfoData?.emp_id;
@@ -21,7 +22,7 @@ const Cards = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const leaveSummaryData = await employee.leaveRequestSummary(userId);
+          const leaveSummaryData = await employee.leaveRequestSummary(empId);
           setSummary(leaveSummaryData);
         } catch (error) {
           console.log(error);
@@ -42,7 +43,7 @@ const Cards = () => {
     }
    
     return (
-        <div className=" relative grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap:4  xl:gap-10    lg:rounded-lg w-full  p-2 my-12">
+        <div className=" relative grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap:4  xl:gap-10    lg:rounded-lg w-full  p-2 mt-5 mb-12">
         <div className="absolute lg:hidden  top-1/2 -translate-y-1/2 left-[8%] w-[84%]  h-[1px] bg-black opacity-50">
         </div>
         <div className="absolute lg:hidden  left-1/2 -translate-x-1/2 h-[90%]  w-[1px] top-[5%] bg-black opacity-50">

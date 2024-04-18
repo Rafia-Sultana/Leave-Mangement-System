@@ -86,7 +86,7 @@ const ApexChart = () => {
                   className="bar absolute bg-red   "
                   style={{
                     width: "4px",
-                    height: "100%",
+                    height: "83%",
                     left: `${maxPercentage}%`,
                     top: "0",
                  

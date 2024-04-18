@@ -67,7 +67,7 @@
     font-size: 1.5rem !important; 
 
   }
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     /* .container{
         display: flex;
     } */
@@ -94,6 +94,7 @@
 .active{
     color:white;
     background-color: #7BD3FF;
-   
+    /* padding: 5px; */
+    /* width: 100%; */
 }
 

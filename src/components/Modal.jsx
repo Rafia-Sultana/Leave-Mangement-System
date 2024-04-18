@@ -9,13 +9,15 @@ import CommonTable from "./CommonTable";
 import { employee_data } from "../utils/Dummy_Data";
 import Button from "./Button";
 import employee from "../services/employee";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Manager_Leave_Approval } from "../pages/Manager_Data";
 import { useState,useEffect } from "react";
 
 const Modal = ({ open, handleClose, historyData }) => {
   const location = useLocation();
-  const [logData, setLogData] = useState([])
+  const navigate = useNavigate();
+  const [logData, setLogData] = useState([]);
+  const [isclickedEditBtn,seIsClickedEditBtn]=useState(false);
   // console.log(historyData);
   // const [logTable, setLogTable] = useState([]);
 
@@ -48,20 +50,35 @@ const Modal = ({ open, handleClose, historyData }) => {
   ];
   const handleClickOpen = () => {
     console.log("object");
+
   };
 
   useEffect(() => {
     
     const fetchData = async () => {
-      console.log(historyData.application_id);
+      //console.log(historyData.application_id);
     const logData = await employee.getLog(historyData.application_id);
     
     setLogData(logData)
-    console.log('logData',logData);
+    // console.log('logData',logData);
   };
   
     fetchData();
   }, []);
+
+  const handleEditButton = () => {
+  
+    const data = {
+      ...historyData,
+      btnText:'Send To Employee',
+      headerText:'Edit Leave Application'
+    }
+    navigate('/dashboard/manager_edit_leave_application',{state:data,
+    
+    
+    })
+// seIsClickedEditBtn(true);
+  }
   return (
     <div className="w-full">
       <Dialog
@@ -69,7 +86,11 @@ const Modal = ({ open, handleClose, historyData }) => {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        minWidth={"lg"}
+        maxWidth={"lg"}
+        
+        fullWidth
+        style={{padding:"50px"}}
+       
       >
         <DialogTitle
           id="alert-dialog-title"
@@ -86,11 +107,11 @@ const Modal = ({ open, handleClose, historyData }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <Leave_Details info={historyData} />
+            <Leave_Details info={historyData} isclickedEditBtn={isclickedEditBtn} />
             {role === "Employee" ||
             (role === "Team Lead" &&
               location.pathname === "/dashboard/manager_leave_history") ||
-            location.pathname === "/dashboard/manager_team_leave_info" ? (
+            location.pathname === "/dashboard/manager_view_each_teamMember_leave_info" ? (
               <CommonTable
                 columns={columns2}
                 rows={logData}
@@ -100,7 +121,7 @@ const Modal = ({ open, handleClose, historyData }) => {
               <>
                 <Manager_Leave_Approval
                   applicationId={historyData.application_id}
-          
+                  editButton={handleEditButton}
                 />
               </>
             )}

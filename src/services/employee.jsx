@@ -139,7 +139,7 @@ const employee = {
 ,
     //http://ip:4040/api/leave/history/team
     getLeaveHistroryOfTeam : async() => {
-    return getRequest(`/leave/history/team`,
+    return getRequest(`/leave/history/team/count`,
      "Error Fetching to get Leave Request Of Team By TeamLead"
      )
     }
@@ -149,6 +149,13 @@ const employee = {
     return postRequest(`/leave/decision?by=teamLead`,decison, "Error Fetching to get decision By TeamLead")
     },
 
+    getTeamRequestHistory: async(userId)=>{
+   
+      return getRequest(`/leave/history/team/${userId}`,"Error Fetching to get employee request history")
+      }
+
+    
+,
 
     // ----------------------- HR ----------------------------
 

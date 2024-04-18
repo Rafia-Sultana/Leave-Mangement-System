@@ -102,19 +102,24 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
  
   }, [rows, selectedStatus, selectedType]);
 
-  const getSelectedStatus = (status) => {
-    setSelectedStatus(status);
+  const getSelectedStatus = (e) => {
+   setSelectedStatus(e.target.value);
   };
 
-  const getSelectedType = (type) => {
-    setSelectedType(type);
+  const getSelectedType = (e) => {
+   setSelectedType(e.target.value);
   };
 
   // const handleShowAll = (e) => {
   //   setShowAll(e.target.checked);
   // };
 
-
+  const handleDelete =(index)=>{
+    console.log('handle deltr',index);
+  const updateRows =rows;
+  rows[index].leave_status = "Withdraw" ;
+  setRows(updateRows);
+   }
   return (
     <div className="">
       <h2
@@ -126,7 +131,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
       </h2>
 
       <div className="flex  flex-col md:flex-row justify-between relative">
-        <div className="md:flex">
+        <div className="grid grid-cols-2 w-[100%] md:w-[50%]  gap-5 my-3">
           <SelectInput
             options={leaveStatusOptions}
             placeholder="Filter by status"
@@ -149,6 +154,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
             columns={isSmallScreen ? smallScreenColumns:columns}
             rows={filteredRows}
             viewDetails={handleClickOpen}
+            handleDelete ={handleDelete}
           />
         </div>
       ) : loading ? (
