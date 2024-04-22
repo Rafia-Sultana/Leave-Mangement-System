@@ -10,7 +10,8 @@ import AutoComplete from '../components/InputFields/AutoComplete';
 const Leave_Details = ({ info,isclickedEditBtn }) => {
   const [leaveTypes, setLeaveTypes] = useState(null);
   const isSmallScreen  = useMediaQuery('(max-width:600px)');
-  const { delegated_to,leave_name, reason, application_date, leave_status,start_date,end_date,total_days,application_id} = info;
+  const { delegated_to,leave_name, reason, application_date, leave_status,start_date,end_date,total_days,
+    application_id} = info;
   
   useEffect(() => {
     

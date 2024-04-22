@@ -11,7 +11,9 @@ const AutoComplete = ({options,label,handleInputChange,field,value}) => {
                 getOptionLabel={(option) => option.leave_name || option.employee_name}
                 renderInput={(params) => (
                   <TextField {...params}
-                   label={label}/>
+                   label={label}
+                   required={true}
+                   />
                 )}
                 onChange={(e, newValue) => {
                   if (newValue) {
@@ -23,6 +25,7 @@ const AutoComplete = ({options,label,handleInputChange,field,value}) => {
                  
                   return   option.label === value.label;
                 }}
+            
               />
         </div>
     );

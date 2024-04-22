@@ -106,8 +106,8 @@ const { enqueueSnackbar } = useSnackbar();
   return (
     <div className="">
    
-      <div className="bg-[#dff1e0] h-screen w-full flex flex-col   justify-center items-center relative">
-        <div className="bg-green  w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
+      <div className="bg-[#DCF3FF] h-screen w-full flex flex-col   justify-center items-center relative">
+        <div className="bg-blue-lightest w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
           <div className=" md:w-1/2 hidden md:flex flex-col justify-center  text-white pl-4">
           <p className="text-2xl font-semibold">
        
@@ -150,7 +150,7 @@ const { enqueueSnackbar } = useSnackbar();
                 btnText="Submit"
                 width="full"
                 type='submit'
-                backgroundColor={'bg-green'}
+                backgroundColor={'bg-blue-lightest'}
                 padding={'p-3'}
                 // onClick={handleSubmitClick}
               />

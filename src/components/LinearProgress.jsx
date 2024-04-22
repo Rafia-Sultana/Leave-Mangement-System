@@ -38,8 +38,16 @@ const ApexChart = () => {
 
   return (
     <div className="font-poppins border p-5 border-gray-lightest rounded-lg">
-      <p className="text-center mb-10 mt-4 text-2xl ">Total Leave Chart</p>
-
+       <div className="flex justify-between">
+       <p className="text-center mb-10 mt-4 text-2xl ">Total Leave Chart</p>
+       <div className="text-xs">
+        <p>    Total Yearly Leave: <span className="font-bold">42</span></p>
+        <p> Leave Taken: <span  className="font-bold">30</span></p>
+        <p> Leave Remaining: <span  className="font-bold">12</span> </p>
+       </div>
+ 
+       </div>
+     
       <div className="flex flex-col gap-2 border-s-2 border-gray">
         {customLegendItems.map(({ val, exp, type, color }, index) => {
           const percentage = Math.min((val / exp) * 100, 100);

@@ -36,6 +36,7 @@ const MenuProps = {
           //requirements . render value is useful when you want to show additional information, format the display differently, or trigger some side effect when a value is selected.
         onChange={getSelectedValue}
         MenuProps={MenuProps}
+        required={true}
         >
           {options.map((name) => (
             <MenuItem key={name} value={name}>

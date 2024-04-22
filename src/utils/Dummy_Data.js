@@ -607,6 +607,67 @@ export const leaveInfo = [
   ]
   }
 
+  export const HR_other_leave_history = {
+    software_development: [
+      {
+        emp_id: 1,
+        name: 'Md. Magfur Alam',
+        designation: 'Software Engineer',
+        total_days: 5,
+      },
+      {
+        emp_id: 2,
+        name: 'Shaibal',
+        designation: 'Software Engineer',
+        total_days: 5,
+      },
+      {
+        emp_id: 3,
+        name: 'Rafia',
+        designation: 'Software Engineer',
+        total_days: 5,
+      },
+      {
+        emp_id: 4,
+        name: 'Raj',
+        designation: 'Software Engineer',
+        total_days: 5,
+      },
+    ],
+    planning: [
+      {
+        emp_id: 5,
+        name: 'John Doe',
+        designation: 'Marketing Manager',
+        total_days: 5,
+      },
+      {
+        emp_id: 6,
+        name: 'Alice',
+        designation: 'Marketing Executive',
+        total_days: 5,
+      },
+      // Add more employees for the marketing department here
+    ],
+    admin: [
+      {
+        emp_id: 7,
+        name: 'Emma',
+        designation: 'Financial Analyst',
+        total_days: 5,
+      },
+      {
+        emp_id: 8,
+        name: 'Mike',
+        designation: 'Accountant',
+        total_days: 5,
+      },
+      // Add more employees for the finance department here
+    ],
+    // Add more departments here
+  };
+  
+
 
   
 

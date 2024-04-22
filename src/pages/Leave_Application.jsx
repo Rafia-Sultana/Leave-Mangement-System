@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button.jsx";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
 import FormateDate from "../utils/FormateDate.js";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,22 +15,16 @@ import DateInput from "../components/InputFields/DateInput.jsx";
 
 const Leave_Application = () => {
   const { state } = useLocation();
-
-  const navigate = useNavigate();
-
   const { enqueueSnackbar } = useSnackbar();
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
-
-  // const defaultStartDate = dayjs();
-  // const defaultEndDate = dayjs();
 
   const initialState = {
     emp_id: userId,
     leave_type_id: state?.leave_type_id || null,
     leave_name: state?.leave_name || null,
-    start_date: state?.start_date || null,
-    end_date: state?.end_date ||  null,
+    start_date: state ? dayjs(state.start_date, "M/D/YYYY, h:mm:ss A") : null,
+    end_date: state ? dayjs(state.end_date, "M/D/YYYY, h:mm:ss A") : null,
     duration: state?.duration || "",
     joining_date: "",
     file: null,
@@ -43,99 +32,107 @@ const Leave_Application = () => {
     delegated_to: state?.delegated_to || null,
     application_date: "",
   };
-  
- 
 
   const [formData, setFormData] = useState(initialState);
-  const [total_Days, setTotal_Days] = useState(null);
   const [selectedLeaveType, setSelectedLeaveType] = useState(null);
-  // const [selectedOption, setSelectedOption] = useState("fullDay");
   const [leaveTypes, setLeaveTypes] = useState(null);
   const [collegueName, setCollegueName] = useState(null);
   const [teamMembersList, setTeamMembersList] = useState(null);
   const [startTime, setStartTime] = useState("9:00 AM");
   const [endTime, setEndTime] = useState("6:00 PM");
-  const [isoTime,setIsoTime] = useState(null);
+  const [isoTime, setIsoTime] = useState(null);
+  const [endIsoTime, setEndIsoTime] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState(null);
-  const today = new Date().toISOString();
 
 
+  const convertToIsoString = (date, uptime) => {
+    const [time, ampm] = uptime.split(" ");
+    const [hours, minutes] = time.split(":").map(Number);
+    const adjustHours = ampm == "PM" && hours !== 12 ? hours + 12 : hours;
+    const date1 = new Date(date?.$d);
+    date1.setHours(adjustHours, minutes, 0, 0);
+    const timestamp = date1?.toISOString();
+    return timestamp;
+  };
 
-
- const convertToIsoString = (date,uptime) => {
-  
-  const [time,ampm] = uptime.split(" ");
-  const [hours, minutes]=time.split(":").map(Number);
-  const adjustHours = ampm == "PM" && hours!== 12? hours+12:hours;
-  const date1 = new Date(date?.$d);
-  date1.setHours(adjustHours,minutes,0,0);
-  const timestamp = date1?.toISOString();
-  //  setIsoTime(timestamp);
-  return timestamp;
-  }
-  useEffect(()=>{
-   if((formData?.start_date)!==null){
-     const startTimestamp = convertToIsoString(formData?.start_date,startTime);
-     setIsoTime(startTimestamp);
-    //  const endTimestamp = convertToIsoString(formData?.end_date,endTime);
-    //  console.log(endTimestamp);
-    //  setIsoTime(endTimestamp);
-
+  useEffect(() => {
+    if (formData?.start_date !== null) {
+      const startTimestamp = convertToIsoString(
+        formData?.start_date,
+        startTime
+      );
+      setIsoTime(startTimestamp);
     }
-  },[startTime,endTime,formData?.start_date,formData?.end_date])
+    if (formData?.end_date !== null) {
+      const endTimestamp = convertToIsoString(formData?.end_date, endTime);
+      setEndIsoTime(endTimestamp);
+    }
+  }, [startTime, endTime, formData?.start_date, formData?.end_date]);
 
   const handleDateChange = (date, label) => {
-   setFormData((prevState) => ({
-    ...prevState,
-    [label]:date
-  }));
+    setFormData((prevState) => ({
+      ...prevState,
+      [label]: date,
+    }));
   };
 
   const disablePreviousDates = (date) => {
-  if (formData.end_date) {
-      return (
-        new Date(formData.end_date) <
-        new Date(date.$d)
-      );
+    if (formData.end_date) {
+      return new Date(formData.end_date) < new Date(date.$d);
     }
-
   };
-  
+
   const disableFutureDates = (date) => {
     if (formData.start_date) {
-     return (
-    new Date(formData.start_date) >
-        new Date(date.$d)
-      );
+      return new Date(formData.start_date) > new Date(date.$d);
     }
-    
   };
-  
 
   const getJoiningDate = (toDate) => {
-    const currentToDate = new Date(toDate);
-    const tomorrowToDate = new Date(currentToDate);
-    return new Date(
-      tomorrowToDate.setDate(currentToDate.getDate() + 1)
-    ).toISOString();
+    const tomorrowToDate = new Date(toDate);
+    return FormateDate(
+      new Date(tomorrowToDate.setDate(tomorrowToDate.getDate() + 1))
+    );
   };
 
   const getTotalDays = () => {
-    if (formData.end_date && formData.start_date) {
-      const startDate = dayjs(formData.start_date);
-      const endDate = dayjs(formData.end_date);
-      let daysDifference = endDate.diff(startDate, "day");
-      const hoursDifference = endDate.diff(startDate, "hour");
-      if (daysDifference === 0 && hoursDifference < 9) return 0.5;
-      else if (daysDifference === 1 && endDate.hour() < 12) {
-        return 1.5;
+    //  per day Miliseconds = 1000*60*60*24 = 86400000 ;
+    if (isoTime !== null && endIsoTime !== null) {
+      //Get the difference in miliseconds
+      const differenceInMS = Math.abs(new Date(isoTime) - new Date(endIsoTime));
+
+      // Convert milliseconds to days
+      const differenceInDays = Math.floor(differenceInMS / 86400000);
+      const startHour = new Date(isoTime).getUTCHours();
+      const endHour = new Date(endIsoTime).getUTCHours();
+
+      if (differenceInDays === 0) {
+        if (startHour < 6 && endHour <= 6) {
+          return { days: 0.5, half: "First Half" };
+        } else if (startHour >= 6 && endHour >= 6) {
+          return { days: 0.5, half: "Second Half" };
+        }
+        return { days: differenceInDays + 1, half: differenceInDays + 1 };
+      } else {
+        if (startHour < 6 && endHour <= 6) {
+          return {
+            days: differenceInDays + 0.5,
+            half: differenceInDays +" " + "(First Half)",
+          };
+        } else if (startHour >= 6 && endHour > 6) {
+          return {
+            days: differenceInDays + 0.5,
+            half: differenceInDays + " " + "(Half)",
+          };
+        }
+        else if(startHour<6 && endHour>6){
+          return{
+            days: differenceInDays + 1,
+            half: differenceInDays + 1,
+          };
+        }
       }
-      // Otherwise, count as full days
-      else {
-        return daysDifference + 1; // Add 1 to include the start date
-      }
-      // console.log(hoursDifference);
-      // console.log(formData.start_date, startDate);
+      return { days: differenceInDays+1, half: differenceInDays +1};
     }
   };
 
@@ -158,7 +155,7 @@ const Leave_Application = () => {
       case "leave_type_id":
         updatedFields[field] =
           newValue.id !== undefined ? newValue.id : formData[field];
-        console.log(newValue);
+
         setSelectedLeaveType(newValue);
         break;
       case "delegated_to":
@@ -189,12 +186,14 @@ const Leave_Application = () => {
     const result = await employee.postLeaveApplication(
       {
         ...formData,
-        start_date:isoTime,
-        duration: getTotalDays(),
+        start_date: isoTime,
+        end_date: endIsoTime,
+        duration: getTotalDays()?.days,
         joining_date: formData.end_date && getJoiningDate(formData.end_date),
 
         application_date: new Date().toISOString(),
       }
+
       /// send put request if state !== null
     );
 
@@ -208,14 +207,6 @@ const Leave_Application = () => {
     //   console.error("email does not exist");
     // }
   };
-
-  useEffect(() => {
-    if (getTotalDays() > 0) {
-      setTotal_Days(getTotalDays());
-    } else {
-      setTotal_Days(null);
-    }
-  }, [formData.start_date, formData.end_date]);
 
   const selectedOptionOfLeaveName = leaveTypes?.find(
     (option) => option.leave_name === state?.leave_name
@@ -263,7 +254,6 @@ const Leave_Application = () => {
     ).val;
   }
 
-
   const startTimeArray = [
     "9:00 AM",
     "9:30 AM",
@@ -297,12 +287,11 @@ const Leave_Application = () => {
   ];
 
   const getSelectStartTime = (e) => {
-  setStartTime(e.target.value);
-};
-  const getSelectEndTime = (e)=>{
+    setStartTime(e.target.value);
+  };
+  const getSelectEndTime = (e) => {
     setEndTime(e.target.value);
-  }
-
+  };
 
   return (
     <div className="p-10 rounded-md shadow-xl">
@@ -329,11 +318,9 @@ const Leave_Application = () => {
           <Grid item xs={12} lg={4} md={6}>
             <DateInput
               label={"start_date"}
-            
               handleDateChange={handleDateChange}
-              // value={dayjs(formData["start_date"])}
-              disableDates={
-                disablePreviousDates}
+              value={formData?.start_date}
+              disableDates={disablePreviousDates}
             />
 
             {selectedLeaveType?.leave_name && (
@@ -355,13 +342,10 @@ const Leave_Application = () => {
           <Grid item xs={12} lg={4} md={6}>
             <DateInput
               label={"end_date"}
-              
               handleDateChange={handleDateChange}
-              // value={dayjs(formData["end_date"])}
+              value={formData?.end_date}
               disableDates={disableFutureDates}
-              
             />
-           
           </Grid>
 
           <Grid item xs={12} lg={4} md={6}>
@@ -373,30 +357,23 @@ const Leave_Application = () => {
             />
           </Grid>
 
+          <Grid item xs={12} lg={4} md={6}>
+            <TextInput
+              label={"Date of Joining"}
+              InputProps={{ readOnly: true }}
+              value={formData.end_date && getJoiningDate(formData.end_date)}
+              focused={true}
+            />
+          </Grid>
 
-          
-
-          {[
-            { label: "Date of Joining", readOnly: true },
-            { label: "Number of Days Applied", readOnly: true },
-          ].map((textFieldProps, index) => (
-            <Grid item xs={12} lg={4} md={6} key={index}>
-              <TextInput
-                label={textFieldProps.label}
-                InputProps={{ readOnly: textFieldProps.readOnly }}
-                value={
-                  textFieldProps.label === "Number of Days Applied"
-                    ? total_Days !== null
-                      ? total_Days
-                      : ""
-                    : formData.end_date &&
-                      FormateDate(new Date(getJoiningDate(formData.end_date)))
-                }
-              />
-            </Grid>
-          ))}
-
-
+          <Grid item xs={12} lg={4} md={6}>
+            <TextInput
+              label={"Number of Days Applied"}
+              InputProps={{ readOnly: true }}
+              focused={true}
+              value={getTotalDays()?.half}
+            />
+          </Grid>
 
           <Grid item xs={12} lg={4} md={6}>
             <AutoComplete
@@ -433,6 +410,7 @@ const Leave_Application = () => {
               value={formData.reason}
               multiline={true}
               rows={4}
+              required={true}
               onchange={(e) => {
                 if (e.target.name) {
                   setFormData((prev) => ({
@@ -443,11 +421,6 @@ const Leave_Application = () => {
               }}
             />
           </Grid>
-
-
-        
-
-
         </Grid>
 
         <div className="mt-6">
