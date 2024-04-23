@@ -33,13 +33,13 @@ const Modal = ({ open, handleClose, historyData }) => {
       id: "timestamp",
       label: "Date",
       minWidth: 170,
-      align: "right",
+      align: "center",
     },
     {
       id: "status",
       label: "Status",
       minWidth: 170,
-      align: "right",
+      align: "center",
     },
     {
       id: "comments",
@@ -58,7 +58,7 @@ const Modal = ({ open, handleClose, historyData }) => {
     const fetchData = async () => {
       //console.log(historyData.application_id);
     const logData = await employee.getLog(historyData.application_id);
-    
+    // console.log(logData);
     setLogData(logData)
     // console.log('logData',logData);
   };

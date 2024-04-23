@@ -1,12 +1,9 @@
 import CommonTable from "../components/CommonTable";
-
 import { useEffect, useState } from "react";
-
 import Button from "../components/Button";
 import TextInput from "../components/InputFields/TextInput";
 import employee from "../services/employee";
 import Modal from "../components/Modal";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import RadioInput from "../components/InputFields/RadioInput";
 import { Employee_Leave_Request } from "./Employee_Data";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -16,22 +13,17 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Avatar from "@mui/material/Avatar";
 import { useLocation, useNavigate } from "react-router-dom";
 import Leave_Application from "./Leave_Application";
+import HeadLine from "../components/HeadLine";
 
 export const Manager_Leave_History = () => {
-  return (
-    <div>
-      <Employee_Leave_Request />
-    </div>
-  );
+  return ( <Employee_Leave_Request />);
 };
 export const Manager_Team_Leave_Info = () => {
   const navigate = useNavigate();
 
-
   const [rows, setRows] = useState([]);
 
   const [open, setOpen] = useState(false);
- 
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
@@ -56,12 +48,12 @@ export const Manager_Team_Leave_Info = () => {
       align: "center",
     },
   ];
- 
+
   const handleViewDetails = async (index, emp_id) => {
-
-    navigate('/dashboard/manager_view_each_teamMember_leave_info',{state:{empId:emp_id}})
+    navigate("/dashboard/manager_view_each_teamMember_leave_info", {
+      state: { empId: emp_id },
+    });
   };
-
 
   useEffect(() => {
     const fetchDataOfTeamLeave = async () => {
@@ -72,41 +64,28 @@ export const Manager_Team_Leave_Info = () => {
     fetchDataOfTeamLeave();
   }, []);
 
-
- 
-
   return (
     <div>
       {rows.length === 0 ? (
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
-      ) : 
-      
-        <div className="">
-          <h2
-            className="text-2xl text-center font-semibold text-gray-darker
-       underline decoration-2 decoration-blue-dark 
-       underline-offset-8 mt-5"
-          >
-            Team Leave History
-          </h2>
+      ) : (
+        <div>
+          <HeadLine text={"Team's Leave History"}/>
           <CommonTable
             columns={columns}
             rows={rows}
             viewDetails={handleViewDetails}
           />
         </div>
-    
-      
-      }
+      )}
     </div>
   );
 };
 
-
 export const Manager_View_Each_TeamMember_Leave_Info = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const  empId = location.state.empId;
+  const empId = location.state.empId;
   const [id, setId] = useState(0);
   const [rows2, setRows2] = useState([]);
   const [open, setOpen] = useState(false);
@@ -139,10 +118,8 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
 
   useEffect(() => {
     const fecthData = async () => {
-      const teammembersLeaveInfos = await employee.getTeamRequestHistory(
-        empId
-      );
-     
+      const teammembersLeaveInfos = await employee.getTeamRequestHistory(empId);
+
       const employeeBasicData = await employee.basicInfo(empId);
       setEmployeeBasicData(employeeBasicData);
       setRows2(teammembersLeaveInfos);
@@ -151,7 +128,7 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
   }, []);
 
   const handleGoBack = () => {
-  navigate(-1);
+    navigate(-1);
   };
 
   const smallScreenColumns = columns2.filter(
@@ -186,11 +163,13 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
       </div>
 
       <div className="">
-        <Cards empId={empId}/>
+        <Cards empId={empId} />
         <CommonTable
           columns={isSmallScreen ? smallScreenColumns : columns2}
           rows={rows2}
           viewDetails={handleClickOpen}
+          borderRadius={"10px"}
+          maxHeight={400}
         />
       </div>
       {open && (
@@ -204,8 +183,6 @@ export const Manager_Leave_Request = () => {
   const [id, setId] = useState(0);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
-
-  
 
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 100 },
@@ -262,12 +239,6 @@ export const Manager_Leave_Request = () => {
       minWidth: 170,
       align: "right",
     },
-    // {
-    //   id: "action",
-    //   label: "Action",
-    //   minWidth: 170,
-    //   align: "center",
-    // }
   ];
 
   const handleClickOpen = (value) => {
@@ -281,7 +252,7 @@ export const Manager_Leave_Request = () => {
   useEffect(() => {
     const fetchData = async () => {
       const LeaveRequstData = await employee.getLeaveRequestOfTeamByTeamLead();
-    
+
       setRows(LeaveRequstData);
     };
     fetchData();
@@ -295,13 +266,7 @@ export const Manager_Leave_Request = () => {
   );
   return (
     <div>
-      <h2
-        className="text-2xl text-center font-semibold text-gray-darker
-       underline decoration-2 decoration-blue-dark 
-       underline-offset-8 mt-5 mb-1"
-      >
-        Team's Request History
-      </h2>
+      <HeadLine text={"Team's Request History"}/>
       {rows.length === 0 ? (
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
       ) : (
@@ -309,6 +274,7 @@ export const Manager_Leave_Request = () => {
           columns={isSmallScreen ? smallScreenColumns : columns}
           rows={rows}
           viewDetails={handleClickOpen}
+          maxHeight={770}
         />
       )}
 
@@ -347,7 +313,6 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
   //   const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
   // };
 
- 
   const handleSendToHR = async () => {
     console.log("handleSendToHR");
     const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
@@ -367,7 +332,6 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex flex-col md:flex-row justify-between items-center mt-2">
-    
         <div className="flex flex-col md:flex-row">
           <RadioInput
             label="Approved"
@@ -430,11 +394,10 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
   );
 };
 
-
-export const Edit_Leave_Application =()=>{
- return (
-    <div className="">
-      <Leave_Application/>
+export const Edit_Leave_Application = () => {
+  return (
+    <div>
+      <Leave_Application />
     </div>
-  )
-}
+  );
+};

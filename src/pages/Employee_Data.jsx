@@ -11,6 +11,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import LottiePlayers from "../components/LottiePlayers";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useLocation } from "react-router-dom";
+import HeadLine from "../components/HeadLine";
 
 
 
@@ -122,16 +123,10 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
    }
   return (
     <div className="">
-      <h2
-        className="text-2xl text-center font-semibold text-gray-darker
-       underline decoration-2 decoration-blue-dark 
-       underline-offset-8 mt-5 mb-1"
-      >
-       Request History
-      </h2>
-
+   
+<HeadLine text={"Request History"}/>
       <div className="flex  flex-col md:flex-row justify-between relative">
-        <div className="grid grid-cols-2 w-[100%] md:w-[50%]  gap-5 my-3">
+        <div className="grid grid-cols-2 w-[100%] md:w-[50%]  gap-5 mb-3">
           <SelectInput
             options={leaveStatusOptions}
             placeholder="Filter by status"
@@ -155,6 +150,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
             rows={filteredRows}
             viewDetails={handleClickOpen}
             handleDelete ={handleDelete}
+            maxHeight={710}
           />
         </div>
       ) : loading ? (

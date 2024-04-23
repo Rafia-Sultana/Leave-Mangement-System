@@ -37,7 +37,8 @@ const ApexChart = () => {
   ];
 
   return (
-    <div className="font-poppins border p-5 border-gray-lightest rounded-lg">
+    <div className="font-poppins 
+    border p-5 border-gray-lightest rounded-lg shadow-lg">
        <div className="flex justify-between">
        <p className="text-center mb-10 mt-4 text-2xl ">Total Leave Chart</p>
        <div className="text-xs">
@@ -64,8 +65,10 @@ const ApexChart = () => {
               {/* Bar */}
               <div className="overflow-hidden bg-gray-light rounded-r-md">
                 <Tooltip title={` Taken:${val} || Total:${exp} `} arrow>
+                  <div className="py-2">
                   <div
-                    className="bar text-xs text-white p-2 lg:p-3 rounded-r-md whitespace-nowrap"
+                    className="bar text-xs text-white
+                     p-2 lg:p-3 rounded-r-md whitespace-nowrap"
                     style={{
                       width: `${val>exp?maxPercentage:percentage}%`,
                       backgroundColor: color,
@@ -73,15 +76,19 @@ const ApexChart = () => {
                   >
                     {` ${type}:  ${val}/${exp}`}
                   </div>
+
+                  </div>
                   {val > exp && (
                 <div
                   className="bar absolute bg-[#FFEBB2] rounded-md  "
                   style={{
-                    width: `${100-maxPercentage}%`,
-                    height: "80%",
+                    width: `${100-maxPercentage-1}%`,
+                    height: "60%",
                     left: `${maxPercentage+0.6}%`,
                     top: "0",
-                 
+                    marginTop:"1.1%",
+               
+                   
                   }}
                 ></div>
               )}
@@ -94,9 +101,10 @@ const ApexChart = () => {
                   className="bar absolute bg-red   "
                   style={{
                     width: "4px",
-                    height: "83%",
+                    height: "63%",
                     left: `${maxPercentage}%`,
                     top: "0",
+                    marginTop:"1.1%",
                  
                   }}
                 ></div>

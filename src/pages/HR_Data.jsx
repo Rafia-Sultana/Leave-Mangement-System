@@ -1,28 +1,15 @@
 import React from "react";
-import { HR_leave_data } from "../utils/Dummy_Data";
 import CommonTable from "../components/CommonTable";
-import { Manager_Leave_Approval } from "./Manager_Data";
-
-import { Manager_Team_Leave_Info } from "./Manager_Data";
-
-import { employee_data } from "../utils/Dummy_Data";
-import Leave_Details from "./Leave_Details";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-
 import { useEffect, useState } from "react";
-
-import Button from "../components/Button";
-import TextInput from "../components/InputFields/TextInput";
 import employee from "../services/employee";
 import Modal from "../components/Modal";
-import RadioInput from "../components/InputFields/RadioInput";
 import { Employee_Leave_Request } from "./Employee_Data";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import LottiePlayers from "../components/LottiePlayers";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
 import { HR_other_leave_history } from "../utils/Dummy_Data";
+import HeadLine from "../components/HeadLine";
 
 export const HR_Leave_History = () => {
   return (
@@ -123,6 +110,7 @@ export const HR_Leave_Request = () => {
 
   return (
     <div>
+      <HeadLine text={'Others Request History'}/>
       {rows.length === 0 ? (
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
       ) : (
@@ -130,6 +118,7 @@ export const HR_Leave_Request = () => {
           columns={columns}
           rows={rows}
           viewDetails={handleClickOpen}
+          maxHeight={770}
         />
       )}
       {open && (

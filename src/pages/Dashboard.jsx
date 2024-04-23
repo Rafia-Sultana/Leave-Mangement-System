@@ -92,7 +92,7 @@ const Dashboard = () => {
 
   return (
     <div className="font-poppins">
-      <header className="h-20 bg-[#DCF3FF] flex items-center justify-between  relative">
+      <header className="h-20 bg-[#DCF3FF] flex items-center justify-between fixed w-full z-10 lg:relative ">
         <div className="flex items-center">
           <div className="menu-toggle" onClick={menuToggleClick}>
             <div className="hamburger"></div>
@@ -120,10 +120,10 @@ const Dashboard = () => {
       <div className="flex">
         <nav className="h-[calc(100vh-80px)]  bg-[#DCF3FF] text-black w-[60%] md:w-[30%] lg:w-[22%]
         
-        site-nav  border-t-white">
+        site-nav  border-t-white  mt-20  lg:mt-0">
     
          
-          <ul className="flex flex-col items-center  gap-8 ml-2">
+          <ul className="flex flex-col items-center  gap-8 ml-2 ">
             <li className="mt-10 w-[100%] xl:w-[80%] 
              bg-[#DCF3FF] rounded flex justify-start items-center gap-3 py-1 ">
               <img src={dashboard} alt="" className="w-6 h-6" />
@@ -172,7 +172,7 @@ const Dashboard = () => {
           </ul>
         </nav>
 
-        <main className="w-full px-8 bg-white">
+        <main className="w-full px-8 bg-white  pt-20 lg:pt-0">
           <Outlet />
         </main>
       </div>

@@ -43,7 +43,7 @@ const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
   </>
 );
 
-const CommonTable = ({ columns, rows, viewDetails,handleDelete  }) => {
+const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxHeight=730  }) => {
  
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
@@ -59,8 +59,8 @@ const CommonTable = ({ columns, rows, viewDetails,handleDelete  }) => {
   };
 
   return (
-    <Paper sx={{ width: "100%", marginBottom: "2%"}}>
-      <TableContainer sx={{ maxHeight: 750 }}>
+    <Paper sx={{ width: "100%", borderRadius:borderRadius}}>
+      <TableContainer sx={{ maxHeight: maxHeight , borderRadius:borderRadius}}>
         <Table stickyHeader aria-label="sticky-table">
       
           <TableHead>
@@ -89,8 +89,11 @@ const CommonTable = ({ columns, rows, viewDetails,handleDelete  }) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                   {columns.map((column) => {
-                    const value = row[column.id];
-
+                    let value = row[column.id];
+                      if(column.id === 'start_date' || column.id === 'end_date' || column.id ==='timestamp'){
+                        value = (FormateDate(new Date(row[column.id])));
+                      }
+                    
                     if (column.id === "action") {
                       return (
                         <TableCell align="center">

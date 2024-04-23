@@ -78,7 +78,7 @@ try {
 
 
     return (
-<div className=''>
+<div className='shadow-lg'>
 
             <FullCalendar
             ref={calendarRef}

@@ -1,10 +1,10 @@
-import React from 'react';
+
 
 const Button = ({fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIcon,padding,backgroundColor,disable}) => {
 
     return (
         
-            <button 
+            <button
            type={type}
            onClick={onClick}
             disabled={disable}

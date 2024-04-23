@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import TextInput from "../components/InputFields/TextInput.jsx";
 import SelectInput from "../components/InputFields/SelectInput.jsx";
 import DateInput from "../components/InputFields/DateInput.jsx";
+import HeadLine from "../components/HeadLine.jsx";
 
 const Leave_Application = () => {
   const { state } = useLocation();
@@ -294,15 +295,11 @@ const Leave_Application = () => {
   };
 
   return (
-    <div className="p-10 rounded-md shadow-xl">
-      <h2
-        className="text-2xl text-center font-semibold text-gray-darker
-         underline decoration-2  decoration-blue-dark underline-offset-8  mb-16"
-      >
-        {`${
+    <div className="px-8 shadow-lg pb-8">
+
+      <HeadLine text={`${
           state && state.headerText ? state.headerText : "Leave Application"
-        }`}
-      </h2>
+        }`}/>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} lg={4} md={6}>

@@ -1,100 +1,80 @@
-
-
 .header::after {
-    content: '';
-    clear: both;
-    display: block;
+  content: "";
+  clear: both;
+  display: block;
 }
 
 .site-nav {
-
-    /* display: flex;
-    flex-direction: column;
-    gap: 10%; */
-    overflow: hidden;
-
+  overflow: hidden;
 }
 
 .menu-toggle {
-    /* display: none; */
-    opacity: 0;
-    padding: 2em;
-    cursor: pointer;
+  opacity: 0;
+  padding: 2em;
+  cursor: pointer;
 }
-
 
 .hamburger,
 .hamburger::before,
 .hamburger::after {
-    display: block;
-    background: #00b3b3;
-    height: 3px;
-    width: 1.75em;
-    border-radius: 2px;
-    transition: all ease-in-out 500ms;
-    content: '';
+  display: block;
+  background: #00b3b3;
+  height: 3px;
+  width: 1.75em;
+  border-radius: 2px;
+  transition: all ease-in-out 500ms;
+  content: "";
 }
 
 .hamburger::before {
-    transform: translateY(-7px);
+  transform: translateY(-7px);
 }
 
 .hamburger::after {
-    transform: translateY(4px);
+  transform: translateY(4px);
 }
 
 .open .hamburger {
-    transform: rotate(45deg);
-    background: #ffc299;
+  transform: rotate(45deg);
+  background: #ffc299;
 }
 
 .open .hamburger::before {
-    opacity: 0;
+  opacity: 0;
 }
 
 .open .hamburger::after {
-    transform: translateY(-3px) rotate(-90deg);
-    background: #ffc299;
+  transform: translateY(-3px) rotate(-90deg);
+  background: #ffc299;
 }
-.active{
-   color: #00b3b3;
+.active {
+  color: #00b3b3;
 }
-.fc-event-title{
-    color: rgb(150, 255, 12);
+.fc-event-title {
+  color: rgb(150, 255, 12);
 }
 .fc-toolbar-title {
-   
-    font-size: 1.5rem !important; 
-
-  }
-@media (max-width: 1024px) {
-    /* .container{
-        display: flex;
-    } */
-    .menu-toggle {
-        /* display: block; */
-        opacity: 100;
-    }
-    .site-nav {
-        max-width: 300px; 
-        transform: translateX(-100%);
-        transition: transform  ease-in-out 0.5s;
-        position: absolute;
-        z-index: 100;
-        left: 0;
-        max-height: 100vh;
-    }
-
- .site-nav-open {
-        transform: translateX(0);
-        /* transition: transform  ease-in-out 0.5s; */
-    }
-   
-} 
-.active{
-    color:white;
-    background-color: #7BD3FF;
-    /* padding: 5px; */
-    /* width: 100%; */
+  font-size: 1.5rem !important;
 }
+@media (max-width: 1024px) {
+  .menu-toggle {
+    opacity: 100;
+  }
+  .site-nav {
+    max-width: 300px;
+    transform: translateX(-100%);
+    transition: transform ease-in-out 0.5s;
+    position: fixed;
+    z-index: 5;
+    left: 0;
+    max-height: 100%;
+  }
 
+  .site-nav-open {
+    transform: translateX(0);
+  }
+}
+.active {
+  color: white;
+  background-color: #7bd3ff;
+}

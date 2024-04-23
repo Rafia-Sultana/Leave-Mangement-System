@@ -21,7 +21,7 @@ const handleRequestError = (error, errorMessage) => {
 
 // Function to make GET requests http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
 const getRequest = async (url, errorMessage) => {
-  // console.log(url);
+
   try {
     const token = getToken();
     const response = await axiosInstance.get(url, {
@@ -29,7 +29,7 @@ const getRequest = async (url, errorMessage) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    //  console.log(response.data);
+  
     return response.data;
   } catch (error) {
     if (error.response.data.error == "Token expired") {
@@ -44,7 +44,7 @@ const postRequest = async (url, params, errorMessage) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    // console.log(response.data);
+  
     return response.data;
   } catch (error) {
     handleRequestError(error, errorMessage);
@@ -78,7 +78,6 @@ const employee = {
   },
 
   leaveDatesByMonth: async (userId, monthId) => {
-    // console.log(monthId);
     return getRequest(
       `/leave/dates/${userId}?month=${monthId}`,
       "Error fetching leave dates by month data:"
