@@ -17,6 +17,7 @@ import Container from "@mui/material/Container";
 import { useNavigate, useLocation } from "react-router-dom";
 import { enqueueSnackbar } from 'notistack';
 import FormateDate from "../utils/FormateDate";
+import PaginationSection from "./PaginationSection";
 
 
 const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
@@ -43,7 +44,7 @@ const ActionButtons = ({ viewDetails, onEdit, onDelete }) => (
   </>
 );
 
-const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxHeight=730  }) => {
+const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxHeight=700  }) => {
  
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
@@ -59,7 +60,8 @@ const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxH
   };
 
   return (
-    <Paper sx={{ width: "100%", borderRadius:borderRadius}}>
+ <div className="">
+     <Paper sx={{ width: "100%", borderRadius:borderRadius}}>
       <TableContainer sx={{ maxHeight: maxHeight , borderRadius:borderRadius}}>
         <Table stickyHeader aria-label="sticky-table">
       
@@ -83,10 +85,7 @@ const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxH
           <TableBody>
             {rows.map((row, index) => {
               const isLastRow = index === rows.length - 1;
-              // console.log(isLastRow,index);
-              
-
-              return (
+ return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                   {columns.map((column) => {
                     let value = row[column.id];
@@ -163,22 +162,18 @@ const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxH
                         </TableCell>
                       );
                     }
-                    let cellStyle = {};
-                    if (value === "Approved") {
-                      cellStyle.color = "green";
-                      cellStyle.fontWeight = "bold";
-                    } else if (value === "Pending") {
-                      cellStyle.color = "orange";
-                      cellStyle.fontWeight = "bold";
-                    } else if (value === "Rejected") {
-                      cellStyle.color = "red";
-                      cellStyle.fontWeight = "bold";
-                    }
+                    
+                    const statusStyles = {
+                      Approved: { color: "green", fontWeight: "bold" },
+                      Pending: { color: "orange", fontWeight: "bold" },
+                      Rejected: { color: "red", fontWeight: "bold" }
+                  };
+      
                     return (
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        style={cellStyle}
+                        style={statusStyles[value]}
                       >
                         {value || "--"}
                       </TableCell>
@@ -190,7 +185,12 @@ const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxH
           </TableBody>
         </Table>
       </TableContainer>
+
     </Paper>
+          
+          
+          <PaginationSection/>
+ </div>
   );
 };
 

@@ -16,6 +16,7 @@ const AutoComplete = ({options,label,handleInputChange,field,value}) => {
                    />
                 )}
                 onChange={(e, newValue) => {
+               
                   if (newValue) {
                    handleInputChange(e, newValue,field);
                   }

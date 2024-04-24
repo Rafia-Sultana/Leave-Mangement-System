@@ -150,7 +150,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
             rows={filteredRows}
             viewDetails={handleClickOpen}
             handleDelete ={handleDelete}
-            maxHeight={710}
+            maxHeight={560}
           />
         </div>
       ) : loading ? (

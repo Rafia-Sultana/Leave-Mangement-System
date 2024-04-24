@@ -1,4 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
+
+
+
+
+
+
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { usersInfo } from "../utils/Dummy_Data.js";
 import Button from "../components/Button.jsx";
@@ -18,7 +24,8 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import team from "../assets/styles/svg/team.svg";
 import personal from "../assets/styles/svg/personal.svg";
 import dashboard from "../assets/styles/svg/dashboard.svg";
-import Avatar from '@mui/material/Avatar';
+import managment from "../assets/styles/svg/managment.svg";
+
 
 const Dashboard = () => {
   const [open, setOpen] = useState({});
@@ -73,11 +80,23 @@ const Dashboard = () => {
       {
         category: "Others",
         links: [
-          createNavLink("hr-leave-request", "Request History"),
+          createNavLink("hr-leave-request", "Pending Request "),
           createNavLink("hr_others_leave_history", "Leave History"),
+
         ],
         icon: team,
       },
+      {
+        category:"Managment",
+        links:[
+          createNavLink("hr-add-employee","Add Employee"),
+          createNavLink("hr-remove-employee","Remove Employee"),
+          createNavLink("hr-add-hoilday","Add Holiday"),
+          createNavLink("hr-remove-hoilday","Remove Hoilday"),
+          createNavLink("hr-edit-employee","Edit Employee"),
+        ],
+        icon:managment
+      }
     ],
   };
 
@@ -92,6 +111,7 @@ const Dashboard = () => {
 
   return (
     <div className="font-poppins">
+      
       <header className="h-20 bg-[#DCF3FF] flex items-center justify-between fixed w-full z-10 lg:relative ">
         <div className="flex items-center">
           <div className="menu-toggle" onClick={menuToggleClick}>

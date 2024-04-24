@@ -110,7 +110,7 @@ export const HR_Leave_Request = () => {
 
   return (
     <div>
-      <HeadLine text={'Others Request History'}/>
+      <HeadLine text={'Pending Request '}/>
       {rows.length === 0 ? (
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
       ) : (

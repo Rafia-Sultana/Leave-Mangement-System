@@ -13,8 +13,11 @@ import TextInput from "../components/InputFields/TextInput.jsx";
 import SelectInput from "../components/InputFields/SelectInput.jsx";
 import DateInput from "../components/InputFields/DateInput.jsx";
 import HeadLine from "../components/HeadLine.jsx";
+import {startTimeArray,endTimeArray,convertToIsoString,getJoiningDate} from '../utils/FormateDate.js'
+
 
 const Leave_Application = () => {
+
   const { state } = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
@@ -45,16 +48,6 @@ const Leave_Application = () => {
   const [endIsoTime, setEndIsoTime] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState(null);
 
-
-  const convertToIsoString = (date, uptime) => {
-    const [time, ampm] = uptime.split(" ");
-    const [hours, minutes] = time.split(":").map(Number);
-    const adjustHours = ampm == "PM" && hours !== 12 ? hours + 12 : hours;
-    const date1 = new Date(date?.$d);
-    date1.setHours(adjustHours, minutes, 0, 0);
-    const timestamp = date1?.toISOString();
-    return timestamp;
-  };
 
   useEffect(() => {
     if (formData?.start_date !== null) {
@@ -89,12 +82,6 @@ const Leave_Application = () => {
     }
   };
 
-  const getJoiningDate = (toDate) => {
-    const tomorrowToDate = new Date(toDate);
-    return FormateDate(
-      new Date(tomorrowToDate.setDate(tomorrowToDate.getDate() + 1))
-    );
-  };
 
   const getTotalDays = () => {
     //  per day Miliseconds = 1000*60*60*24 = 86400000 ;
@@ -149,6 +136,7 @@ const Leave_Application = () => {
 
   const handleInputChange = (e, newValue, field) => {
     const { name, value } = e?.target;
+    
 
     const updatedFields = {};
 
@@ -173,6 +161,7 @@ const Leave_Application = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
+     
       ...updatedFields,
     }));
   };
@@ -184,7 +173,7 @@ const Leave_Application = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const result = await employee.postLeaveApplication(
+    await employee.postLeaveApplication(
       {
         ...formData,
         start_date: isoTime,
@@ -255,45 +244,22 @@ const Leave_Application = () => {
     ).val;
   }
 
-  const startTimeArray = [
-    "9:00 AM",
-    "9:30 AM",
-    "10:00 AM",
-    "10:30 AM",
-    "11:00 AM",
-    "11:30 AM",
-    "12:00 PM",
-    "12:30 PM",
-    "1:00 PM",
-    "1:30 PM",
-    "2:00 PM",
-    "2:30 PM",
-    "3:00 PM",
-    "3:30 PM",
-  ];
-  const endTimeArray = [
-    "12:00 PM",
-    "12:30 PM",
-    "1:00 PM",
-    "1:30 PM",
-    "2:00 PM",
-    "2:30 PM",
-    "3:00 PM",
-    "3:30 PM",
-    "4:00 PM",
-    "4:30 PM",
-    "5:00 PM",
-    "5:30 PM",
-    "6:00 PM",
-  ];
-
+  
   const getSelectStartTime = (e) => {
     setStartTime(e.target.value);
   };
   const getSelectEndTime = (e) => {
     setEndTime(e.target.value);
   };
+ console.log(      {
+  ...formData,
+  start_date: isoTime,
+  end_date: endIsoTime,
+  duration: getTotalDays()?.days,
+  joining_date: formData.end_date && getJoiningDate(formData.end_date),
 
+  application_date: new Date().toISOString(),
+});
   return (
     <div className="px-8 shadow-lg pb-8">
 

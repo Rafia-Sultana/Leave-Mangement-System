@@ -16,13 +16,14 @@ const Cards = ({empId}) => {
     const userId = userInfoData?.emp_id;
   
     const icons =[
-      total, approve,pending,reject
+      total,pending,approve,reject
     ]
   
     useEffect(() => {
       const fetchData = async () => {
         try {
           const leaveSummaryData = await employee.leaveRequestSummary(empId);
+   
           setSummary(leaveSummaryData);
         } catch (error) {
           console.log(error);
@@ -34,13 +35,7 @@ const Cards = ({empId}) => {
       }
     }, [userId]);
   
-    let data = [];
-    if (summary) {
-      data = Object.entries(summary).map(([label, value]) => ({
-        label: label.charAt(0).toUpperCase() + label.slice(1),
-        value: `${value} ${value>1? 'days':'day'}`
-      }));
-    }
+
    
     return (
         <div className=" relative grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap:4  xl:gap-10    lg:rounded-lg w-full  p-2 mt-5 mb-12">
@@ -48,22 +43,34 @@ const Cards = ({empId}) => {
         </div>
         <div className="absolute lg:hidden  left-1/2 -translate-x-1/2 h-[90%]  w-[1px] top-[5%] bg-black opacity-50">
         </div>
-        {data.map((item, index) => (
-          <React.Fragment key={index}>
+        {summary?.map((item, index) => {
+        const {applications, days}=Object.values(item)[0]
+
+
+          return (
+            <React.Fragment key={index}>
             <div
               className={`h-24 lg:h-32 rounded-xl 
               flex items-center justify-center  gap-5 lg:gap-1 xl:gap-5   bg-blue-lightest bg-opacity-55  lg:shadow-lg`}
             >
               <img className=" w-16 h-16 hidden sm:block" src={icons[index]} alt={item.label} />
               <div className="text-lg">
-              <p className="">{item.label}
+              <p className="">{(Object.keys(item)[0]).charAt(0).toUpperCase()+(Object.keys(item)[0]).slice(1)}
             
             </p>
-            <p className="text-sm font-semibold">{item.value}</p>
+         
+                    <p className="text-xs">Application:
+                     {applications}</p>
+                    <p className="text-xs">Applied Days: {days}</p>
+          
+           
               </div>
             </div>
           </React.Fragment>
-        ))}
+          )
+        }
+        
+        )}
       </div>
     );
 };
