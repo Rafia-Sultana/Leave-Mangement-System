@@ -251,15 +251,7 @@ const Leave_Application = () => {
   const getSelectEndTime = (e) => {
     setEndTime(e.target.value);
   };
- console.log(      {
-  ...formData,
-  start_date: isoTime,
-  end_date: endIsoTime,
-  duration: getTotalDays()?.days,
-  joining_date: formData.end_date && getJoiningDate(formData.end_date),
 
-  application_date: new Date().toISOString(),
-});
   return (
     <div className="px-8 shadow-lg pb-8">
 

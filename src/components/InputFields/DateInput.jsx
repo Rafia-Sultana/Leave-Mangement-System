@@ -3,7 +3,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
-const DateInput = ({ label, handleDateChange, value, disableDates }) => {
+const DateInput = ({ label, handleDateChange, value, disableDates,variant="outlined" }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -16,6 +16,7 @@ const DateInput = ({ label, handleDateChange, value, disableDates }) => {
         // defaultValue={dayjs(new Date())}
         shouldDisableDate={disableDates}
         required={true}
+        slotProps={{ textField: { variant: variant } }}
       />
     </LocalizationProvider>
   );

@@ -192,7 +192,7 @@ const Dashboard = () => {
           </ul>
         </nav>
 
-        <main className="w-full px-8 bg-white  pt-20 lg:pt-0">
+        <main className="w-full px-8 bg-[#E8F7FF] pt-20 lg:pt-0">
           <Outlet />
         </main>
       </div>
