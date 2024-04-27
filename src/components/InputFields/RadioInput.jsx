@@ -1,20 +1,20 @@
-import Radio from "@mui/material/Radio";
+import Radio from '@mui/material/Radio';
 
-const RadioInput = ({label,onchange, selectedValue,value,color}) => {
+const RadioInput = ({label,onchange, selectedValue,value,color,name}) => {
+
     return (
-    <div className="">
-     
+  <div className="">
         <Radio
-        checked={selectedValue=== value}
+        checked={selectedValue===value}
         onChange={onchange}
         value={value}
         color={color}
-        name="radio-buttons"
+        name={name}
         
        
       />
-        <label htmlFor="">{label}</label>
-    </div>
+        <label htmlFor="" className="text-sm">{label}</label>
+        </div>
     );
 };
 
