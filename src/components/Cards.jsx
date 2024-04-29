@@ -35,7 +35,7 @@ const Cards = ({empId}) => {
       }
     }, [userId]);
   
-
+// console.log(summary);
    
     return (
         <div className=" relative grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap:4  xl:gap-10    lg:rounded-lg w-full  p-2 mt-5 mb-12">

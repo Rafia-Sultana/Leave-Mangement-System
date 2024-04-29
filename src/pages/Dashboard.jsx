@@ -89,11 +89,12 @@ const Dashboard = () => {
       {
         category:"Managment",
         links:[
-          createNavLink("hr-add-employee","Add Employee"),
-          createNavLink("hr-remove-employee","Remove Employee"),
-          createNavLink("hr-add-hoilday","Add Holiday"),
-          createNavLink("hr-remove-hoilday","Remove Hoilday"),
-          createNavLink("hr-edit-employee","Edit Employee"),
+          createNavLink("manage-employee","Employee"),
+          // createNavLink("hr-add-employee","Add Employee"),
+          // createNavLink("hr-remove-employee","Remove Employee"),
+          // createNavLink("hr-add-hoilday","Add Holiday"),
+          // createNavLink("hr-remove-hoilday","Remove Hoilday"),
+          // createNavLink("hr-edit-employee","Edit Employee"),
         ],
         icon:managment
       }

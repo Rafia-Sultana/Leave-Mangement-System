@@ -6,20 +6,29 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 
 
-const SelectInput = ({ options, placeholder, getSelectedValue,value ,variant="outlined",name}) => {
 
 
+const SelectInput = ({
+  options,
+  placeholder,
+  getSelectedValue,
+  value,
+  variant = "outlined",
+  name,
+  multiple = false,
+}) => {
+  // console.log(value);
   const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps:{
-    style:{
-      maxHeight: ITEM_HEIGHT*4.5 + ITEM_PADDING_TOP,
-      width:250
-    }
-  }
-}
-  
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
   return (
     <div>
       <FormControl variant={variant} sx={{ width: "100%" }}>
@@ -35,20 +44,24 @@ const MenuProps = {
           //     return selected;
           //   }
           // }}
-
-          //render value and onChange works like same but which one you need to use depends on 
+     
+          
+          //render value and onChange works like same but which one you need to use depends on
           //requirements . render value is useful when you want to show additional information, format the display differently, or trigger some side effect when a value is selected.
-        onChange={getSelectedValue}
-        MenuProps={MenuProps}
-        required={true}
-
+          onChange={getSelectedValue}
+          MenuProps={MenuProps}
+          required={true}
+          multiple={multiple}
         >
           {options.map((name) => (
             <MenuItem key={name} value={name}>
+            
               {name}
             </MenuItem>
           ))}
-          {options.length === 0 && placeholder==="Designation" && <p className="text-red px-2 text-sm">Select Department First.</p>}
+          {options.length === 0 && placeholder === "Designation" && (
+            <p className="text-red px-2 text-sm">Select Department First.</p>
+          )}
         </Select>
       </FormControl>
     </div>

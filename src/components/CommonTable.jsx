@@ -188,8 +188,8 @@ const CommonTable = ({ columns, rows, viewDetails,handleDelete,borderRadius,maxH
 
     </Paper>
           
-          
-          <PaginationSection/>
+{/*           
+          <PaginationSection/> */}
  </div>
   );
 };

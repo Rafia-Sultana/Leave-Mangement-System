@@ -3,6 +3,7 @@ import { Employee_Leave_History, Employee_Leave_Request } from "../pages/Employe
 import { HR_Leave_History, HR_Leave_Request, HR_others_leave_history } from "../pages/HR_Data";
 import Leave_Application from "../pages/Leave_Application";
 import Leave_Approval from "../pages/Leave_Approval";
+import ManageEmployeeTable from "../pages/ManageEmployeeTable";
 import { Edit_Leave_Application, Manager_Leave_History, Manager_Leave_Request, Manager_Team_Leave_Info, Manager_View_Each_TeamMember_Leave_Info } from "../pages/Manager_Data";
 
 
@@ -18,6 +19,7 @@ const routes = [
   createRoute("hr-leave-request", HR_Leave_Request),
   createRoute("hr_others_leave_history", HR_others_leave_history),
   createRoute("hr-add-employee", AddEmployee),
+  createRoute("manage-employee",ManageEmployeeTable),
   createRoute("manager_team_leave_info", Manager_Team_Leave_Info),
   createRoute("manager_view_each_teamMember_leave_info", Manager_View_Each_TeamMember_Leave_Info),
   createRoute("manager_edit_leave_application", Edit_Leave_Application),

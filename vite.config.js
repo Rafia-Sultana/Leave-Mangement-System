@@ -9,7 +9,8 @@ export default defineConfig({
       '@emotion/styled', 
       '@mui/material',
       '@mui/material/Tooltip',
-      '@mui/material/Box'
+      '@mui/material/Box',
+      '@mui/x-data-grid'
     ],
   },
   plugins: [react({

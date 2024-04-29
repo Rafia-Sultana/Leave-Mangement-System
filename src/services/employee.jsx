@@ -175,6 +175,18 @@ const employee = {
       "Error Fetching to get Leave Request Of Employee By HR"
     );
   },
+
+  ///api/departments
+  getDepartmentList: async () =>{
+    return getRequest(`/departments`,
+    "Error Fetching to get departments"
+    )
+  },
+
+  getDesignationList: async () =>{
+    return getRequest(`/designations`,
+    "Error Fetching to get designations")
+  }
 };
 
 export default employee;
