@@ -368,7 +368,7 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
 
       <div className="flex gap-4 ">
         <Button
-          fontSize="semibold"
+          fontWeight="semibold"
           textColor="white"
           btnText="Send to HR"
           width="full"
@@ -379,7 +379,7 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
           disable={isBtnDisable}
         ></Button>
         <Button
-          fontSize="semibold"
+          fontWeight="semibold"
           textColor="white"
           btnText="Return to Employee"
           width="full"

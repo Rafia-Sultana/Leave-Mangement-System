@@ -92,7 +92,7 @@ const Employee_summary = () => {
             </div>
       <Button
    
-        fontSize="bold"
+        fontWeight="bold"
         textColor="black"
         btnText="submit"
         width="full"

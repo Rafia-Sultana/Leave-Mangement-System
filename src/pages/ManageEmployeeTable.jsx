@@ -30,50 +30,100 @@ import AddIcon from "@mui/icons-material/Add";
 import SelectInput from "../components/InputFields/SelectInput.jsx";
 import TextInput from "../components/InputFields/TextInput.jsx";
 import { useNavigate } from "react-router-dom";
+import Cards from "../components/Cards.jsx";
+import CheckBoxInput from "../components/InputFields/CheckBoxInput.jsx";
+import { useEffect, useState } from "react";
+
+// import totalEmployee from '../'
+import totalEmployee from '../assets/styles/svg/totalEmployee.svg';
+import activeEmployee from '../assets/styles/svg/activeEmployee.svg';
+import leaveEmployee from '../assets/styles/svg/leaveEmployee.svg';
+import onBoardEmployee from '../assets/styles/svg/onBoardEmployee.svg';
 // import DeleteIcon from '@mui/icons-material/Delete';
 
 const ManageEmployeeTable = () => {
     const navigate = useNavigate();
-  const summaryOfTotalEmployee = [60, 40, 17];
-  const names = ["Total Employee", "Active Employee", "On Leave"];
+  const summaryOfTotalEmployee = [60, 40, 17,15];
+  const names = ["Total Employee", "Active Employee", "On Leave","On Boarding"];
+  const cardIcons=[totalEmployee,activeEmployee,leaveEmployee,onBoardEmployee]
   const handleAddEmployee = () => {
     navigate("/dashboard/hr-add-employee")
   };
+const [checkedRows,setCheckedRows]= useState([]);
 
-  //   EnhancedTableHead.propTypes={
-  //     numSelected: PropTypes.number.isRequired,
-  //     onRequestSort: PropTypes.func.isRequired,
-  //     onSelectAllClick:PropTypes.func.isRequired,
-  //     order:PropTypes.oneOf(['asc','desc']).isRequired,
-  //     orderBy: PropTypes.string.isRequired,
-  //     rowCount: PropTypes.number.isRequired
-  // }
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+const [selectedColumn, setSelectedColumn] = useState('Name');
+const [searchValue, setSearchValue] = useState('');
+
+  function createData(name,designation, department,status) {
+    return { name,designation,department,status };
   }
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
+  let rows2 = [
+    createData("Frozen yoghurt", "software engineer", "software development", "active"),
+    createData("Ice cream sandwich", "urban planner", "planning", "inactive"),
+    createData("Eclair", "software engineer", "software development", "active"),
+    createData("Cupcake",  "software engineer", "software development", "inactive"),
+    createData("Gingerbread",  "software engineer", "software development", "active"),
+
+    
   ];
+  const [rows,setRows]= useState(rows2);
+  const handleCheckBoxInput = (e,index)=> {
+setCheckedRows(prev=>{
+  let newArray =[...prev];
+  newArray[index] = {[index]:e.target.checked};
+  return newArray;
+
+})
+  }
+  const isAllValuesFalse = checkedRows.every(obj => Object.values(obj)[0]===false);
+  const getSelectedValue=(e)=>{
+    setSelectedColumn(e.target.value);
+  }
+
+  const handleSearchValue = (e) => {
+  const searchValue = e.target.value.toLowerCase();
+  setSearchValue(searchValue);
+  };
+  
+useEffect(()=>{
+  const matchedRows = () =>{
+  let column = selectedColumn.toLowerCase();
+  let searchValues = searchValue.toLowerCase();
+  if (!searchValues) {
+     setRows(rows2);
+
+  } else {
+    const filteredRows = rows2.filter(row => row[column].toLowerCase().includes(searchValues));
+    setRows(filteredRows);
+  }
+
+  }
+  matchedRows();
+},[searchValue,selectedColumn]);
+
+
+ 
   return (
     <div className="">
       {/* //cards */}
 
-      <div className="flex gap-20 my-8">
+      <div className="flex gap-10 my-8 ">
         {summaryOfTotalEmployee.map((x, index) => {
           return (
             <Card>
-              <CardActionArea>
-                <CardContent key={index} sx={{ width: 350, height: 100 }}>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {names[index]}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
+              <CardActionArea sx={{display:"flex",alignItems:"center"}}>
+                <CardMedia
+                component="img"
+                image={cardIcons[index]}
+                />
+                <CardContent key={index} sx={{ width: 200, height: 100}} className="">
+            
+                  <Typography gutterBottom variant="h6" component="div">
                     {x}
+                  </Typography>
+                  <Typography  variant="body1" color="text.secondary" style={{whiteSpace:"nowrap"}}>
+                    {names[index]}
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -82,71 +132,71 @@ const ManageEmployeeTable = () => {
         })}
       </div>
 
-      <div className="grid grid-cols-5 mb-2">
+
+      <div className="grid grid-cols-5 mb-5 gap-10">
         <div className="col-span-1">
           <SelectInput
             placeholder={"column"}
-            options={["Name","Job Title", "Department","Status"]}
+            options={["Name","Designation", "Department","Status"]}
             variant="standard"
+            getSelectedValue={getSelectedValue}
           ></SelectInput>
         </div>
-        <div className="mt-4 ml-5">
-          <TextInput variant="standard"></TextInput>
+        <div className="">
+          <TextInput variant="standard" label={"value"} onchange={handleSearchValue}></TextInput>
         </div>
 
-        <div className="col-span-3 flex justify-end gap-5 ">
+        <div className="col-span-3 flex justify-end gap-2 ">
           <Button
-            textColor={"white"}
-            btnText={"Remove"}
+            textColor={isAllValuesFalse?"gray":"white"}
+            // btnText={"Remove"}
             width={"1/2"}
-            backgroundColor={"bg-red"}
-            padding={"p-3"}
+            backgroundColor={isAllValuesFalse?"bg-gray":"bg-red"}
+            padding={"p-2"}
            btnIcon={DeleteIcon}
+           fontSize={'sm'}
+           disable={isAllValuesFalse?true:false}
+           cursor={isAllValuesFalse?"cursor-not-allowed":"cursor-pointer"}
           ></Button>
           <Button
             textColor={"white"}
             btnText={"Add Employee"}
             width={"1/2"}
-            backgroundColor={"bg-blue"}
-            padding={"p-3"}
+            backgroundColor={"bg-[#7BD3FF]"}
+            padding={"p-2"}
             btnIcon={AddIcon}
             onClick={handleAddEmployee}
+            fontSize={'sm'}
           ></Button>
 
 
         </div>
       </div>
-      <TableContainer component={Paper}>
-        {/* <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6">Employee List</Typography>
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Toolbar> */}
+      <TableContainer component={Paper} sx={{backgroundColor:"#E8F7FF"}} >
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Job Title</TableCell>
-              <TableCell align="right">Department</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Action</TableCell>
+            <TableRow  style={{fontWeight:"bold"}}>
+         {   ["Name","Designation", "Department","Status","Action"].map((column)=>(
+              <TableCell  key={column}  align={column==='Name'?'left':"right"}  style={{fontWeight:"bold"}} >{column}</TableCell>
+            ))}
+            
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows.map((row,index) => (
               <TableRow
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  <Checkbox />
-                  {row.name}
+                  {/* <Checkbox /> */}
+                  <CheckBoxInput text= {row.name} onchange={(e)=>handleCheckBoxInput(e,index)} />
+                  {/* {row.name} */}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="right">{row.designation}</TableCell>
+                <TableCell align="right">{row.department}</TableCell>
+                <TableCell align="right">{row.status}</TableCell>
+                <TableCell align="right" className="">{"Edit"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

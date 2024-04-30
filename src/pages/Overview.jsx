@@ -6,6 +6,7 @@ import Cards from "../components/Cards.jsx";
 const Overview = () => {
   const userInfoData = JSON.parse(localStorage.getItem('userInfo'));
   const empId = userInfoData?.emp_id;
+  
   return (
     <div>
       <Cards empId={empId}  />

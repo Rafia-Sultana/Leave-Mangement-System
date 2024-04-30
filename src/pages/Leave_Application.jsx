@@ -381,7 +381,7 @@ const Leave_Application = () => {
         <div className="mt-6">
           {state?.btnText ? (
             <Button
-              fontSize="semibold"
+              fontWeight="semibold"
               textColor="white"
               btnText="Send to Employee"
               width="full"
@@ -392,7 +392,7 @@ const Leave_Application = () => {
             ></Button>
           ) : (
             <Button
-              fontSize="bold"
+              fontWeight="bold"
               textColor="white"
               btnText="SUBMIT"
               width="full"

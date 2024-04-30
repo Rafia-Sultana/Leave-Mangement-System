@@ -23,11 +23,11 @@ const RadialChart = () => {
                 radialBar: {
                     dataLabels: {
                         name: {
-                            fontSize: '22px',
+                            fontWeight: '22px',
                             // color:'red'
                         },
                         value: {
-                            fontSize: '16px',
+                            fontWeight: '16px',
                         },
                         total: {
                             show: true,

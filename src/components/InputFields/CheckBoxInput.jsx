@@ -1,9 +1,18 @@
 import React from 'react';
 import Checkbox from '@mui/material/Checkbox';
-const CheckBoxInput = ({onchange,text}) => {
+import FormControlLabel from '@mui/material/FormControlLabel';
+const CheckBoxInput = ({onchange,text,value="end"}) => {
     return (
         <div>
-            <Checkbox size='small'  onChange={onchange} />
+            <FormControlLabel
+            value={value}
+            control={<Checkbox size='small'  onChange={onchange} />}
+            label={text}
+   />
+            
+
+
+         
         </div>
     );
 };

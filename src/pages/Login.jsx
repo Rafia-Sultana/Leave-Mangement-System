@@ -145,7 +145,7 @@ const { enqueueSnackbar } = useSnackbar();
 
               <Button
                
-                fontSize="bold"
+                fontWeight="bold"
                 textColor="white"
                 btnText="Submit"
                 width="full"

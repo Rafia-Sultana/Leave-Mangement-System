@@ -77,7 +77,7 @@ const Request_History = () => {
                       {/* <button className="bg-blue-500 text-white py-1 px-2 rounded">View Details</button> */}
                       <Button
                        
-                        fontSize="normal"
+                        fontWeight="normal"
                         textColor="black"
                         btnText="view details"
                         width=""
@@ -90,7 +90,7 @@ const Request_History = () => {
                       {/* <button className="bg-green-500 text-white py-1 px-2 rounded">View File</button> */}
                       <Button
                         
-                        fontSize="normal"
+                        fontWeight="normal"
                         textColor="black"
                         btnText="view file"
                         width=""

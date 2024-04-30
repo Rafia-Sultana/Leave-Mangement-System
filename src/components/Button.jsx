@@ -1,6 +1,6 @@
 
 
-const Button = ({fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIcon,padding,backgroundColor,disable}) => {
+const Button = ({fontWeight,fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIcon,padding,backgroundColor,disable,cursor}) => {
 
     return (
         
@@ -8,8 +8,8 @@ const Button = ({fontSize,textColor,btnText,width,type,onClick, btnIcon:BtnIcon,
            type={type}
            onClick={onClick}
             disabled={disable}
-            className={` font-${fontSize} text-${textColor} w-${width} 
-              border-r-black focus:outline-none rounded ${padding}  ${backgroundColor}` }
+            className={` font-${fontWeight} text-${textColor} w-${width} 
+              border-r-black focus:outline-none rounded ${padding}  ${backgroundColor}  text-${fontSize} ${cursor}` }
            >
            {BtnIcon && <BtnIcon />}
             {btnText}</button>
