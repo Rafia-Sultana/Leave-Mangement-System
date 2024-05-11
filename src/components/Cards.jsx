@@ -1,9 +1,5 @@
 import React,{useEffect, useState} from "react";
-import Calendar from "../components/Calendar.jsx";
-import RadialChart from "../components/RadialChart.jsx";
 import employee from "../services/employee.jsx";
-import LinearProgressComponent from "../components/LinearProgress.jsx";
-import ApexChart from "../components/LinearProgress.jsx";
 import approve from '../assets/styles/svg/approve.svg';
 import pending from '../assets/styles/svg/pending.svg';
 import total from '../assets/styles/svg/total.svg';

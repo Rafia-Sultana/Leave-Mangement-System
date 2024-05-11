@@ -70,7 +70,7 @@ export function getYear(date) {
 
 export   const getJoiningDate = (toDate) => {
   const tomorrowToDate = new Date(toDate);
-  return FormateDate(
+  return (
     new Date(tomorrowToDate.setDate(tomorrowToDate.getDate() + 1))
   );
 };

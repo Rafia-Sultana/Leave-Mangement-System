@@ -1,37 +1,32 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context api/Context";
+import React, { useEffect, useRef, useState } from "react";
 import employee from "../services/employee.jsx";
-import authJWT from "../services/auth.jsx";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { pink } from "@mui/material/colors";
-import SvgIcon from "@mui/material/SvgIcon";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const NavProfile = () => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [rotateIcon, setRotateIcon] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
   const navigate = useNavigate();
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const userBasicData = await employee.basicInfo(userId);
-
         setUserData(userBasicData);
       } catch (error) {
         setError(error.message);
       }
     };
-
     if (userId) {
       fetchData();
     }
@@ -45,12 +40,22 @@ const NavProfile = () => {
     localStorage.removeItem("userInfo");
   };
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const handleRightMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    setRotateIcon(!rotateIcon)
+    setRotateIcon(!rotateIcon);
   };
+
+  useEffect(() => {
+    const handleClickOutSide = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+        setRotateIcon(false);
+      }
+      
+    };
+
+    document.addEventListener("mousedown", handleClickOutSide);
+  }, []);
 
   return (
     <div className="">
@@ -79,12 +84,18 @@ const NavProfile = () => {
           ) : (
             <div className="loading"></div>
           )}
-       
-            <ExpandMoreIcon    className={`${rotateIcon? ' rotate-180':'transition-all duration-1000 ease-linear'} hidden sm:block`}/> 
- 
+
+          <ExpandMoreIcon
+            className={`${
+              rotateIcon
+                ? " rotate-180"
+                : "transition-all duration-1000 ease-linear"
+            } hidden sm:block`}
+          />
         </div>
 
         <div
+          ref={menuRef}
           className={`absolute right-0 w-44 z-50 bg-white rounded-lg shadow-md ${
             isMenuOpen ? "block" : "hidden"
           }`}
@@ -98,7 +109,7 @@ const NavProfile = () => {
               <SettingsOutlinedIcon sx={{ fontSize: 20 }} />
               <span className="ml-2">Settings</span>
             </li>
-            <li className="flex items-center " onClick={() => handleLogout()}>
+            <li className="flex items-center" onClick={() => handleLogout()}>
               <LogoutOutlinedIcon sx={{ fontSize: 20 }} />
               <span className="ml-2">Logout</span>
             </li>

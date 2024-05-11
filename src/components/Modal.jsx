@@ -18,13 +18,12 @@ const Modal = ({ open, handleClose, historyData }) => {
   const navigate = useNavigate();
   const [logData, setLogData] = useState([]);
   const [isclickedEditBtn,seIsClickedEditBtn]=useState(false);
-  // console.log(historyData);
-  // const [logTable, setLogTable] = useState([]);
+
 
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
 
-  // const rows = employee_data.leave_details[0].logs;
+
  
 
   const columns2 = [
@@ -56,15 +55,15 @@ const Modal = ({ open, handleClose, historyData }) => {
   useEffect(() => {
     
     const fetchData = async () => {
-      //console.log(historyData.application_id);
-    const logData = await employee.getLog(historyData.application_id);
-    // console.log(logData);
+
+    const logData = await employee?.getLog(historyData.application_id);
+ 
     setLogData(logData)
-    // console.log('logData',logData);
+
   };
   
     fetchData();
-  }, []);
+  }, [historyData]);
 
   const handleEditButton = () => {
   
@@ -77,7 +76,7 @@ const Modal = ({ open, handleClose, historyData }) => {
     
     
     })
-// seIsClickedEditBtn(true);
+
   }
   return (
     <div className="w-full">
@@ -120,7 +119,7 @@ const Modal = ({ open, handleClose, historyData }) => {
             ) : (
               <>
                 <Manager_Leave_Approval
-                  applicationId={historyData.application_id}
+                  applicationId={historyData?.application_id}
                   editButton={handleEditButton}
                 />
               </>

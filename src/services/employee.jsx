@@ -51,6 +51,20 @@ const postRequest = async (url, params, errorMessage) => {
   }
 };
 
+const putRequest = async(url,data,errorMessage) =>{
+  try {
+    const token = getToken();
+    const response = await axiosInstance.put(url,data,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleRequestError(error, errorMessage);
+  }
+}
+
 const employee = {
   basicInfo: async (userId) => {
     return getRequest(
@@ -67,7 +81,7 @@ const employee = {
   },
 
   calenderHoilday: async () => {
-    return getRequest("/calender/holiday", "Error fetching calendar holiday:");
+    return getRequest("/calender/weekly-holiday", "Error fetching calendar holiday:");
   },
 
   leaveDates: async (userId) => {
@@ -116,6 +130,13 @@ const employee = {
       "Error Fetching to get employee request history"
     );
   },
+
+  
+  //http://ip:4040/api/leave/editapplication/{applicationID}
+  editLeaveApplication: async(applicationID,updateInfo) =>{
+    return putRequest(`/leave/editapplication/${applicationID}`,updateInfo,"Error updating leave application");
+    },
+
   //http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
   getLog: async (applicationId) => {
     return getRequest(
@@ -183,10 +204,42 @@ const employee = {
     )
   },
 
+    ///api/designations
   getDesignationList: async () =>{
     return getRequest(`/designations`,
     "Error Fetching to get designations")
-  }
+  },
+
+
+  //http://ip:4040/api/employee/add
+  addEmployee: async (employeeInfo) =>{
+   return postRequest(`/employee/add`,employeeInfo,"Error Fetching to add employee by hr")
+  },
+  //body{
+// "status" : "active" / "inactive"
+// }				
+//  editLeaveApplication: async(applicationID,updateInfo) =>{
+//   return putRequest(`/leave/editapplication/${applicationID}`,updateInfo,"Error updating leave application");
+// },
+// http://IP:4040/api/employee/activity/{employee_id}
+  
+inActiveEmployee:async(employeeId) =>{
+  return putRequest(`/employee/activity/${employeeId}`,
+{status:"inactive"},
+  "Error when inactive employee")
+}
+,
+
+//"/calender/weekly-holiday"
+officeHoliday:async(holidayInfo)=>{
+return postRequest("/calender/office-holiday",holidayInfo,"Error for posting holidayInfo")
+},
+
+//http://ip:4040/api/employee/all
+getAllEmployee:async()=>{
+  return getRequest("/employee/all","Error for getting all employee Info");
+},
+
 };
 
 export default employee;

@@ -45,6 +45,7 @@ export const HR_Leave_Request = () => {
       minWidth: 170,
       align: "right",
     },
+
     // {
     //   id: "leave_status",
     //   label: "Leave Status",

@@ -50,6 +50,7 @@ export const Manager_Team_Leave_Info = () => {
   ];
 
   const handleViewDetails = async (index, emp_id) => {
+    console.log(index);
     navigate("/dashboard/manager_view_each_teamMember_leave_info", {
       state: { empId: emp_id },
     });

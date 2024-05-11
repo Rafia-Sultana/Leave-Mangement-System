@@ -19,6 +19,7 @@ import {startTimeArray,endTimeArray,convertToIsoString,getJoiningDate} from '../
 const Leave_Application = () => {
 
   const { state } = useLocation();
+
   const { enqueueSnackbar } = useSnackbar();
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
@@ -127,6 +128,7 @@ const Leave_Application = () => {
   useEffect(() => {
     const fetchData = async () => {
       let leaveTypeData = await employee.getLeaveTypes();
+      console.log(leaveTypeData);
       let teamMembersList = await employee.getTeamMembersOfUser(userId);
       setTeamMembersList(teamMembersList);
       setLeaveTypes(leaveTypeData);
@@ -136,20 +138,18 @@ const Leave_Application = () => {
 
   const handleInputChange = (e, newValue, field) => {
     const { name, value } = e?.target;
-    
-
     const updatedFields = {};
-
+   console.log(newValue);
     switch (field) {
       case "leave_type_id":
         updatedFields[field] =
           newValue.id !== undefined ? newValue.id : formData[field];
-
+          updatedFields["leave_name"]= newValue?.leave_name;
         setSelectedLeaveType(newValue);
         break;
       case "delegated_to":
         updatedFields[field] =
-          newValue.emp_id !== undefined ? newValue.emp_id : formData[field];
+          newValue.emp_id !== undefined ? newValue?.emp_id : formData[field];
         setCollegueName(newValue);
         break;
 
@@ -162,7 +162,7 @@ const Leave_Application = () => {
       ...prevFormData,
       [name]: value,
      
-      ...updatedFields,
+      ...updatedFields
     }));
   };
 
@@ -173,19 +173,34 @@ const Leave_Application = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await employee.postLeaveApplication(
+
+    if(state){
+    await employee.editLeaveApplication(
+      state.application_id,
       {
         ...formData,
         start_date: isoTime,
         end_date: endIsoTime,
         duration: getTotalDays()?.days,
-        joining_date: formData.end_date && getJoiningDate(formData.end_date),
-
+        joining_date: formData.end_date && getJoiningDate(formData.end_date)?.toISOString(),
         application_date: new Date().toISOString(),
       }
-
-      /// send put request if state !== null
-    );
+    )
+    }
+    else{
+      await employee.postLeaveApplication(
+        {
+          ...formData,
+          start_date: isoTime,
+          end_date: endIsoTime,
+          duration: getTotalDays()?.days,
+          joining_date: formData.end_date && getJoiningDate(formData.end_date)?.toISOString(),
+          application_date: new Date().toISOString(),
+        }
+  
+       );
+    }
+         
 
     // if (formData) {
     //   enqueueSnackbar("Submitted Succesfully!", { variant: "success" });
@@ -197,6 +212,7 @@ const Leave_Application = () => {
     //   console.error("email does not exist");
     // }
   };
+
 
   const selectedOptionOfLeaveName = leaveTypes?.find(
     (option) => option.leave_name === state?.leave_name
@@ -216,13 +232,13 @@ const Leave_Application = () => {
     {
       val: 18,
       exp: 18,
-      type: "Annual Leave",
+      type: "Casual Leave",
       color: "#6290C8",
     },
     {
       val: 14,
       exp: 10,
-      type: "Unpaid Leave",
+      type: "Leave Without Pay",
       color: "#376996",
     },
     {
@@ -251,6 +267,8 @@ const Leave_Application = () => {
   const getSelectEndTime = (e) => {
     setEndTime(e.target.value);
   };
+
+ 
 
   return (
     <div className="px-8 shadow-lg pb-8">
@@ -316,7 +334,7 @@ const Leave_Application = () => {
             <TextInput
               label={"Date of Joining"}
               InputProps={{ readOnly: true }}
-              value={formData.end_date && getJoiningDate(formData.end_date)}
+              value={formData.end_date && FormateDate(getJoiningDate(formData.end_date))}
               focused={true}
             />
           </Grid>

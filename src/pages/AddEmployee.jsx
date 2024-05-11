@@ -11,78 +11,92 @@ import SelectInput from "../components/InputFields/SelectInput"; // Import your 
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import employee from "../services/employee";
-import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import { useNavigate } from "react-router-dom";
+import { convertToIsoString } from "../utils/FormateDate";
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 
 const AddEmployee = () => {
   const navigate = useNavigate();
   const initialFormState = {
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     gender: "Male",
-    joiningDate: dayjs(),
-    status: "",
-    department: [],
-    designation: [],
+    joining_date: null,
+
+    gender: "Male",
+    dept_des: {
+      primary: {
+        dept_id: null,
+        des_id: null,
+      },
+      secondary: [
+        {
+          dept_id: null,
+          des_id: null,
+        },
+        {
+          dept_id: null,
+          des_id: null,
+        },
+      ],
+    },
+    role: "",
   };
 
   const [addEmployeeForm, setAddEmployeeForm] = useState(initialFormState);
   const [imageURL, setImageURL] = useState(null);
   const [departmentsList, setDepartmentsList] = useState([]);
   const [designationsList, setDesignationsList] = useState([]);
-
+  const [openOtherDepartments, setOpenOtherDepartments]=useState(false);
+  let roleOptions = [
+    {
+      id: 1,
+      role: "Employee",
+    },
+    {
+      id: 2,
+      role: "Team Lead",
+    },
+    {
+      id: 3,
+      role: "HR",
+    },
+  ];
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAddEmployeeForm((prev) => ({
+      
       ...prev,
-      [name]: Array.isArray(value)?[...value]:value,
+      [name]: value,
+      // [name]: Array.isArray(value) ? [...value] : value,
     }));
   };
 
-  const handleDateChange = (date) => {
-    console.log(date);
+  const handleDateChange = (date, label) => {
+    // let labelWords = label.split(" ");
+    // labelWords[1] =
+    //   labelWords[1].charAt(0).toUpperCase() + labelWords[1].slice(1);
+    // let updateLabel = labelWords.join("");
+    setAddEmployeeForm((prev) => ({
+      ...prev,
+      ["joining_date"]: convertToIsoString(date, "6:00 PM"),
+    }));
   };
-
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
       const departments = await employee.getDepartmentList();
       const designations = await employee.getDesignationList();
-
-      setDepartmentsList(
-        departments.map((department) => department.department)
-      );
-      setDesignationsList(
-        designations.map((designation) => designation.designation)
-      );
+      setDepartmentsList(departments);
+      setDesignationsList(designations);
     };
     fetchData();
   }, []);
 
-  // const departmentList = ["Planning", "Software Development", "Admin"];
-  // const designationList = [
-  //   {
-  //     Planning: [
-  //       "Senior Urban Planner",
-  //       "Associate Urban Planner",
-  //       "Junior Urban Planner",
-  //     ],
-  //   },
-  //   {
-  //     "Software Development": [
-  //       "Senior Software Engineer",
-  //       "Software Engineer",
-  //       "Junior Software Engineer",
-  //     ],
-  //   },
-  //   { Admin: ["Senior Executive", "Manager", "Finance/Account"] },
-  // ];
-console.log(addEmployeeForm);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     const url = URL.createObjectURL(file);
@@ -90,12 +104,45 @@ console.log(addEmployeeForm);
     // console.log(file);
   };
 
+  const setDepartment = (value, field, index = null) => {
+    let dept_id = departmentsList.find((x) => x.department === value)?.id;
+    let des_id = designationsList.find((x) => x.designation === value)?.id;
+
+    setAddEmployeeForm((prev) => {
+      const updatedForm = { ...prev };
+      if (index === null) {
+        updatedForm.dept_des.primary[field] =
+          field === "dept_id" ? dept_id : des_id;
+      } else {
+        updatedForm.dept_des.secondary[index][field] =
+          field === "dept_id" ? dept_id : des_id;
+      }
+      return updatedForm;
+    });
+  };
+
+  const handleRoleChange = (e) => {
+    const { name, value } = e.target;
+    let roleId = roleOptions?.find((x) => x.role == value)?.id;
+    setAddEmployeeForm((prev) => ({ ...prev, [name]: roleId }));
+  };
+  const handleAddDepartmentClick = () =>{
+    setOpenOtherDepartments(!openOtherDepartments)
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await employee.addEmployee(addEmployeeForm);
+  };
+// console.log(addEmployeeForm);
   return (
     <Box className="">
-<div className="flex items-center ">
-<ArrowBackIosNewOutlinedIcon className='cursor-pointer'   onClick={()=>navigate(-1)}/>
-      <h2 className="font-bold text-xl p-4">Add New Employee</h2>
-</div>
+      <div className="flex items-center ">
+        <ArrowBackIosNewOutlinedIcon
+          className="cursor-pointer"
+          onClick={() => navigate(-1)}
+        />
+        <h2 className="font-bold text-xl p-4">Add New Employee</h2>
+      </div>
       <form>
         <Box
           className="flex flex-col lg:flex-row justify-center  items-center lg:justify-start lg:items-start
@@ -142,41 +189,24 @@ console.log(addEmployeeForm);
                 label={"First Name"}
                 onchange={handleInputChange}
                 variant="standard"
-                name={"firstName"}
+                name={"first_name"}
               />
               <TextInput
                 label={"Last Name"}
                 onchange={handleInputChange}
-                name={"lastName"}
+                name={"last_name"}
                 variant="standard"
               />
             </div>
-
-            {/* Your other input fields */}
-            <SelectInput
-              options={departmentsList}
-              placeholder="Department"
-              value={addEmployeeForm?.department}
-              getSelectedValue={handleInputChange}
-              variant="standard"
-              name={"department"}
-              multiple={true}
-    
-            />
-            <SelectInput
-              // options={
-              //   designationList.find((item) => item[addEmployeeForm?.department])?.[
-              //     addEmployeeForm?.department
-              //   ] || []
-              // }
-              options={addEmployeeForm.department.length!=0?designationsList:[]}
-              placeholder="Designation"
-              value={addEmployeeForm?.designation}
-              getSelectedValue={handleInputChange}
-              variant="standard"
-              name={"designation"}
-              multiple={true}
         
+
+            <SelectInput
+              options={roleOptions.map((role) => role.role)}
+              placeholder="Role"
+              value={roleOptions.find(role=>role.id == addEmployeeForm?.role)?.role}
+              getSelectedValue={handleRoleChange}
+              name={"role"}
+              variant="standard"
             />
 
             <TextInput
@@ -194,8 +224,105 @@ console.log(addEmployeeForm);
               variant="standard"
             />
 
-            {/* Remaining input fields */}
-            <>
+       
+
+            <DateInput
+              label={"joining date"}
+              handleDateChange={handleDateChange}
+              value={initialFormState.joiningDate}
+              variant="standard"
+            />
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-10">
+              <SelectInput
+                options={departmentsList.map(
+                  (department) => department.department
+                )}
+                placeholder="Department"
+                value={
+                  departmentsList.find(
+                    (x) =>
+                      x.department == addEmployeeForm.dept_des.primary.dept_id
+                  )?.department
+                }
+                getSelectedValue={(e) =>
+                  setDepartment(e.target.value, "dept_id")
+                }
+                variant="standard"
+              />
+              <SelectInput
+                options={designationsList.map(
+                  (designation) => designation.designation
+                )}
+                placeholder="Designation"
+                value={
+                  designationsList.find(
+                    (x) =>
+                      x.designation == addEmployeeForm.dept_des.primary.des_id
+                  )?.designation
+                }
+                getSelectedValue={(e) =>
+                  setDepartment(e.target.value, "des_id")
+                }
+                variant="standard"
+              />
+            </div>
+            <div>
+              <div className="flex gap-2 cursor-pointer" onClick={handleAddDepartmentClick} >
+               {openOtherDepartments?<RemoveOutlinedIcon/>:<AddOutlinedIcon/>}  
+                <Button
+                  btnText={"Add Department"}
+                  textColor={"blue"}
+                  fontWeight={"bold"}
+
+                  btnIcon={"AddOutlinedIcon"}
+                ></Button>
+                <p className="text-blue">(if any)</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-10">
+                {openOtherDepartments &&  addEmployeeForm.dept_des.secondary.map((_, index) => (
+                  <div key={index}>
+                    <SelectInput
+                      options={departmentsList.map(
+                        (department) => department.department
+                      )}
+                      placeholder={`Department ${index + 1}`}
+                      value={
+                        departmentsList.find(
+                          (x) =>
+                            x.id ==
+                            addEmployeeForm.dept_des.secondary[index].dept_id
+                        )?.department
+                      }
+                      getSelectedValue={(e) =>
+                        setDepartment(e.target.value, "dept_id", index)
+                      }
+                      variant="standard"
+                    />
+                    <SelectInput
+                      options={designationsList.map(
+                        (designation) => designation.designation
+                      )}
+                      placeholder={`Designation ${index + 1}`}
+                      value={
+                        designationsList.find(
+                          (x) =>
+                            x.designation ==
+                            addEmployeeForm.dept_des.secondary[index].des_id
+                        )?.designation
+                      }
+                      getSelectedValue={(e) =>
+                        setDepartment(e.target.value, "des_id", index)
+                      }
+                      variant="standard"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+               
+                 <>
               <FormControl>
                 <FormLabel>Gender</FormLabel>
                 <RadioGroup
@@ -220,30 +347,13 @@ console.log(addEmployeeForm);
                 </RadioGroup>
               </FormControl>
             </>
-
-            <div className="grid grid-cols-1   md:grid-cols-2 gap-5 lg:gap-10">
-              <DateInput
-                label={"joining date"}
-                handleDateChange={handleDateChange}
-                value={initialFormState.joiningDate}
-                variant="standard"
-              />
-
-              <SelectInput
-                options={["Active", "Inactive"]}
-                placeholder="Status"
-                value={addEmployeeForm.status}
-                getSelectedValue={handleInputChange}
-                name={"status"}
-                variant="standard"
-              />
-            </div>
             <Button
               btnText={"SUBMIT"}
               backgroundColor={"bg-blue-light"}
               padding={"p-3"}
               textColor={"white"}
               width={"1/2"}
+              onClick={handleSubmit}
             ></Button>
           </div>
         </Box>

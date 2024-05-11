@@ -1,10 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-
-
-
-
-
-
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { usersInfo } from "../utils/Dummy_Data.js";
 import Button from "../components/Button.jsx";
@@ -26,7 +20,6 @@ import personal from "../assets/styles/svg/personal.svg";
 import dashboard from "../assets/styles/svg/dashboard.svg";
 import managment from "../assets/styles/svg/managment.svg";
 
-
 const Dashboard = () => {
   const [open, setOpen] = useState({});
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
@@ -43,12 +36,11 @@ const Dashboard = () => {
     menuToggle.classList.toggle("open");
   };
 
-  const createNavLink = (to, text,icon) => ({ to, text ,icon});
+  const createNavLink = (to, text, icon) => ({ to, text, icon });
   const navLinks = {
     Employee: [
-      createNavLink("leave-application", "Leave Application",personal),
-      createNavLink("request-history", "Request History",team),
- 
+      createNavLink("leave-application", "Leave Application", personal),
+      createNavLink("request-history", "Request History", team),
     ],
     "Team Lead": [
       {
@@ -82,22 +74,21 @@ const Dashboard = () => {
         links: [
           createNavLink("hr-leave-request", "Pending Request "),
           createNavLink("hr_others_leave_history", "Leave History"),
-
         ],
         icon: team,
       },
       {
-        category:"Managment",
-        links:[
-          createNavLink("manage-employee","Employee"),
-          // createNavLink("hr-add-employee","Add Employee"),
+        category: "Managment",
+        links: [
+          createNavLink("manage-employee", "Employee"),
+          createNavLink("hr-add-holiday", "Holiday"),
           // createNavLink("hr-remove-employee","Remove Employee"),
           // createNavLink("hr-add-hoilday","Add Holiday"),
           // createNavLink("hr-remove-hoilday","Remove Hoilday"),
           // createNavLink("hr-edit-employee","Edit Employee"),
         ],
-        icon:managment
-      }
+        icon: managment,
+      },
     ],
   };
 
@@ -112,7 +103,6 @@ const Dashboard = () => {
 
   return (
     <div className="font-poppins">
-      
       <header className="h-20 bg-[#DCF3FF] flex items-center justify-between fixed w-full z-10 lg:relative ">
         <div className="flex items-center">
           <div className="menu-toggle" onClick={menuToggleClick}>
@@ -120,8 +110,8 @@ const Dashboard = () => {
           </div>
           <p
             className="text-3xl font-black"
-            style={{ fontFamily: "Biggy John",cursor:'pointer' }}
-            onClick={()=>navigate("/dashboard")}
+            style={{ fontFamily: "Biggy John", cursor: "pointer" }}
+            onClick={() => navigate("/dashboard")}
           >
             LMS
           </p>
@@ -139,14 +129,16 @@ const Dashboard = () => {
       </header>
 
       <div className="flex">
-        <nav className="h-[calc(100vh-80px)]  bg-[#DCF3FF] text-black w-[60%] md:w-[30%] lg:w-[22%]
+        <nav
+          className="h-[calc(100vh-80px)]  bg-[#DCF3FF] text-black w-[60%] md:w-[30%] lg:w-[22%]
         
-        site-nav  border-t-white  mt-20  lg:mt-0">
-    
-         
+        site-nav  border-t-white  mt-20  lg:mt-0"
+        >
           <ul className="flex flex-col items-center  gap-8 ml-2 ">
-            <li className="mt-10 w-[100%] xl:w-[80%] 
-             bg-[#DCF3FF] rounded flex justify-start items-center gap-3 py-1 ">
+            <li
+              className="mt-10 w-[100%] xl:w-[80%] 
+             bg-[#DCF3FF] rounded flex justify-start items-center gap-3 py-1 "
+            >
               <img src={dashboard} alt="" className="w-6 h-6" />
               <NavLink
                 to={"/dashboard"}
@@ -155,8 +147,8 @@ const Dashboard = () => {
                   backgroundColor: isNavActive("/dashboard")
                     ? "#7BD3FF"
                     : "transparent",
-                    width:'60%',
-                   padding:'2px'
+                  width: "60%",
+                  padding: "2px",
                 }}
               >
                 Dashboard
@@ -164,29 +156,29 @@ const Dashboard = () => {
             </li>
 
             {navLinks[role]?.map((section, index) => (
-              <ul
-                key={index}
-                className="w-[100%] xl:w-[80%]  rounded  py-1 "
-              >
+              <ul key={index} className="w-[100%] xl:w-[80%]  rounded  py-1 ">
                 <li className="flex gap-2 ">
-                <img src={section?.icon} alt="" className="w-6 h-6" />
-                  <NavLink className={`px-${section?.category?0:2}`}  to={section?.to}>
-                       {section?.text}
+                  <img src={section?.icon} alt="" className="w-6 h-6" />
+                  <NavLink
+                    className={`px-${section?.category ? 0 : 2}`}
+                    to={section?.to}
+                  >
+                    {section?.text}
                   </NavLink>
                   <li className="font-bold "> {section.category}</li>
                 </li>
                 <li className="ml-12">
-               {section.links?.map((link, linkIndex) => (
-                      <li key={linkIndex}>
-                        <NavLink
-                          className={`my-2 px-2 py-1 text-[0.80rem]  lg:text-sm
+                  {section.links?.map((link, linkIndex) => (
+                    <li key={linkIndex}>
+                      <NavLink
+                        className={`my-2 px-2 py-1 text-[0.80rem]  lg:text-sm
                           `}
-                          to={link.to}
-                        >
-                          {link.text}
-                        </NavLink>
-                      </li>
-                    ))}
+                        to={link.to}
+                      >
+                        {link.text}
+                      </NavLink>
+                    </li>
+                  ))}
                 </li>
               </ul>
             ))}

@@ -29,8 +29,11 @@ const Calendar = () => {
 try {
   const monthNumber = getMonthNumber();
   const holidays = await employee.calenderHoilday();
+
   const leaveDates = await employee.leaveDates(userId);
+  console.log(leaveDates);
   const  leaveDatesByMonth =  await employee.leaveDatesByMonth(userId,monthNumber);
+  console.log(leaveDatesByMonth);
   // console.log(leaveDatesByMonth);
   const holidayEvents = holidays?.map((date)=> createEventObject('Holiday',date,'red'));
   const leaveEvents = leaveDates?.map(({leave_type,leave_date,color})=>createEventObject(leave_type,leave_date,color));
