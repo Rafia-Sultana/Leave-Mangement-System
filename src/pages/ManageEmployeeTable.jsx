@@ -9,7 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SelectInput from "../components/InputFields/SelectInput.jsx";
 import TextInput from "../components/InputFields/TextInput.jsx";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import totalEmployee from "../assets/styles/svg/totalEmployee.svg";
 import activeEmployee from "../assets/styles/svg/activeEmployee.svg";
 import leaveEmployee from "../assets/styles/svg/leaveEmployee.svg";
@@ -17,11 +17,11 @@ import onBoardEmployee from "../assets/styles/svg/onBoardEmployee.svg";
 import CommonTable from "../components/CommonTable.jsx";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import employee from "../services/employee.jsx";
-
+import { UserContext } from "../context api/Context.jsx";
 const ManageEmployeeTable = () => {
-  const navigate = useNavigate();
-
-  const isSmallScreen = useMediaQuery("(max-width:600px)");
+//  const {checkedRows} = useContext(UserContext);
+const navigate = useNavigate();
+const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   let summary = [
     {
@@ -49,76 +49,74 @@ const ManageEmployeeTable = () => {
   const handleAddEmployee = () => {
     navigate("/dashboard/hr-add-employee");
   };
-  const [checkedRows, setCheckedRows] = useState([]);
+  // const [checkedRows, setCheckedRows] = useState([]);
   const [selectedColumn, setSelectedColumn] = useState("Name");
   const [searchValue, setSearchValue] = useState("");
 
-  function createData(id, name, role, designation, department, status) {
-    return { id, name, role, designation, department, status };
+  function createData(id, name, joining_date, status) {
+    return { id, name, joining_date, status };
   }
 
-  let rows2 = [
-    createData(
-      0,
-      "Frozen yoghurt",
-      "Employee",
-      "software engineer",
-      "software development",
-      "active"
-    ),
-    createData(
-      1,
-      "Ice cream sandwich",
-      "Team Lead",
-      "urban planner",
-      "planning",
-      "inactive"
-    ),
-    createData(
-      2,
-      "Eclair",
-      "Admin",
-      "software engineer",
-      "software development",
-      "active"
-    ),
-    createData(
-      3,
-      "Cupcake",
-      "Employee",
-      "software engineer",
-      "software development",
-      "inactive"
-    ),
-    createData(
-      4,
-      "Gingerbread",
-      "Employee",
-      "software engineer",
-      "software development",
-      "active"
-    ),
-  ];
+  // let rows2 = [
+  //   createData(
+  //     0,
+  //     "Frozen yoghurt",
+  //     "Employee",
+  //     "software engineer",
+  //     "software development",
+  //     "active"
+  //   ),
+  //   createData(
+  //     1,
+  //     "Ice cream sandwich",
+  //     "Team Lead",
+  //     "urban planner",
+  //     "planning",
+  //     "inactive"
+  //   ),
+  //   createData(
+  //     2,
+  //     "Eclair",
+  //     "Admin",
+  //     "software engineer",
+  //     "software development",
+  //     "active"
+  //   ),
+  //   createData(
+  //     3,
+  //     "Cupcake",
+  //     "Employee",
+  //     "software engineer",
+  //     "software development",
+  //     "inactive"
+  //   ),
+  //   createData(
+  //     4,
+  //     "Gingerbread",
+  //     "Employee",
+  //     "software engineer",
+  //     "software development",
+  //     "active"
+  //   ),
+  // ];
 
-  const [rows, setRows] = useState(rows2);
-  const handleCheckBoxInput = (e, index) => {
-    setCheckedRows((prev) => {
-      let newArray = [...prev];
-      newArray[index] = { [index]: e.target.checked };
-      return newArray;
-    });
-  };
+  const [rows, setRows] = useState([]);
 
-  const handleDelete = () => {
+  const handleDelete = async() => {
     // Filter out the rows that are checked
-    const updatedRows = rows.filter((row, index) => !checkedRows[index]);
+ 
+  //  const updatedRows = rows.filter((row, index) => checkedRows[index]);
 
-    setRows(updatedRows);
+  //  let selectedEmployeeId = updatedRows[0].id
+  //  console.log(updatedRows);
+  //  let d = await employee.inActiveEmployee(selectedEmployeeId);
+  // console.log(d);
+    // setRows(updatedRows);
   };
 
-  const isAllValuesFalse = checkedRows.every(
-    (obj) => Object.values(obj)[0] === false
-  );
+  // const isAllValuesFalse = checkedRows.every(
+  //   (obj) => Object.values(obj)[0] === false
+  // );
   const getSelectedValue = (e) => {
     setSelectedColumn(e.target.value);
   };
@@ -129,32 +127,53 @@ const ManageEmployeeTable = () => {
   };
 
   useEffect(() => {
-    const matchedRows = async() => {
-      let column = selectedColumn.toLowerCase();
-      let searchValues = searchValue.toLowerCase();
+    const matchedRows = async () => {
+      let column = selectedColumn?.toLowerCase();
+      let searchValues = searchValue?.toLowerCase();
       let allEmployee = await employee.getAllEmployee();
-      // const {emp_id,first_name, middle_name,last_name,email,joining_date,status,designations,departments}= allEmployee;
-      // let name = first_name+" "+middle_name+" "+last_name;
-      let p = allEmployee.map((x)=>{
-      const {emp_id,first_name, middle_name,last_name,email,joining_date,status,designations,departments}= x;
-      let name = first_name+" "+middle_name+" "+last_name;
-    createData
-      })
 
-      if (!searchValues) {
-        setRows(rows2);
-      } else {
-        const filteredRows = rows2.filter((row) =>
-          row[column].toLowerCase().includes(searchValues)
-        );
-        setRows(filteredRows);
+      const concatNames =(...names) =>{
+        return names.filter(Boolean).join(" ");
       }
+      allEmployee.map((x) => {
+        const {
+          emp_id,
+          first_name,
+          middle_name,
+          last_name,
+          email,
+          joining_date,
+          status,
+          designations,
+          departments,
+        } = x;
+        // console.log(designations,departments);
+
+        let name = concatNames(first_name ,middle_name, last_name);
+        let infoObject = createData(emp_id, name, joining_date, status);
+ setRows((prev) => [...prev, infoObject]);
+      });
+  
+      if(searchValues){
+       const filteredRows = rows.filter((row) =>
+            row[column].toLowerCase().includes(searchValues)
+          );
+          setRows(filteredRows);
+       
+      }
+  //  console.log(handleCheckBoxInput);
+      //   setCheckedRows((prev) => {
+  //     let newArray = [...prev];
+  //     newArray[index] = { [index]: e.target.checked };
+  //     return newArray;
+  //   });
+    
     };
     matchedRows();
   }, [searchValue, selectedColumn]);
 
   const columns = [
-    { id: "check", label: "", minWidth: 10 },
+    // { id: "check", label: "",},
     { id: "name", label: "Name", minWidth: 10 },
     { id: "role", label: "Role", minWidth: 10 },
     { id: "designation", label: "Designation ", minWidth: 10 },
@@ -169,10 +188,13 @@ const ManageEmployeeTable = () => {
     },
   ];
 
-  const handleInActive = async(index) => {
-   let emp_id = (rows[index].id);
-  await employee.inActiveEmployee(emp_id);
-  }
+  const handleInActive = async (index) => {
+let emp_id = rows[index].id;
+await employee.inActiveEmployee(emp_id);
+const updateRows = [...rows];
+updateRows[index]={...updateRows[index],status:"inactive"}
+setRows(updateRows);
+ };
 
   return (
     <div className="">
@@ -181,11 +203,17 @@ const ManageEmployeeTable = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4">
         {summary.map((x, index) => {
           return (
-           
             <section className="flex bg-[#add5f4] shadow-lg w-[90%] p-[5%] my-5 items-center ">
-              <img src={x.icon} alt="" className="hidden sm:block  min-w-[35%]" />
+              <img
+                src={x.icon}
+                alt=""
+                className="hidden sm:block  min-w-[35%]"
+              />
               <div className="">
-                <p className="font-bold text-sm xl:text-base  "> {x.numberOfEmployee}</p>
+                <p className="font-bold text-sm xl:text-base  ">
+                  {" "}
+                  {x.numberOfEmployee}
+                </p>
                 <p className="text-sm"> {x.title}</p>
               </div>
             </section>
@@ -211,10 +239,10 @@ const ManageEmployeeTable = () => {
         </div>
 
         <div className="col-span-3 flex justify-end gap-2 ">
-          <Button
+          {/* <Button
             textColor={isAllValuesFalse ? "gray" : "white"}
             // btnText={"Remove"}
-      
+
             backgroundColor={isAllValuesFalse ? "bg-gray" : "bg-red"}
             padding={"p-2"}
             btnIcon={DeleteIcon}
@@ -222,7 +250,7 @@ const ManageEmployeeTable = () => {
             disable={isAllValuesFalse ? true : false}
             cursor={isAllValuesFalse ? "cursor-not-allowed" : "cursor-pointer"}
             onClick={handleDelete}
-          ></Button>
+          ></Button> */}
           <Button
             textColor={"white"}
             btnText={"Add Employee"}
@@ -238,7 +266,7 @@ const ManageEmployeeTable = () => {
       <CommonTable
         rows={rows}
         columns={columns}
-        handleCheckBoxInput={handleCheckBoxInput}
+        // handleCheckBoxInput={handleCheckBoxInput}
         handleDelete={handleInActive}
       ></CommonTable>
     </div>

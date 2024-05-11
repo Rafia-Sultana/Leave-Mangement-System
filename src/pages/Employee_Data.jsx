@@ -23,6 +23,7 @@ export const Employee_Leave_Request = () => {
   const [rows, setRows] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedType, setSelectedType] = useState("All");
+  const [leaveTypesOptions,setLeaveTypesOption]= useState([]);
   // const [showAll, setShowAll] = useState(false);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -64,7 +65,10 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
       const requestHistoryData = await employee.getEmployeeRequestHistory(
         userId
       );
-      // console.log(requestHistoryData);
+      let leaveTypeData = await employee.getLeaveTypes();
+       let leave_names = leaveTypeData.map((x)=>x.leave_name);
+       setLeaveTypesOption(leave_names);
+    
       setRows(requestHistoryData);
       setLoading(false);
     };
@@ -78,14 +82,14 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
  "All"
   
   ];
-  const leaveTypesOptions = [
-    "Sick Leave",
-    "Annual Leave",
-    "Paternity Leave",
-    "Maternity Leave",
-    "Unpaid Leave",
-    "All"
-  ];
+  // const leaveTypesOptions = [
+  //   "Sick Leave",
+  //   "Annual Leave",
+  //   "Paternity Leave",
+  //   "Maternity Leave",
+  //   "Unpaid Leave",
+  //   "All"
+  // ];
 
   const filteredRows = useMemo(() => {
     let filtered = rows;

@@ -13,12 +13,18 @@ import FormLabel from "@mui/material/FormLabel";
 import employee from "../services/employee";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import { useNavigate } from "react-router-dom";
-import { convertToIsoString } from "../utils/FormateDate";
+import FormateDate, { convertToIsoString } from "../utils/FormateDate";
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
+import ShowSnackbar from "../components/ShowSnackbar";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useContext } from "react";
+import { UserContext } from "../context api/Context";
 
 const AddEmployee = () => {
   const navigate = useNavigate();
+  const {openSnackBar,handleSnackBarClose,setOpenSnackbar}=useContext(UserContext);
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -26,25 +32,23 @@ const AddEmployee = () => {
     password: "",
     gender: "Male",
     joining_date: null,
-
-    gender: "Male",
     dept_des: {
       primary: {
-        dept_id: null,
-        des_id: null,
+        dept_id: '',
+        des_id: '',
       },
       secondary: [
         {
-          dept_id: null,
-          des_id: null,
+          dept_id: '',
+          des_id: '',
         },
         {
-          dept_id: null,
-          des_id: null,
+          dept_id:'',
+          des_id: '',
         },
       ],
     },
-    role: "",
+    role: '',
   };
 
   const [addEmployeeForm, setAddEmployeeForm] = useState(initialFormState);
@@ -52,8 +56,9 @@ const AddEmployee = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
   const [designationsList, setDesignationsList] = useState([]);
   const [openOtherDepartments, setOpenOtherDepartments]=useState(false);
+
   let roleOptions = [
-    {
+   {
       id: 1,
       role: "Employee",
     },
@@ -66,24 +71,21 @@ const AddEmployee = () => {
       role: "HR",
     },
   ];
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAddEmployeeForm((prev) => ({
       
       ...prev,
       [name]: value,
-      // [name]: Array.isArray(value) ? [...value] : value,
+
     }));
   };
 
   const handleDateChange = (date, label) => {
-    // let labelWords = label.split(" ");
-    // labelWords[1] =
-    //   labelWords[1].charAt(0).toUpperCase() + labelWords[1].slice(1);
-    // let updateLabel = labelWords.join("");
-    setAddEmployeeForm((prev) => ({
+   setAddEmployeeForm((prev) => ({
       ...prev,
-      ["joining_date"]: convertToIsoString(date, "6:00 PM"),
+      [label]:date,
     }));
   };
 
@@ -101,41 +103,93 @@ const AddEmployee = () => {
     const file = e.target.files[0];
     const url = URL.createObjectURL(file);
     setImageURL(url);
-    // console.log(file);
+
   };
+  // console.log(addEmployeeForm);
 
   const setDepartment = (value, field, index = null) => {
-    let dept_id = departmentsList.find((x) => x.department === value)?.id;
-    let des_id = designationsList.find((x) => x.designation === value)?.id;
+
 
     setAddEmployeeForm((prev) => {
       const updatedForm = { ...prev };
       if (index === null) {
-        updatedForm.dept_des.primary[field] =
-          field === "dept_id" ? dept_id : des_id;
+        updatedForm.dept_des.primary[field] = value
+   
       } else {
-        updatedForm.dept_des.secondary[index][field] =
-          field === "dept_id" ? dept_id : des_id;
+        updatedForm.dept_des.secondary[index][field] = value
+
       }
       return updatedForm;
     });
   };
 
-  const handleRoleChange = (e) => {
-    const { name, value } = e.target;
-    let roleId = roleOptions?.find((x) => x.role == value)?.id;
-    setAddEmployeeForm((prev) => ({ ...prev, [name]: roleId }));
-  };
   const handleAddDepartmentClick = () =>{
     setOpenOtherDepartments(!openOtherDepartments)
   }
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await employee.addEmployee(addEmployeeForm);
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Map department name to department ID
+  const primaryDepartment = departmentsList.find(
+    (department) => department.department === addEmployeeForm?.dept_des.primary.dept_id
+  );
+  const primaryDeptId = primaryDepartment ? primaryDepartment.id : null;
+
+  // Map designation name to designation ID
+  const primaryDesignation = designationsList.find(
+    (designation) => designation.designation === addEmployeeForm?.dept_des.primary.des_id
+  );
+  const primaryDesId = primaryDesignation ? primaryDesignation.id : null;
+
+  // Map role name to role ID
+  const selectedRole = roleOptions.find(
+    (role) => role.role === addEmployeeForm?.role
+  );
+  const roleId = selectedRole ? selectedRole.id : null;
+
+  // Update the form data with IDs
+  const updatedFormData = {
+    ...addEmployeeForm,
+    dept_des: {
+      primary: {
+        dept_id: primaryDeptId,
+        des_id: primaryDesId,
+      },
+      secondary: addEmployeeForm.dept_des.secondary.map((secondaryDept) => ({
+        dept_id: secondaryDept.dept_id ? departmentsList.find(
+          (department) => department.department === secondaryDept.dept_id
+        ).id : null,
+        des_id: secondaryDept.des_id ? designationsList.find(
+          (designation) => designation.designation === secondaryDept.des_id
+        ).id : null,
+      })),
+    },
+    role: roleId,
   };
-// console.log(addEmployeeForm);
+
+  // Submit the updated form data
+  let timestamp = convertToIsoString(updatedFormData?.joining_date, "6:00 PM");
+  console.log({...updatedFormData,joining_date:timestamp});
+  // let result = await employee.addEmployee(updatedFormData, timestamp);
+  // setAddEmployeeForm(initialFormState); 
+  // //   if(result.success == true){
+// //    setOpenSnackbar(true);
+// //   //  setTimeout(()=>{
+// //   //   navigate('/dashboard/manage-employee')
+// //   //  },600)
+// // }
+// };
+};
+
+
+
   return (
     <Box className="">
+      {
+      <ShowSnackbar open={openSnackBar} handleClose={handleSnackBarClose} text={'SuccessFully Employee Added '} />
+      }
       <div className="flex items-center ">
         <ArrowBackIosNewOutlinedIcon
           className="cursor-pointer"
@@ -190,12 +244,14 @@ const AddEmployee = () => {
                 onchange={handleInputChange}
                 variant="standard"
                 name={"first_name"}
+                value={addEmployeeForm?.first_name}
               />
               <TextInput
                 label={"Last Name"}
                 onchange={handleInputChange}
                 name={"last_name"}
                 variant="standard"
+                value={addEmployeeForm?.last_name}
               />
             </div>
         
@@ -203,8 +259,8 @@ const AddEmployee = () => {
             <SelectInput
               options={roleOptions.map((role) => role.role)}
               placeholder="Role"
-              value={roleOptions.find(role=>role.id == addEmployeeForm?.role)?.role}
-              getSelectedValue={handleRoleChange}
+              value={addEmployeeForm?.role}
+              getSelectedValue={handleInputChange}
               name={"role"}
               variant="standard"
             />
@@ -214,22 +270,23 @@ const AddEmployee = () => {
               // type="email"
               onchange={handleInputChange}
               name={"email"}
+              value={addEmployeeForm?.email}
               variant="standard"
             />
             <TextInput
               label={"Password"}
               // type="password"
+              value={addEmployeeForm?.password}
               onchange={handleInputChange}
               name={"password"}
               variant="standard"
             />
 
-       
-
-            <DateInput
-              label={"joining date"}
+      
+              <DateInput
+              label={"joining_date"}
               handleDateChange={handleDateChange}
-              value={initialFormState.joiningDate}
+              value={(addEmployeeForm?.joining_date)}
               variant="standard"
             />
 
@@ -239,28 +296,21 @@ const AddEmployee = () => {
                   (department) => department.department
                 )}
                 placeholder="Department"
-                value={
-                  departmentsList.find(
-                    (x) =>
-                      x.department == addEmployeeForm.dept_des.primary.dept_id
-                  )?.department
-                }
+                value={addEmployeeForm?.dept_des.primary.dept_id}
                 getSelectedValue={(e) =>
                   setDepartment(e.target.value, "dept_id")
                 }
                 variant="standard"
               />
+
+
               <SelectInput
                 options={designationsList.map(
                   (designation) => designation.designation
                 )}
                 placeholder="Designation"
-                value={
-                  designationsList.find(
-                    (x) =>
-                      x.designation == addEmployeeForm.dept_des.primary.des_id
-                  )?.designation
-                }
+            
+                value={addEmployeeForm?.dept_des.primary.des_id}
                 getSelectedValue={(e) =>
                   setDepartment(e.target.value, "des_id")
                 }
@@ -287,13 +337,8 @@ const AddEmployee = () => {
                         (department) => department.department
                       )}
                       placeholder={`Department ${index + 1}`}
-                      value={
-                        departmentsList.find(
-                          (x) =>
-                            x.id ==
-                            addEmployeeForm.dept_des.secondary[index].dept_id
-                        )?.department
-                      }
+                
+                      value={addEmployeeForm?.dept_des.secondary[index].dept_id}
                       getSelectedValue={(e) =>
                         setDepartment(e.target.value, "dept_id", index)
                       }
@@ -304,13 +349,14 @@ const AddEmployee = () => {
                         (designation) => designation.designation
                       )}
                       placeholder={`Designation ${index + 1}`}
-                      value={
-                        designationsList.find(
-                          (x) =>
-                            x.designation ==
-                            addEmployeeForm.dept_des.secondary[index].des_id
-                        )?.designation
-                      }
+                      // value={
+                      //   designationsList.find(
+                      //     (x) =>
+                      //       x.designation ==
+                      //       addEmployeeForm.dept_des.secondary[index].des_id
+                      //   )?.designation
+                      // }
+                      value={addEmployeeForm?.dept_des.secondary[index].des_id}
                       getSelectedValue={(e) =>
                         setDepartment(e.target.value, "des_id", index)
                       }

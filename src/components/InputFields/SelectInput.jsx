@@ -17,6 +17,7 @@ const SelectInput = ({
   name,
   multiple = false,
 }) => {
+
   // console.log(value);
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;

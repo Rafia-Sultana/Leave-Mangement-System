@@ -4,6 +4,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
 const DateInput = ({ label, handleDateChange, value, disableDates,variant="outlined" }) => {
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker

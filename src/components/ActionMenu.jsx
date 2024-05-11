@@ -7,39 +7,28 @@ import { useState } from "react";
 
 const ActionMenu = ({viewDetails,onEdit,onDelete,row,type}) => {
   let value = row['leave_status'];
+  let status=row["status"];
+  
 let options;
 
 
-switch (value) {
+switch (value,status) {
   case 'Pending':
     options = ["Edit", "View", "Delete"];
     break;
     case 'Approved':
     options = ["View"];
     break;
-    // case '/dashboard/hr_others_leave_history' :
-    // options = ["View"];
-    // break;
-    // case '/dashboard/manager_team_leave_info':
-    // options = ["View"];
-    // break;
+    case 'active':
+      options = ["View", "Inactive"];
+    break;
+ 
     default:
     options = ["View"];
     break;
 }
-// switch (locations) {
-// case '/dashboard/hr_others_leave_history' :
-//     options = ["View"];
-//     break;
-//     case '/dashboard/manager_team_leave_info':
-//     options = ["View"];
-//     break;
-//     default:
-//     options = ["View"];
-//     break;
-// }
-  
-// options = value !== 'Pending' ? ["View"] : ["Edit", "View", "Delete"];
+
+
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -55,7 +44,8 @@ switch (value) {
   const actionHandlers = {
     Edit: onEdit,
     View: viewDetails,
-    Delete: onDelete
+    Delete: onDelete,
+    Inactive: onDelete,
   };
 
   const actionHandler = actionHandlers[option]

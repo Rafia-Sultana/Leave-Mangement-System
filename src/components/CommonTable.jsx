@@ -16,7 +16,7 @@ const CommonTable = ({
   handleDelete,
   borderRadius,
   maxHeight = 700,
-  handleCheckBoxInput
+  // handleCheckBoxInput
 }) => {
  const navigate = useNavigate();
 
@@ -66,7 +66,7 @@ const CommonTable = ({
                             });
                           }}
                           index={index}
-                          handleCheckBoxInput={handleCheckBoxInput}
+                          // handleCheckBoxInput={handleCheckBoxInput}
                         ></TableCells>
                       );
                     })}

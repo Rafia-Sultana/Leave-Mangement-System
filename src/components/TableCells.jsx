@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import TableCell from "@mui/material/TableCell";
 import ActionMenu from "./ActionMenu";
 import CheckBoxInput from "./InputFields/CheckBoxInput";
+import { UserContext } from "../context api/Context";
 
 
-const TableCells = ({ row, column, viewDetails, onDelete, onEdit,handleCheckBoxInput,index }) => {
- 
+const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index }) => {
+
   const statusStyles = {
     Approved: { color: "green", fontWeight: "bold" },
     Pending: { color: "orange", fontWeight: "bold" },
@@ -27,13 +28,13 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,handleCheckBoxI
           />
         </TableCell>
       );
-    case 'check':
-      return (
-        <TableCell key={column.id} align={column.align}>
-          <CheckBoxInput onchange={(e)=>handleCheckBoxInput(e,index)}   />
+    // case 'check':
+    //   return (
+    //     <TableCell key={column.id} align={column.align}>
+    //       <CheckBoxInput onchange={(e)=>handleCheckBoxInput(e,index)}   />
           
-        </TableCell>
-      );
+    //     </TableCell>
+    //   );
     default:
       return (
         <TableCell

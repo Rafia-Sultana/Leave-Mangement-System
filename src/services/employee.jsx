@@ -224,6 +224,7 @@ const employee = {
 // http://IP:4040/api/employee/activity/{employee_id}
   
 inActiveEmployee:async(employeeId) =>{
+  
   return putRequest(`/employee/activity/${employeeId}`,
 {status:"inactive"},
   "Error when inactive employee")

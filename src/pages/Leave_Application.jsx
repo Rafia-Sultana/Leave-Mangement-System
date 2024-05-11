@@ -19,7 +19,6 @@ import {startTimeArray,endTimeArray,convertToIsoString,getJoiningDate} from '../
 const Leave_Application = () => {
 
   const { state } = useLocation();
-
   const { enqueueSnackbar } = useSnackbar();
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
@@ -128,7 +127,6 @@ const Leave_Application = () => {
   useEffect(() => {
     const fetchData = async () => {
       let leaveTypeData = await employee.getLeaveTypes();
-      console.log(leaveTypeData);
       let teamMembersList = await employee.getTeamMembersOfUser(userId);
       setTeamMembersList(teamMembersList);
       setLeaveTypes(leaveTypeData);
@@ -173,32 +171,32 @@ const Leave_Application = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+   setFormData(initialState);
     if(state){
-    await employee.editLeaveApplication(
-      state.application_id,
-      {
-        ...formData,
-        start_date: isoTime,
-        end_date: endIsoTime,
-        duration: getTotalDays()?.days,
-        joining_date: formData.end_date && getJoiningDate(formData.end_date)?.toISOString(),
-        application_date: new Date().toISOString(),
-      }
-    )
+    // await employee.editLeaveApplication(
+    //   state.application_id,
+    //   {
+    //     ...formData,
+    //     start_date: isoTime,
+    //     end_date: endIsoTime,
+    //     duration: getTotalDays()?.days,
+    //     joining_date: formData.end_date && getJoiningDate(formData.end_date)?.toISOString(),
+    //     application_date: new Date().toISOString(),
+    //   }
+    // )
     }
     else{
-      await employee.postLeaveApplication(
-        {
-          ...formData,
-          start_date: isoTime,
-          end_date: endIsoTime,
-          duration: getTotalDays()?.days,
-          joining_date: formData.end_date && getJoiningDate(formData.end_date)?.toISOString(),
-          application_date: new Date().toISOString(),
-        }
+      // await employee.postLeaveApplication(
+      //   {
+      //     ...formData,
+      //     start_date: isoTime,
+      //     end_date: endIsoTime,
+      //     duration: getTotalDays()?.days,
+      //     joining_date: formData.end_date && getJoiningDate(formData.end_date)?.toISOString(),
+      //     application_date: new Date().toISOString(),
+      //   }
   
-       );
+      //  );
     }
          
 
