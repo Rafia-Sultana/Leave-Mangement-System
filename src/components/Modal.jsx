@@ -78,6 +78,7 @@ const Modal = ({ open, handleClose, historyData }) => {
     })
 
   }
+  
   return (
     <div className="w-full">
       <Dialog
@@ -86,7 +87,7 @@ const Modal = ({ open, handleClose, historyData }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         maxWidth={"lg"}
-        
+ 
         fullWidth
         style={{padding:"50px"}}
        
@@ -105,16 +106,19 @@ const Modal = ({ open, handleClose, historyData }) => {
           </div>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="alert-dialog-description" className="space-y-5">
             <Leave_Details info={historyData} isclickedEditBtn={isclickedEditBtn} />
             {role === "Employee" ||
             (role === "Team Lead" &&
               location.pathname === "/dashboard/manager_leave_history") ||
-            location.pathname === "/dashboard/manager_view_each_teamMember_leave_info" ? (
+            location.pathname === "/dashboard/manager_view_each_teamMember_leave_info" 
+            || location.pathname === "/dashboard/hr_leave_history"? (
               <CommonTable
                 columns={columns2}
-                rows={logData}
+                rows={logData.length>0? logData:["not available"]}
                 viewDetails={handleClickOpen}
+                flag={"modal"}
+            
               />
             ) : (
               <>

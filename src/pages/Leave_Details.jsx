@@ -7,6 +7,7 @@ import employee from "../services/employee";
 import AutoComplete from "../components/InputFields/AutoComplete";
 
 const Leave_Details = ({ info, isclickedEditBtn }) => {
+  console.log(info);
   const [leaveTypes, setLeaveTypes] = useState(null);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const {

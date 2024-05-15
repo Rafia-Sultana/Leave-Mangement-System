@@ -10,6 +10,7 @@ import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
 import { HR_other_leave_history } from "../utils/Dummy_Data";
 import HeadLine from "../components/HeadLine";
+import { Manager_Team_Leave_Info } from "./Manager_Data";
 
 export const HR_Leave_History = () => {
   return (
@@ -104,13 +105,14 @@ export const HR_Leave_Request = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await employee.getLeaveRequestOfEmployeesByHR();
+      console.log(res);
       setRows(res);
     };
     fetchData();
   }, []);
 
   return (
-    <div>
+    <div className="my-2">
       <HeadLine text={'Pending Request '}/>
       {rows.length === 0 ? (
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
@@ -119,7 +121,7 @@ export const HR_Leave_Request = () => {
           columns={columns}
           rows={rows}
           viewDetails={handleClickOpen}
-          maxHeight={770}
+        maxHeight={770}
         />
       )}
       {open && (
@@ -187,7 +189,8 @@ export const HR_others_leave_history = () => {
       {departments.map((_, index) => (
         <TabPanel value={value} index={index} key={index}>
           {/* Item {index + 1} */}
-          <CommonTable columns={columns} rows={na[index]} />
+          {/* <CommonTable columns={columns} rows={na[index]} /> */}
+          <Manager_Team_Leave_Info/>
         </TabPanel>
       ))}
     </Box>

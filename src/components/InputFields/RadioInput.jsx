@@ -10,7 +10,7 @@ const RadioInput = ({label,onchange, selectedValue,value,color,name}) => {
         value={value}
         color={color}
         name={name}
-        
+         required
        
       />
         <label htmlFor="" className="text-sm">{label}</label>

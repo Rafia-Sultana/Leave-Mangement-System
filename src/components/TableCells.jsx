@@ -5,15 +5,29 @@ import CheckBoxInput from "./InputFields/CheckBoxInput";
 import { UserContext } from "../context api/Context";
 
 
-const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index }) => {
+const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive}) => {
 
   const statusStyles = {
     Approved: { color: "green", fontWeight: "bold" },
     Pending: { color: "orange", fontWeight: "bold" },
     Rejected: { color: "red", fontWeight: "bold" },
+    Active: {color: "green", fontWeight: "bold" },
+    Inactive: { color: "red", fontWeight: "bold" }
   };
 
   let value = row[column.id];
+  // console.log(value);
+
+  if(column.id=== 'status'){
+   value = value?.charAt(0).toUpperCase() + value?.slice(1);
+  
+  }
+//   if(row.status ==='active'){
+//     // value = Boolean(value)? value : value?.charAt(0).toUpperCase() + value?.slice(1);
+//     row.status="Active"
+//  }
+
+
 
   switch (column.id) {
     case 'action':
@@ -24,6 +38,7 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index }) => {
             onDelete={onDelete}
             onEdit={onEdit}
             row={row}
+            onActive={onActive}
           
           />
         </TableCell>
@@ -42,7 +57,7 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index }) => {
           align={column.align}
           style={statusStyles[value]}
         >
-          {value}
+          {value||'--'}
         </TableCell>
       );
   }

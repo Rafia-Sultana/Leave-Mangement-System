@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from "@mui/icons-material/Add";
 import HolidayModal from '../components/HolidayModal';
+import HeadLine from '../components/HeadLine';
 
 
 const ManageHoliday = () => {
@@ -28,7 +29,7 @@ const ManageHoliday = () => {
         createData("Ramzon", "26 Jun 2019", "Monday", ""),
       ];
       const columns = [
-        { id: "check", label:'', minWidth: 10 },
+        // { id: "check", label:'', minWidth: 10 },
         { id: "title", label: "Title", minWidth: 10 },
         { id: "holidayDate", label: "Holiday Date", minWidth: 10 },
         { id: "day", label: "Day", minWidth: 10 },
@@ -38,18 +39,9 @@ const ManageHoliday = () => {
       
     return (
         <div>
-                <div className="col-span-3 flex justify-end gap-2 my-5">
-          <Button
-            textColor={"white"}
-            // btnText={"Remove"}
-    
-            backgroundColor={"bg-[#DC143C]"}
-            padding={"p-2"}
-           btnIcon={DeleteIcon}
-           fontSize={'sm'}
-           disable={false}
-           cursor={"cursor-pointer"}
-          ></Button>
+          
+                <div className="col-span-3 flex justify-between gap-2 my-5">
+                <HeadLine text={'Holiday'}></HeadLine>
           <Button
             textColor={"white"}
             btnText={"Add Holiday"}
@@ -61,11 +53,12 @@ const ManageHoliday = () => {
             fontSize={'sm'}
           ></Button>
 
-{open && <HolidayModal open={open} close={handleClose}></HolidayModal>}
+
         </div>
             <CommonTable  rows={rows} columns={columns} 
             
             />
+            {open && <HolidayModal open={open} close={handleClose}></HolidayModal>}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
 
-const TextInput = ({ label,name,
+const TextInput = ({ label,name,width,
    InputProps, value, onchange,rows ,multiline,placeholder,focused,required,type="text",variant="outlined"}) => {
 
   return (
@@ -20,7 +20,7 @@ const TextInput = ({ label,name,
         required={required}
         type={type}
         variant={variant}
-   
+        sx={{width: width }}
         
       />
     </div>

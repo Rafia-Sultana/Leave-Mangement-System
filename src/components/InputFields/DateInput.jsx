@@ -16,8 +16,8 @@ const DateInput = ({ label, handleDateChange, value, disableDates,variant="outli
         value={value}
         // defaultValue={dayjs(new Date())}
         shouldDisableDate={disableDates}
-        required={true}
-        slotProps={{ textField: { variant: variant } }}
+        
+        slotProps={{ textField: { variant: variant ,required:true} }}
       />
     </LocalizationProvider>
   );

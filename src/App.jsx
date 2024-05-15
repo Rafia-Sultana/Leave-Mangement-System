@@ -8,16 +8,10 @@ import { SnackbarProvider } from "notistack";
 import { UserProvider } from "./context api/Context.jsx";
 import routes from "./utils/CreateRoute.js";
 import ProtectedRoute from "./utils/ProtectedRoute.jsx";
-import { useState } from "react";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const updaeStatus = () => {
-    // setIsLoggedIn((prev) => !prev);
-  };
-
-  return (
-    <div>
+ return (
+    <div >
       <Router>
         <SnackbarProvider
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -29,9 +23,9 @@ function App() {
             <Routes>
               <Route
                 path="/"
-                element={<Login updaeStatus={updaeStatus} />}
+                element={<Login  />}
               ></Route>
-              <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
+              <Route element={<ProtectedRoute/>}>
                 <Route path="dashboard" element={<Dashboard />}>
                   <Route index element={<Overview />} />
                    {routes.map((route, index) => (

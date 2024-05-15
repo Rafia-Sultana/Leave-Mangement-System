@@ -23,6 +23,7 @@ import managment from "../assets/styles/svg/managment.svg";
 const Dashboard = () => {
   const [open, setOpen] = useState({});
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
+  console.log(userInfoData);
   const location = useLocation();
   const navigate = useNavigate();
   const role = userInfoData.role;
@@ -38,10 +39,11 @@ const Dashboard = () => {
 
   const createNavLink = (to, text, icon) => ({ to, text, icon });
   const navLinks = {
-    Employee: [
+    "Employee": [
       createNavLink("leave-application", "Leave Application", personal),
       createNavLink("request-history", "Request History", team),
     ],
+ 
     "Team Lead": [
       {
         category: "Personal",
@@ -60,7 +62,37 @@ const Dashboard = () => {
         icon: team,
       },
     ],
-    HR: [
+    "HR": [
+      {
+        category: "Personal",
+        links: [
+          createNavLink("leave-application", "Leave Application"),
+          createNavLink("hr_leave_history", "My Leave History"),
+        ],
+        icon: personal,
+      },
+      {
+        category: "Others",
+        links: [
+          createNavLink("hr-leave-request", "Pending Request "),
+          createNavLink("hr_others_leave_history", "Leave History"),
+        ],
+        icon: team,
+      },
+      {
+        category: "Managment",
+        links: [
+          createNavLink("manage-employee", "Employee"),
+          createNavLink("hr-add-holiday", "Holiday"),
+          // createNavLink("hr-remove-employee","Remove Employee"),
+          // createNavLink("hr-add-hoilday","Add Holiday"),
+          // createNavLink("hr-remove-hoilday","Remove Hoilday"),
+          // createNavLink("hr-edit-employee","Edit Employee"),
+        ],
+        icon: managment,
+      },
+    ],
+    "Admin": [
       {
         category: "Personal",
         links: [
@@ -184,8 +216,9 @@ const Dashboard = () => {
             ))}
           </ul>
         </nav>
-
-        <main className="w-full  px-8   bg-[#E8F7FF] pt-20 lg:pt-0">
+        {/* please add this color  //bg-[#E8F7FF] */}
+        <main 
+        className="w-full  px-8   bg-[#E8F7FF]  mt-20 lg:mt-0 ">
           <Outlet />
         </main>
       </div>

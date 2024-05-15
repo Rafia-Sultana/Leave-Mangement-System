@@ -1,5 +1,5 @@
 import CommonTable from "../components/CommonTable";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
 import TextInput from "../components/InputFields/TextInput";
 import employee from "../services/employee";
@@ -11,9 +11,11 @@ import LottiePlayers from "../components/LottiePlayers";
 import Cards from "../components/Cards";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Avatar from "@mui/material/Avatar";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Leave_Application from "./Leave_Application";
 import HeadLine from "../components/HeadLine";
+import { UserContext } from "../context api/Context";
+import ShowSnackbar from "../components/ShowSnackbar";
 
 export const Manager_Leave_History = () => {
   return ( <Employee_Leave_Request />);
@@ -50,10 +52,7 @@ export const Manager_Team_Leave_Info = () => {
   ];
 
   const handleViewDetails = async (index, emp_id) => {
-    console.log(index);
-    navigate("/dashboard/manager_view_each_teamMember_leave_info", {
-      state: { empId: emp_id },
-    });
+    navigate(`/dashboard/view-teamMember-leave-info/${emp_id}`);
   };
 
   useEffect(() => {
@@ -84,9 +83,9 @@ export const Manager_Team_Leave_Info = () => {
 };
 
 export const Manager_View_Each_TeamMember_Leave_Info = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const empId = location.state.empId;
+  const param = useParams();
+  const empId = param.empId;
   const [id, setId] = useState(0);
   const [rows2, setRows2] = useState([]);
   const [open, setOpen] = useState(false);
@@ -170,7 +169,7 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
           rows={rows2}
           viewDetails={handleClickOpen}
           borderRadius={"10px"}
-          maxHeight={400}
+          // maxHeight={400}
         />
       </div>
       {open && (
@@ -258,6 +257,7 @@ export const Manager_Leave_Request = () => {
     };
     fetchData();
   }, []);
+  console.log(rows);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const smallScreenColumns = columns.filter(
     (column) =>
@@ -275,7 +275,7 @@ export const Manager_Leave_Request = () => {
           columns={isSmallScreen ? smallScreenColumns : columns}
           rows={rows}
           viewDetails={handleClickOpen}
-          maxHeight={770}
+           maxHeight={770}
         />
       )}
 
@@ -287,12 +287,15 @@ export const Manager_Leave_Request = () => {
 };
 
 export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
+  const { openSnackBar, handleSnackBarClose, setOpenSnackbar } =
+ useContext(UserContext);
   const [selectedValue, setSelectedValue] = useState("Pending");
-  const [comments, setComments] = useState(null);
+  const [comments, setComments] = useState("");
   const [logData, setLogData] = useState({});
   const [isBtnDisable, setIsBtnDisable] = useState(true);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
+ 
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -305,23 +308,47 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
     application_id: applicationId,
     leave_status: selectedValue,
     comments: comments,
-    // sent_by: role,
     sent_to: selectedValue === "Approved" ? "HR" : "Applicant",
     processing_time: new Date().toISOString(),
   };
 
-  // const handleSubmit = async () => {
-  //   const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
-  // };
+
 
   const handleSendToHR = async () => {
-    console.log("handleSendToHR");
+   
     const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
+    console.log(result);
+ 
+    if(result){
+      setOpenSnackbar(true);
+      }
   };
 
-  const handleReturnToEmployee = () => {
-    console.log("returnToEmployee");
+  const handleReturnToEmployee = async () => {
+    const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
+    if(result){
+      setOpenSnackbar(true);
+      }
   };
+
+  const deciosnByHR = {
+    application_id: applicationId,
+    leave_status: selectedValue,
+    comments: comments,
+    // sent_by: role,
+    sent_to: "Applicant",
+    processing_time: new Date().toISOString(),
+  };
+  //postDecisionByHR
+const handleSendToEmployeeByHr = async () =>{
+  const result = await employee.postDecisionByHR(deciosnByHR);
+  
+  if(result){
+  setOpenSnackbar(true);
+  }
+}
+
+
 
   useEffect(() => {
     if (selectedValue === "Approved") {
@@ -330,9 +357,28 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
       setIsBtnDisable(true);
     }
   }, [selectedValue]);
+
+  useEffect(() => {
+    if (openSnackBar) {
+      setSelectedValue("Pending");
+      setComments("");
+    }
+  }, [openSnackBar]);
+  const handleSubmit=()=>{
+
+  }
+  console.log(selectedValue);
   return (
     <div className="flex flex-col space-y-3">
+      {
+        <ShowSnackbar
+          open={openSnackBar}
+          handleClose={handleSnackBarClose}
+          text={"Sent SuccessFully"}
+        />
+      }
       <div className="flex flex-col md:flex-row justify-between items-center mt-2">
+     
         <div className="flex flex-col md:flex-row">
           <RadioInput
             label="Approved"
@@ -349,6 +395,7 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
             selectedValue={selectedValue}
           />
         </div>
+    
 
         <Button
           btnText={"Edit"}
@@ -364,33 +411,53 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
           multiline={true}
           onchange={handleCommentSection}
           placeholder="Add comment ..."
+          value={comments}
         />
       </div>
+{
+  role!== 'HR' ?
+  
+  <div className="flex gap-4 ">
+  <Button
+    fontWeight="semibold"
+    textColor="white"
+    btnText="Send to HR"
+    width="full"
+    type="submit"
+    backgroundColor={isBtnDisable ? "bg-gray" : "bg-green"}
+    padding={"p-3"}
+    onClick={handleSendToHR}
+    disable={isBtnDisable}
+  ></Button>
+  <Button
+    fontWeight="semibold"
+    textColor="white"
+    btnText="Return to Employee"
+    width="full"
+    type="submit"
+    backgroundColor={!isBtnDisable ? "bg-gray" : "bg-red"}
+    padding={"p-3"}
+    onClick={handleReturnToEmployee}
+    disable={!isBtnDisable}
+  ></Button>
+</div>
+:
+<Button
+  fontWeight="semibold"
+  textColor="white"
+  btnText="Send to Employee"
+  width="full"
+  type="submit"
+  backgroundColor={selectedValue === 'Approved' || selectedValue === 'Rejected' ? "bg-blue-light" : "bg-gray"}
+  padding={"p-3"}
+  cursor={selectedValue === 'Approved' || selectedValue === 'Rejected' ? "cursor-pointer" : "cursor-not-allowed"}
+  onClick={handleSendToEmployeeByHr}
+  disable={selectedValue !== 'Approved' && selectedValue !== 'Rejected'}
 
-      <div className="flex gap-4 ">
-        <Button
-          fontWeight="semibold"
-          textColor="white"
-          btnText="Send to HR"
-          width="full"
-          type="submit"
-          backgroundColor={isBtnDisable ? "bg-gray" : "bg-green"}
-          padding={"p-3"}
-          onClick={handleSendToHR}
-          disable={isBtnDisable}
-        ></Button>
-        <Button
-          fontWeight="semibold"
-          textColor="white"
-          btnText="Return to Employee"
-          width="full"
-          type="submit"
-          backgroundColor={!isBtnDisable ? "bg-gray" : "bg-red"}
-          padding={"p-3"}
-          onClick={handleReturnToEmployee}
-          disable={!isBtnDisable}
-        ></Button>
-      </div>
+  // disable={selectedValue !== 'Approved' || selectedValue !== 'Rejected'}
+></Button>
+
+}
     </div>
   );
 };

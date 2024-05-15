@@ -134,6 +134,7 @@ const employee = {
   
   //http://ip:4040/api/leave/editapplication/{applicationID}
   editLeaveApplication: async(applicationID,updateInfo) =>{
+
     return putRequest(`/leave/editapplication/${applicationID}`,updateInfo,"Error updating leave application");
     },
 
@@ -181,6 +182,7 @@ const employee = {
 
   // http://ip:4040/api/leave/decision?by=hr
   postDecisionByHR: async (decison) => {
+    console.log(decison);
     return postRequest(
       `/leave/decision?by=hr`,
       decison,
@@ -223,13 +225,15 @@ const employee = {
 // },
 // http://IP:4040/api/employee/activity/{employee_id}
   
-inActiveEmployee:async(employeeId) =>{
-  
+inActiveEmployee:async(employeeId,status) =>{
+  console.log(employeeId);
   return putRequest(`/employee/activity/${employeeId}`,
-{status:"inactive"},
+status,
   "Error when inactive employee")
 }
 ,
+
+
 
 //"/calender/weekly-holiday"
 officeHoliday:async(holidayInfo)=>{

@@ -1,15 +1,9 @@
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "../components/Button.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import SelectInput from "../components/InputFields/SelectInput.jsx";
 import TextInput from "../components/InputFields/TextInput.jsx";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import totalEmployee from "../assets/styles/svg/totalEmployee.svg";
 import activeEmployee from "../assets/styles/svg/activeEmployee.svg";
 import leaveEmployee from "../assets/styles/svg/leaveEmployee.svg";
@@ -17,11 +11,12 @@ import onBoardEmployee from "../assets/styles/svg/onBoardEmployee.svg";
 import CommonTable from "../components/CommonTable.jsx";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import employee from "../services/employee.jsx";
-import { UserContext } from "../context api/Context.jsx";
+import FormateDate from "../utils/FormateDate.js";
+
 const ManageEmployeeTable = () => {
 //  const {checkedRows} = useContext(UserContext);
 const navigate = useNavigate();
-const isSmallScreen = useMediaQuery("(max-width:600px)");
+const isSmallScreen = useMediaQuery("(max-width:768px)");
 
   let summary = [
     {
@@ -53,10 +48,14 @@ const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [selectedColumn, setSelectedColumn] = useState("Name");
   const [searchValue, setSearchValue] = useState("");
 
-  function createData(id, name, joining_date, status) {
-    return { id, name, joining_date, status };
+  function createData(emp_id, name,email, joining_date, status,role,primary_dept,primary_des,secondary_dept_1,
+    secondary_des_1,secondary_dept_2,secondary_des_2) {
+    return { emp_id, name,email, joining_date, status,role,primary_dept,primary_des,secondary_dept_1,
+      secondary_des_1,secondary_dept_2,secondary_des_2 };
   }
 
+  //emp_id, name,email, FormateDate(new Date(joining_date)), status,role,primary_dept,primary_des,secondary_dept_1,
+  // secondary_des_1,secondary_dept_2,secondary_des_2
   // let rows2 = [
   //   createData(
   //     0,
@@ -131,7 +130,7 @@ const isSmallScreen = useMediaQuery("(max-width:600px)");
       let column = selectedColumn?.toLowerCase();
       let searchValues = searchValue?.toLowerCase();
       let allEmployee = await employee.getAllEmployee();
-
+console.log(allEmployee);
       const concatNames =(...names) =>{
         return names.filter(Boolean).join(" ");
       }
@@ -144,13 +143,22 @@ const isSmallScreen = useMediaQuery("(max-width:600px)");
           email,
           joining_date,
           status,
-          designations,
-          departments,
+          dept_des,role
         } = x;
-        // console.log(designations,departments);
+   
+    
 
         let name = concatNames(first_name ,middle_name, last_name);
-        let infoObject = createData(emp_id, name, joining_date, status);
+        let primary_dept = dept_des?.primary?.dept_name;
+        let primary_des = dept_des?.primary?.des_name;
+        let secondary_dept_1 = dept_des?.secondary[0]?.dept_name;
+        let secondary_des_1 = dept_des?.secondary[0]?.des_name;
+        let secondary_dept_2 = dept_des?.secondary[1]?.dept_name;
+        let secondary_des_2 = dept_des?.secondary[1]?.des_name;
+        let infoObject = createData(emp_id, name,email, FormateDate(new Date(joining_date)), status,role,primary_dept,primary_des,secondary_dept_1,
+        secondary_des_1,secondary_dept_2,secondary_des_2
+        );
+        console.log(infoObject);
  setRows((prev) => [...prev, infoObject]);
       });
   
@@ -174,10 +182,12 @@ const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   const columns = [
     // { id: "check", label: "",},
+
     { id: "name", label: "Name", minWidth: 10 },
     { id: "role", label: "Role", minWidth: 10 },
-    { id: "designation", label: "Designation ", minWidth: 10 },
-    { id: "department", label: "Department", minWidth: 10 },
+    { id: "primary_des", label: " Designation ", minWidth: 10 },
+    { id: "primary_dept", label: "Department", minWidth: 10 },
+    { id: "joining_date", label: "Joining Date", minWidth: 10 },
     { id: "status", label: "Status", minWidth: 10 },
 
     {
@@ -189,13 +199,24 @@ const isSmallScreen = useMediaQuery("(max-width:600px)");
   ];
 
   const handleInActive = async (index) => {
-let emp_id = rows[index].id;
-await employee.inActiveEmployee(emp_id);
+let emp_id = rows[index].emp_id;
+await employee.inActiveEmployee(emp_id,{status:"inactive"});
 const updateRows = [...rows];
-updateRows[index]={...updateRows[index],status:"inactive"}
+updateRows[index]={...updateRows[index],status:"Inactive"}
 setRows(updateRows);
  };
-
+ const handleActive = async (index) => {
+let emp_id = rows[index].emp_id;
+await employee.inActiveEmployee(emp_id,{status:"active"});
+const updateRows = [...rows];
+updateRows[index]={...updateRows[index],status:"Active"}
+setRows(updateRows);
+ };
+const viewDetails=(index,empId)=>{
+let empDetails = rows.find((x)=>x.emp_id=== empId);
+navigate(`/dashboard/view-add-emp/${empId}`,{state:empDetails})
+}
+console.log(rows);
   return (
     <div className="">
       {/* //cards */}
@@ -268,6 +289,9 @@ setRows(updateRows);
         columns={columns}
         // handleCheckBoxInput={handleCheckBoxInput}
         handleDelete={handleInActive}
+        handleActive={handleActive}
+        viewDetails={viewDetails}
+        maxHeight={isSmallScreen?500:650}
       ></CommonTable>
     </div>
   );

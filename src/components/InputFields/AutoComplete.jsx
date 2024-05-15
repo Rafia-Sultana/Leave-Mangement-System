@@ -1,26 +1,32 @@
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
-const AutoComplete = ({ options, label, handleInputChange, field, value ,variant='outlined'}) => {
+const AutoComplete = ({ options, label, handleInputChange, field, value ,name,required=true,
+  
+  variant="standard"
+}) => {
+
+
   return (
     <div>
       <Autocomplete
         disablePortal
-        variant={variant}
+        // variant={variant}
         options={options}
-        getOptionLabel={(option) => option.leave_name || option.employee_name || option.genderType}
+        // getOptionLabel={(option) => option}
         renderInput={(params) => (
-          <TextField {...params} label={label} required={true} />
+          <TextField {...params} label={label} required={required}  variant={variant} />
         )}
         onChange={(e, newValue) => {
           if (newValue) {
-            handleInputChange(e, newValue, field);
+            handleInputChange(e, newValue, field,name);
           }
         }}
         value={value}
-        isOptionEqualToValue={(option, value) => {
-          return option.label === value.label;
-        }}
+        // name={name}
+        // isOptionEqualToValue={(option, value) => {
+        //   return option.label === value.label;
+        // }}
       />
     </div>
   );

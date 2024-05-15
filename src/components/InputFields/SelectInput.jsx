@@ -16,6 +16,7 @@ const SelectInput = ({
   variant = "outlined",
   name,
   multiple = false,
+  required=false,width=250
 }) => {
 
   // console.log(value);
@@ -25,14 +26,14 @@ const SelectInput = ({
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
+        width: width,
       },
     },
   };
 
   return (
     <div>
-      <FormControl variant={variant} sx={{ width: "100%" }}>
+      <FormControl variant={variant} sx={{ width: "100%" }} required={required}  >
         <InputLabel>{placeholder}</InputLabel>
         <Select
           size="large"

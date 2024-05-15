@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 import { UserContext } from "../context api/Context.jsx";
 import { getYear } from "../utils/FormateDate.js";
 
-const Login = ({updaeStatus}) => {
+const Login = () => {
   const { setUserInfo } = useContext(UserContext);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -39,7 +39,7 @@ const Login = ({updaeStatus}) => {
         localStorage.setItem("accessToken", token);
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
         setUserInfo(userInfo);
-        updaeStatus();
+
         // enqueueSnackbar('Logged In Successfully!', { variant: 'success' });
         navigate("/dashboard");
       } else {
@@ -100,7 +100,7 @@ const Login = ({updaeStatus}) => {
 
             <form
               action="#"
-              className="w-full flex flex-col justify-center gap-5"
+              className="w-full space-y-5"
               onSubmit={handleSubmit}
             >
               <InputField

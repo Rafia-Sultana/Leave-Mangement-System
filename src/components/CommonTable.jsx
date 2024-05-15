@@ -15,16 +15,17 @@ const CommonTable = ({
   viewDetails,
   handleDelete,
   borderRadius,
-  maxHeight = 700,
+  maxHeight = 600,
+  handleActive,flag
   // handleCheckBoxInput
 }) => {
  const navigate = useNavigate();
 
   return (
-    <div className="">
-      <Paper sx={{ width: "100%", borderRadius: borderRadius }}>
+    <div className={`${flag=="modal"?"":"min-h-screen"}`}>
+      <Paper sx={{ width: "100%", borderRadius: borderRadius}}>
         <TableContainer
-          sx={{ maxHeight: maxHeight, borderRadius: borderRadius }}
+          sx={{ borderRadius: borderRadius, maxHeight:maxHeight}}
         >
           <Table stickyHeader aria-label="sticky-table">
             <TableHead>
@@ -65,6 +66,7 @@ const CommonTable = ({
                               state: row,
                             });
                           }}
+                          onActive={()=>handleActive(index)}
                           index={index}
                           // handleCheckBoxInput={handleCheckBoxInput}
                         ></TableCells>

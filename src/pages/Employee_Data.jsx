@@ -42,6 +42,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
 
   const columns = [
     { id: "leave_name", label: "Leave Type", minWidth: 100 },
+    { id: "application_date", label: "Applied Date", minWidth: 100 },
     { id: "start_date", label: "Start Date", minWidth: 170, align: "center" },
     { id: "end_date", label: "End Date", minWidth: 170, align: "center" },
     { id: "total_days", label: "Total Days", minWidth: 170, align: "center" },
@@ -65,6 +66,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
       const requestHistoryData = await employee.getEmployeeRequestHistory(
         userId
       );
+      console.log(requestHistoryData);
       let leaveTypeData = await employee.getLeaveTypes();
        let leave_names = leaveTypeData.map((x)=>x.leave_name);
        setLeaveTypesOption(leave_names);
@@ -82,14 +84,6 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
  "All"
   
   ];
-  // const leaveTypesOptions = [
-  //   "Sick Leave",
-  //   "Annual Leave",
-  //   "Paternity Leave",
-  //   "Maternity Leave",
-  //   "Unpaid Leave",
-  //   "All"
-  // ];
 
   const filteredRows = useMemo(() => {
     let filtered = rows;
@@ -128,18 +122,21 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
   return (
     <div className="">
    
+      <div className="flex  flex-col md:flex-row justify-between relative item-center">
 <HeadLine text={"Request History"}/>
-      <div className="flex  flex-col md:flex-row justify-between relative">
-        <div className="grid grid-cols-2 w-[100%] md:w-[50%]  gap-5 mb-3">
+        <div className="grid grid-cols-2 w-[30%] mt-5 mb-3 gap-5 ">
           <SelectInput
             options={leaveStatusOptions}
             placeholder="Filter by status"
             getSelectedValue={getSelectedStatus}
+            variant="standard"
+          
           />
           <SelectInput
             options={leaveTypesOptions}
             placeholder="Filter by type"
             getSelectedValue={getSelectedType}
+            variant="standard"
           />
         </div>
         {/* <div className="flex  items-center md:absolute top-8 right-0">
@@ -154,7 +151,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
             rows={filteredRows}
             viewDetails={handleClickOpen}
             handleDelete ={handleDelete}
-            maxHeight={560}
+          // maxHeight={560}
           />
         </div>
       ) : loading ? (
