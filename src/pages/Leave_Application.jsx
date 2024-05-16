@@ -25,7 +25,7 @@ const Leave_Application = () => {
   const { openSnackBar, setOpenSnackbar, handleSnackBarClose } =
     useContext(UserContext);
   const { state } = useLocation();
-
+// console.log(state);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
   const initialState = {
@@ -261,7 +261,7 @@ const Leave_Application = () => {
   };
 
   return (
-    <div className="px-8  my-4">
+    <div className="lg:px-8  my-4">
       <ShowSnackbar
         open={openSnackBar}
         handleClose={handleSnackBarClose}
@@ -275,8 +275,8 @@ const Leave_Application = () => {
         }`}
       />
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} lg={6} md={6}>
+        <Grid container rowGap={2}>
+          <Grid item xs={12} lg={6} md={6} sx={{ paddingRight: { lg: '0.6rem' } }} >
             <AutoComplete
               options={
                 Boolean(leaveTypes) ? LeaveNames : [formData?.leave_name]
@@ -288,7 +288,9 @@ const Leave_Application = () => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12} lg={6} md={6}>
+      <Grid container spacing={2}>
+
+      <Grid item xs={12} lg={6} md={6}>
             <DateInput
               label={"start_date"}
               handleDateChange={handleDateChange}
@@ -341,6 +343,12 @@ const Leave_Application = () => {
               onchange={handleInputChange}
             />
           </Grid>
+
+
+
+
+
+
           <Grid item xs={12} lg={6} md={6}>
             <AutoComplete
               options={
@@ -354,19 +362,21 @@ const Leave_Application = () => {
             />
           </Grid>
           <Grid item xs={12} lg={6} md={6}>
-            <TextField
-              type="file"
-              variant="outlined"
-              multiple
-              onChange={handleFileUpload}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    Upload File :
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <TextInput
+             type="file"
+             variant="outlined"
+             multiple
+             onChange={handleFileUpload}
+             InputProps={{
+               startAdornment: (
+                 <InputAdornment position="start">
+                   Upload File :
+                 </InputAdornment>
+               ),
+             }}
+            
+            ></TextInput>
+          
           </Grid>
           <Grid item xs={12}>
             <TextInput
@@ -387,6 +397,7 @@ const Leave_Application = () => {
             />
           </Grid>
         </Grid>
+      </Grid>
         <div className="mt-6">
           {state?.btnText ? (
             <Button

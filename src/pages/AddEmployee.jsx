@@ -18,6 +18,8 @@ import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import ShowSnackbar from "../components/ShowSnackbar";
 import { useContext } from "react";
 import { UserContext } from "../context api/Context";
+import bcrypt from 'bcryptjs';
+const salt = bcrypt.genSaltSync(10);
 
 const AddEmployee = () => {
   const navigate = useNavigate();
@@ -93,12 +95,15 @@ const AddEmployee = () => {
   useEffect(() => {
     const fetchData = async () => {
       const departments = await employee.getDepartmentList();
+      setDepartmentsList(departments);  // Setting departmentList here
+      
       const designations = await employee.getDesignationList();
-      setDepartmentsList(departments);
       setDesignationsList(designations);
     };
-    fetchData();
-  }, []);
+    fetchData();  // Calling fetchData here
+}, []);  // useEffect dependency
+
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -122,7 +127,9 @@ const AddEmployee = () => {
   const handleAddDepartmentClick = () => {
     setOpenOtherDepartments(!openOtherDepartments);
   };
-
+ const hashedPassword = bcrypt.hashSync(addEmployeeForm.password,'$2a$10$CwTycUXWue0Thq9StjUM0u');
+// console.log({...logInData,password:hashedPassword});
+// console.log(logInData);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -218,7 +225,7 @@ const AddEmployee = () => {
       Object.values(addEmployeeForm).every((val) => val !== "");
     setHasSubmit(isFilled);
   }, [addEmployeeForm]);
-
+console.log(departmentsList);
   return (
     <Box className="">
       {

@@ -38,14 +38,14 @@ const Leave_Details = ({ info, isclickedEditBtn }) => {
       <CardContent className="border border-blue-light mx-2 mb-2 rounded-md">
         <Box className="grid  grid-cols-2 gap-5 ">
           <div className="md:col-span-2">
-            <p className="font-semibold">Reasons For Leave</p>
+            <p className="font-semibold">Reason</p>
             <p className="text-sm">{reason}</p>
           </div>
 
           {isSmallScreen && (
     
               <div>
-                <p className="font-semibold">Total_Days</p>
+                <p className="font-semibold">Total Days</p>
                 <p className="text-sm">{total_days}</p>
               </div>
          

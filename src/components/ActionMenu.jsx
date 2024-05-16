@@ -59,7 +59,7 @@ if(location.pathname == '/dashboard/manager-leave-request'){
       View: viewDetails,
       Delete: handleDelete,
       Inactive: handleDelete,
-      Active:onActive
+      Active: handleActive
     };
 
     const actionHandler = actionHandlers[option];
@@ -81,6 +81,27 @@ if(location.pathname == '/dashboard/manager-leave-request'){
       Swal.fire({
         title: "Deleted!",
         text: "Your file has been deleted.",
+        icon: "success"
+      });
+    }
+  });
+}
+
+const handleActive=()=>{
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      onActive();
+      Swal.fire({
+        title: "Activated!",
+        text: "Your file has been Activated.",
         icon: "success"
       });
     }

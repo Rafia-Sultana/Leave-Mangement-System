@@ -369,7 +369,7 @@ const handleSendToEmployeeByHr = async () =>{
   }
   console.log(selectedValue);
   return (
-    <div className="flex flex-col space-y-3">
+    <div className="flex flex-col  space-y-3">
       {
         <ShowSnackbar
           open={openSnackBar}
@@ -377,9 +377,9 @@ const handleSendToEmployeeByHr = async () =>{
           text={"Sent SuccessFully"}
         />
       }
-      <div className="flex flex-col md:flex-row justify-between items-center mt-2">
+      <div className="flex   flex-col sm:flex-row justify-between  sm:items-center">
      
-        <div className="flex flex-col md:flex-row">
+        <div className="flex  flex-col sm:flex-row">
           <RadioInput
             label="Approved"
             value={"Approved"}
@@ -405,7 +405,7 @@ const handleSendToEmployeeByHr = async () =>{
         ></Button>
       </div>
 
-      <div className="">
+     
         <TextInput
           rows={4}
           multiline={true}
@@ -413,7 +413,7 @@ const handleSendToEmployeeByHr = async () =>{
           placeholder="Add comment ..."
           value={comments}
         />
-      </div>
+ 
 {
   role!== 'HR' ?
   

@@ -29,6 +29,7 @@ const Calendar = () => {
 try {
   const monthNumber = getMonthNumber();
   const holidays = await employee.calenderHoilday();
+  console.log(holidays);
 
   const leaveDates = await employee.leaveDates(userId);
   console.log(leaveDates);

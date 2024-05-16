@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { UserContext } from "../context api/Context.jsx";
 import { getYear } from "../utils/FormateDate.js";
 
+
 const Login = () => {
   const { setUserInfo } = useContext(UserContext);
   const navigate = useNavigate();
@@ -18,9 +19,11 @@ const Login = () => {
     email: "",
     password: "",
   };
+ 
   const [logInData, setLogInData] = useState(initialState);
   const handleChange = (event) => {
     const { name, value } = event.target;
+
     setLogInData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
@@ -28,6 +31,7 @@ const Login = () => {
     // localStorage.setItem('email',JSON.stringify(email));
     // console.log(logInData);
   }, [logInData]);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();

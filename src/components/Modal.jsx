@@ -65,6 +65,7 @@ const Modal = ({ open, handleClose, historyData }) => {
     fetchData();
   }, [historyData]);
 
+
   const handleEditButton = () => {
   
     const data = {
@@ -86,10 +87,10 @@ const Modal = ({ open, handleClose, historyData }) => {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth={"lg"}
+       maxWidth={'lg'}
  
         fullWidth
-        style={{padding:"50px"}}
+        // style={{padding:"50px"}}
        
       >
         <DialogTitle
@@ -97,7 +98,7 @@ const Modal = ({ open, handleClose, historyData }) => {
           className="text-center font-bold text-blue-dark relative"
         >
           {"User History Details"}
-          <div className="absolute right-5 top-2  border border-red rounded-full w-9 h-9">
+          <div className="absolute right-2 top-1   lg:right-5 lg:top-2  ">
             <Button
               btnIcon={CloseIcon}
               onClick={handleClose}

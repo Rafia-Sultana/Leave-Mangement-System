@@ -124,7 +124,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
    
       <div className="flex  flex-col md:flex-row justify-between relative item-center">
 <HeadLine text={"Request History"}/>
-        <div className="grid grid-cols-2 w-[30%] mt-5 mb-3 gap-5 ">
+        <div className="grid grid-cols-2   md:w-[50%] lg:w-[30%] lg:mt-5 mb-3 gap-5 ">
           <SelectInput
             options={leaveStatusOptions}
             placeholder="Filter by status"

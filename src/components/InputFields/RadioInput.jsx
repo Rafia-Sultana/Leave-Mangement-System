@@ -3,7 +3,7 @@ import Radio from '@mui/material/Radio';
 const RadioInput = ({label,onchange, selectedValue,value,color,name}) => {
 
     return (
-  <div className="">
+  <div className="flex items-center">
         <Radio
         checked={selectedValue===value}
         onChange={onchange}
