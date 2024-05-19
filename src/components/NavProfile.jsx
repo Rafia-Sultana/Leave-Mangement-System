@@ -7,6 +7,8 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FormateDate from "../utils/FormateDate.js";
+import female from '../assets/styles/svg/female.svg';
+import male from '../assets/styles/svg/male.svg';
 
 
 const NavProfile = () => {
@@ -21,12 +23,13 @@ const NavProfile = () => {
 
   const navigate = useNavigate();
   const menuRef = useRef(null);
+ 
   
   function createData(emp_id, name, email,joining_date, role,primary_dept,primary_des,secondary_dept_1,
-    secondary_des_1,secondary_dept_2,secondary_des_2) {
+    secondary_des_1,secondary_dept_2,secondary_des_2,gender) {
     
     return { emp_id, name, email,joining_date, role,primary_dept,primary_des,secondary_dept_1,
-      secondary_des_1,secondary_dept_2,secondary_des_2};
+      secondary_des_1,secondary_dept_2,secondary_des_2,gender};
   }
   const concatNames =(...names) =>{
     return names.filter(Boolean).join(" ");
@@ -48,10 +51,11 @@ const NavProfile = () => {
 
   useEffect(()=>{
    const fetchData  = async()=>{
-    let allEmployee = await employee.getAllEmployee();
+    
+let employeeInfo = await employee.employeeInfo(userId);
 
-    let profileDetails = allEmployee.find(x=>x.emp_id === userId);
-    console.log(profileDetails);
+
+    
     const {
       emp_id,
       first_name,
@@ -60,8 +64,9 @@ const NavProfile = () => {
       email,
       joining_date,
       status,
-      dept_des,role
-    } = profileDetails;
+      dept_des,role,gender
+    } = employeeInfo;
+    
 
     let name = concatNames(first_name ,middle_name, last_name);
     let primary_dept = dept_des?.primary?.dept_name;
@@ -74,14 +79,14 @@ const NavProfile = () => {
     let secondary_des_2 = dept_des?.secondary[1]?.des_name;
  
     let infoObject = createData(emp_id, name,email,FormateDate(new Date(joining_date)), role,primary_dept,primary_des,secondary_dept_1,
-    secondary_des_1,secondary_dept_2,secondary_des_2
+    secondary_des_1,secondary_dept_2,secondary_des_2,gender,
     );
 setProfileDetails({...infoObject})
    }
    fetchData();
   },[])
 
-console.log(profileDetails);
+
   const handleLogout = async () => {
     let logOutData = await employee.logOut();
     let shortToken = logOutData.token;
@@ -90,29 +95,27 @@ console.log(profileDetails);
     localStorage.removeItem("userInfo");
     localStorage.removeItem("accessToken");
   };
-
   const handleRightMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     setRotateIcon(!rotateIcon);
   };
 
   useEffect(() => {
-    const handleClickOutSide = (event) => {
+    const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsMenuOpen(false);
         setRotateIcon(false);
       }
-      
     };
 
-    document.addEventListener("mousedown", handleClickOutSide);
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
-  useEffect(()=>{
-    let accessToken=localStorage.getItem("accessToken");
-  
-    // console.log(accessToken);
-  },[])
+
+
 
   return (
     <div className="">
@@ -120,11 +123,12 @@ console.log(profileDetails);
         <div
           className="  bg-blue-light flex gap-5 bg-opacity-20 p-2 rounded-xl sm:rounded"
           onClick={handleRightMenu}
+          ref={menuRef}
         >
           <div className="avatar">
             <div className="w-10  rounded-xl sm:rounded">
               <img
-                src="https://png.pngtree.com/png-clipart/20211121/original/pngtree-funny-avatar-vector-icons-png-png-image_6948004.png"
+                src={profileDetails.gender==="Male"?male:female}
                 alt="avatar"
               />
             </div>
@@ -152,7 +156,7 @@ console.log(profileDetails);
         </div>
 
         <div
-          ref={menuRef}
+     
           className={`absolute right-0 w-44 z-50 bg-white rounded-lg shadow-md ${
             isMenuOpen ? "block" : "hidden"
           }`}

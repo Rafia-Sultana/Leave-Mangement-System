@@ -218,7 +218,7 @@ const Dashboard = () => {
         </nav>
         {/* please add this color  //bg-[#E8F7FF] */}
         <main 
-        className="w-full  px-8   bg-[#E8F7FF]  mt-20 lg:mt-0 ">
+        className="w-full  px-8   bg-[#E8F7FF] min-h-screen  mt-20 lg:mt-0 ">
           <Outlet />
         </main>
       </div>

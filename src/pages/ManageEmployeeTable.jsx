@@ -221,10 +221,10 @@ console.log(rows);
     <div className="">
       {/* //cards */}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 my-5">
         {summary.map((x, index) => {
           return (
-            <section className="flex bg-[#add5f4] shadow-lg w-[90%] p-[5%] my-5 items-center ">
+            <section className="flex bg-[#add5f4] shadow-lg  p-[5%] m-[5%]  items-center ">
               <img
                 src={x.icon}
                 alt=""
@@ -242,7 +242,7 @@ console.log(rows);
         })}
       </div>
 
-      <div className="grid grid-cols-5 mb-5 gap-10">
+      <div className="grid grid-cols-5 mb-5 gap-3">
         <div className="col-span-1">
           <SelectInput
             placeholder={"Column"}
@@ -259,7 +259,7 @@ console.log(rows);
           ></TextInput>
         </div>
 
-        <div className="col-span-3 flex justify-end gap-2 ">
+        <div className="col-span-3 flex justify-end ">
           {/* <Button
             textColor={isAllValuesFalse ? "gray" : "white"}
             // btnText={"Remove"}

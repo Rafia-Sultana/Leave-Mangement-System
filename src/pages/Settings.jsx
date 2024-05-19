@@ -7,39 +7,66 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import { UserContext } from "../context api/Context";
 import ShowSnackbar from "../components/ShowSnackbar";
 import Person2Icon from '@mui/icons-material/Person2';
+import employee from "../services/employee";
+// import validator from "validator";
+
 
 const Settings = () => {
   const { id } = useParams();
+  const userInfoData = JSON.parse(localStorage.getItem('userInfo'));
+  const userId = userInfoData?.emp_id;
   const navigate = useNavigate();
-  const {openSnackBar,setOpenSnackbar, handleSnackBarClose} = useContext(UserContext);
+  const {password,openSnackBar,setOpenSnackbar, handleSnackBarClose,} = useContext(UserContext);
   const initialState ={
-    current:'',
-    new:'',
-    confirm:''
+    // current_password:'',
+    new_password:'',
+    confirm_password:''
   }
+
   const [show, setShow] = useState(true);
   const [changePass,setChangePass]= useState(initialState);
+  const [error,setError] = useState("");
+  const [success,setSuccess] = useState(false);
+
+const validate = (value) =>{
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+  console.log(regex.test(value));
+  if(regex.test(value)){
+    setSuccess(true);
+    setError("Password is strong!!")
+  }
+  else{
+    setError("password must contain 1 uppercase, 1 lowercase ,1 digit and minimum 6 length ");
+  }
+}
   const handleChange = (e) =>{
   const {name,value}=e.target;
   setChangePass((prev)=>({
     ...prev,
-    [name]:value
+    [name]: name === "new_password" ? validate(value):value
   }))
   }
-  const handleResetButton =()=>{
-    if(changePass.confirm !== changePass.new){
-        setOpenSnackbar(true);
-    }
+
+  const handleResetButton = async()=>{
+
+try {
+  // const res = await employee.changePassword({...changePass,userId:userId});
+  setChangePass(initialState);
+  //localStorage.setItem("accessToken", token);
+  setOpenSnackbar(true);
+} catch (error) {
+  
+}
+   
+
 }
   return (
     <div>
-        
-{
+        {
         <ShowSnackbar
           open={openSnackBar}
           handleClose={handleSnackBarClose}
-          text={"Password Did Not Match!!"}
-          severity={"error"}
+          text={"Password Changed SuccessFully!"}
         />
       }
       <div className="flex items-center">
@@ -58,31 +85,38 @@ const Settings = () => {
     <div className="space-y-3">
     <TextInput
         label={"Current Password"}
-        name={"current"}
+        name={"current_password"}
         onChange={onchange}
         width={'35ch'}
         type={"password"}
         variant={"standard"}
         onchange={handleChange}
       />
+    {/*    {error && <p className="text-red">{error.characterValidation}</p>} */}
       <TextInput
         label={"New Password"}
-        name={"new"}
+        name={"new_password"}
         onChange={onchange}
       width={'35ch'}
         type={"password"}
         variant={"standard"}
         onchange={handleChange}
       />
+  {error === '' ? null : 
+                    <span className={`${success== true?'text-green':'text-red-dark'} font-bold`}
+                    
+                    >{error}</span>} 
+
       <TextInput
         label={"Confirm Password"}
-        name={"confirm"}
+        name={"confirm_password"}
         onChange={onchange}
          width={'35ch'}
         type={"password"}
         variant={"standard"}
         onchange={handleChange}
       />
+  
    <div className="w-24">
    <Button
       btnText={'Reset'}

@@ -55,27 +55,28 @@ const AddEmployee = () => {
   const [imageURL, setImageURL] = useState(null);
   const [departmentsList, setDepartmentsList] = useState([]);
   const [designationsList, setDesignationsList] = useState([]);
+  const [roleOptions, setRoleOptions] = useState([]);
   const [openOtherDepartments, setOpenOtherDepartments] = useState(false);
   const [hasSubmit, setHasSubmit] = useState(false);
 
-  let roleOptions = [
-    {
-      id: 1,
-      role: "Admin",
-    },
-    {
-      id: 2,
-      role:"HR" ,
-    },
-    {
-      id: 3,
-      role:"Team Lead" ,
-    },
-    {
-      id: 4,
-      role: "Employee",
-    },
-  ];
+  // let roleOptions = [
+  //   {
+  //     id: 1,
+  //     role: "Admin",
+  //   },
+  //   {
+  //     id: 2,
+  //     role:"HR" ,
+  //   },
+  //   {
+  //     id: 3,
+  //     role:"Team Lead" ,
+  //   },
+  //   {
+  //     id: 4,
+  //     role: "Employee",
+  //   },
+  // ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -95,9 +96,11 @@ const AddEmployee = () => {
   useEffect(() => {
     const fetchData = async () => {
       const departments = await employee.getDepartmentList();
+      const roleOptions = await employee.getRoleList();
+      const designations = await employee.getDesignationList();
+      setRoleOptions(roleOptions);
       setDepartmentsList(departments);  // Setting departmentList here
       
-      const designations = await employee.getDesignationList();
       setDesignationsList(designations);
     };
     fetchData();  // Calling fetchData here
@@ -282,7 +285,7 @@ console.log(departmentsList);
               </>
             )}
           </div>
-          <div className="flex flex-col gap-5 w-[70%] lg:w-[40%]">
+          <div className="flex flex-col gap-5 w-[100%] md:w-[60%] lg:w-[40%]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10">
               <TextInput
                 label={"First Name"}

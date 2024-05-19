@@ -30,7 +30,7 @@ if(status!== undefined){
 }
 
 if(holiday!== undefined){
-  options = ["View", "Remove"];
+  options = ["Remove"];
 }
 
 if(location.pathname == '/dashboard/manager-leave-request'){

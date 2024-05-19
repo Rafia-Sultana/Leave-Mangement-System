@@ -72,6 +72,19 @@ const employee = {
       "Error fetching basic info:"
     );
   },
+ changePassword: async (userPassInfo) => {
+    return putRequest(
+      `/auth/change-password`,userPassInfo,
+      "Error fetching user Password info:"
+    );
+  },
+
+  employeeInfo:async (userId) => {
+    return getRequest(
+      `/employee/${userId}`,
+      "Error fetching employee info:"
+    );
+  },
 
   leaveRequestSummary: async (userId) => {
     return getRequest(
@@ -150,7 +163,7 @@ const employee = {
   // http://ip:4040/api/leave/pendingapplication?for=teamLead
   getLeaveRequestOfTeamByTeamLead: async () => {
     return getRequest(
-      `/leave/pendingapplication?for=teamLead`,
+      `/team/leave/pending-application`,
       "Error Fetching to get Leave Request Of Team By TeamLead"
     );
   },
@@ -164,7 +177,7 @@ const employee = {
   //http://ip:4040/api/leave/decision?by=teamLead
   postDecisionByTeamLead: async (decison) => {
     return postRequest(
-      `/leave/decision?by=teamLead`,
+      `/team/leave/application/decision`,
       decison,
       "Error Fetching to get decision By TeamLead"
     );
@@ -183,7 +196,7 @@ const employee = {
   postDecisionByHR: async (decison) => {
     console.log(decison);
     return postRequest(
-      `/leave/decision?by=hr`,
+      `/hr/leave/application/decision`,
       decison,
       "Error Fetching to get decision By HR"
     );
@@ -193,7 +206,7 @@ const employee = {
 
   getLeaveRequestOfEmployeesByHR: async () => {
     return getRequest(
-      `/leave/pendingapplication?for=hr`,
+      `/hr/leave/pending-application`,
       "Error Fetching to get Leave Request Of Employee By HR"
     );
   },
@@ -209,6 +222,10 @@ const employee = {
   getDesignationList: async () =>{
     return getRequest(`/list/designations`,
     "Error Fetching to get designations")
+  },
+  getRoleList: async () =>{
+    return getRequest(`/list/roles`,
+    "Error Fetching to get roles")
   },
 
 
@@ -235,11 +252,24 @@ officeHoliday:async(holidayInfo)=>{
 return postRequest("/holiday/office",holidayInfo,"Error for posting holidayInfo")
 },
 
+
+getOfficeHoliday:async()=>{
+return getRequest("/holiday/office","Error for posting holidayInfo")
+},
+
 //http://ip:4040/api/employee/all
 getAllEmployee:async()=>{
   return getRequest("/hr/employee-list","Error for getting all employee Info");
 },
 
+getAllEmployeeLeaveHistoryByHR: async()=>{
+  return getRequest("/hr/leave/all-history","Error for getting all employee  Info from hr side")
+},
+///hr/leave/members-history/:empId
+
+getEachEmployeeLeaveHistoryByHR: async(empId)=>{
+  return getRequest(`/hr/leave/members-history/${empId}`,"Error for getting all employee  Info from hr side")
+},
 };
 
 export default employee;

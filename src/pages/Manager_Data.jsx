@@ -41,7 +41,7 @@ export const Manager_Team_Leave_Info = () => {
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 170 },
     { id: "employee_designation", label: "Designation ", minWidth: 170 },
-    { id: "total_leave_days", label: "Total Days", minWidth: 170 },
+    { id: "total_leave_days", label: "Approved", minWidth: 170 },
 
     {
       id: "action",
@@ -90,6 +90,9 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
   const [rows2, setRows2] = useState([]);
   const [open, setOpen] = useState(false);
   const [employeeBasicData, setEmployeeBasicData] = useState(null);
+  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
+  const role = userInfoData.role;
+ 
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
@@ -118,7 +121,13 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
 
   useEffect(() => {
     const fecthData = async () => {
-      const teammembersLeaveInfos = await employee.getTeamRequestHistory(empId);
+      let teammembersLeaveInfos ;
+if(role==='HR'){
+
+teammembersLeaveInfos = await employee.getEachEmployeeLeaveHistoryByHR(empId);
+}else if(role==='Team Lead'){
+ teammembersLeaveInfos = await employee.getTeamRequestHistory(empId);
+}
 
       const employeeBasicData = await employee.basicInfo(empId);
       setEmployeeBasicData(employeeBasicData);

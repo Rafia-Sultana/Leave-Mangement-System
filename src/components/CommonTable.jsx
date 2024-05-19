@@ -22,7 +22,10 @@ const CommonTable = ({
  const navigate = useNavigate();
 
   return (
-    <div className={`${flag=="modal"?"":"min-h-screen"}`}>
+    <div
+    //  className={`${flag=="modal"?"":"min-h-screen"}`}
+     
+     >
       <Paper sx={{ width: "100%", borderRadius: borderRadius}}>
         <TableContainer
           sx={{ borderRadius: borderRadius, maxHeight:maxHeight}}

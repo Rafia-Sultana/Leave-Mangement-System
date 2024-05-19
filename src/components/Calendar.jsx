@@ -29,18 +29,20 @@ const Calendar = () => {
 try {
   const monthNumber = getMonthNumber();
   const holidays = await employee.calenderHoilday();
-  console.log(holidays);
+  const getOfficeHolidays = await employee.getOfficeHoliday();
+  // console.log(getOfficeHolidays);
 
   const leaveDates = await employee.leaveDates(userId);
-  console.log(leaveDates);
+
   const  leaveDatesByMonth =  await employee.leaveDatesByMonth(userId,monthNumber);
   
   // console.log(leaveDatesByMonth);
   const holidayEvents = holidays?.map((date)=> createEventObject('Holiday',date,'red'));
+  const officeHolidayEvents = getOfficeHolidays?.map(({leave_name,date})=> createEventObject(leave_name,date,'blue'));
   const leaveEvents = leaveDates?.map(({leave_type,leave_date,color})=>createEventObject(leave_type,leave_date,color));
   const  leaveDatesByMonthEvents = leaveDatesByMonth.map(({leave_type,leave_date,color})=>createEventObject(leave_type,leave_date,color));
 
-  setEvents([...holidayEvents,...leaveEvents,...leaveDatesByMonthEvents])
+  setEvents([...holidayEvents,...leaveEvents,...leaveDatesByMonthEvents,...officeHolidayEvents])
 } catch (error) {
   console.log(error);
 }

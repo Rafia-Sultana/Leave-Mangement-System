@@ -11,7 +11,7 @@ import { getYear } from "../utils/FormateDate.js";
 
 
 const Login = () => {
-  const { setUserInfo } = useContext(UserContext);
+  const { setUserInfo ,setPassword} = useContext(UserContext);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -35,6 +35,8 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    setPassword(logInData.password);
 
     try {
       const data = await authJWT.login(logInData);

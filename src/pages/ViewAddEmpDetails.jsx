@@ -52,23 +52,23 @@ const ViewAddEmpDetails = () => {
         <Avatars>{name}</Avatars>
         <div>
           <div className="flex items-center gap-2">
-            <p className="text-2xl">{name}</p>
+            <p className="text-lg sm:text-xl">{name}</p>
             <p
               className={`${
               Boolean(status) ?  status === "active" ? "bg-green-dark" : "bg-red-dark" : ''
               } w-3 h-3 rounded-full mr-2`}
             ></p>
           </div>
-          <p className="text-gray text-lg">{primary_des}</p>
-          <p className="text-gray text-lg">{primary_dept} {primary_dept.includes('Team') ? '':"Team"}</p>
+          <p className="text-gray    sm:text-lg">{primary_des}</p>
+          <p className="text-gray  sm:text-lg">{primary_dept} {primary_dept.includes('Team') ? '':"Team"}</p>
         </div>
       </div>
       <Box
         sx={{
-          width: "30%",
+          // width: "30%",
           typography: "body1",
-          marginTop: "1%",
-          marginLeft: "5%",
+          marginTop: "2%",
+          // marginLeft: "5%",
         }}
       >
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -84,8 +84,8 @@ const ViewAddEmpDetails = () => {
         </Box>
         <TabPanel value={value} index={0}>
           <div className="space-y-2">
-            <p>Email: {email}</p>
-            {/* <p>Role: {role}</p> */}
+            <p className="whitespace-nowrap">Email: {email}</p>
+           
 
             <p>Joined: {joining_date}</p>
           </div>

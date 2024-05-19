@@ -1,7 +1,14 @@
-body{
+body {
     font-family: 'Poppins', sans-serif;
- 
     overscroll-behavior: none;
-    /* overflow: hidden; */
+    overflow: hidden; 
+    color: black;
 
+}
+
+@media (max-width: 1024px) {
+    body {
+        overscroll-behavior: auto; 
+        overflow: auto; 
+    }
 }

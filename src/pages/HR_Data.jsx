@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import { HR_other_leave_history } from "../utils/Dummy_Data";
 import HeadLine from "../components/HeadLine";
 import { Manager_Team_Leave_Info } from "./Manager_Data";
+import { useNavigate } from "react-router-dom";
 
 export const HR_Leave_History = () => {
   return (
@@ -27,7 +28,7 @@ export const HR_Leave_Request = () => {
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 100 },
     { id: "delegated_to", label: "Delegated To", minWidth: 100 },
-    { id: "leave_type", label: "Leave Type", minWidth: 100 },
+    { id: "leave_name", label: "Leave Type", minWidth: 100 },
     {
       id: "start_date",
       label: "Start Date",
@@ -47,12 +48,7 @@ export const HR_Leave_Request = () => {
       align: "right",
     },
 
-    // {
-    //   id: "leave_status",
-    //   label: "Leave Status",
-    //   minWidth: 170,
-    //   align: "right",
-    // },
+
     {
       id: "action",
       label: "Action",
@@ -140,16 +136,19 @@ const TabPanel = ({ children, value, index }) => {
 };
 
 export const HR_others_leave_history = () => {
+  const navigate = useNavigate();
+  const [departments,setDepartments]=useState([]);
+  const [employeData,setEmployeeData]= useState({});
   const columns = [
-    { id: "name", label: "Name", minWidth: 100 },
+    { id: "employee_name", label: "Name", minWidth: 100 },
     {
-      id: "designation",
+      id: "employee_designation",
       label: "Designation",
       minWidth: 170,
       align: "center",
     },
     {
-      id: "total_days",
+      id: "total_leave_days",
       label: "Total Days",
       minWidth: 170,
       align: "center",
@@ -162,19 +161,26 @@ export const HR_others_leave_history = () => {
     },
   ];
 
-  const rows_hr = HR_other_leave_history;
-  let sd= rows_hr.software_development;
-  let pl= rows_hr.planning;
-  let ad= rows_hr.admin;
-  let na = [sd,pl,ad];
 
   const [value, setValue] = useState(0);
+ 
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const departments = ["Software Development", "Planning", "Admin"];
+ 
+  useEffect(() => {
+    const fetchDataOfTeamLeave = async () => {
+      const teamMembersDetails = await employee.getAllEmployeeLeaveHistoryByHR();
+      setDepartments(Object.keys(teamMembersDetails));
+      setEmployeeData(teamMembersDetails);
+    };
+    fetchDataOfTeamLeave();
+  }, []);
+  const handleViewDetails = async (index, emp_id) => {
+     navigate(`/dashboard/view-teamMember-leave-info/${emp_id}`);
+  };
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <Tabs
@@ -186,11 +192,15 @@ export const HR_others_leave_history = () => {
           <Tab label={department} value={index} key={index} />
         ))}
       </Tabs>
-      {departments.map((_, index) => (
+      {departments.map((department, index) => (
         <TabPanel value={value} index={index} key={index}>
-          {/* Item {index + 1} */}
-          {/* <CommonTable columns={columns} rows={na[index]} /> */}
-          <Manager_Team_Leave_Info/>
+      
+          <CommonTable 
+          columns={columns}
+           rows={employeData[department]|| []}
+           viewDetails={handleViewDetails}
+           />
+ 
         </TabPanel>
       ))}
     </Box>

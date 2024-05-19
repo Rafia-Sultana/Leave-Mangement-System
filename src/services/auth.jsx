@@ -7,6 +7,7 @@ const authJWT = {
     const loginData = await axios.post(`${BASE_URL}/auth/login`, user);
     return loginData.data;
   },
+
 };
 
 export default authJWT;

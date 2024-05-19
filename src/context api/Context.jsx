@@ -5,6 +5,7 @@ export const UserContext = createContext('');
 
 export const UserProvider = ({children}) => {
     const [userInfo, setUserInfo] = useState([]);
+    const [password,setPassword] = useState('')
     const [openSnackBar, setOpenSnackbar]= useState(false);
     
     const handleSnackBarClose=(reason)=>{
@@ -15,7 +16,7 @@ export const UserProvider = ({children}) => {
       }
 
 return (
-    <UserContext.Provider value={{userInfo, setUserInfo,openSnackBar,setOpenSnackbar, handleSnackBarClose}} >
+    <UserContext.Provider value={{userInfo, setUserInfo,openSnackBar,setOpenSnackbar, handleSnackBarClose,setPassword,password}} >
      {children}
     </UserContext.Provider> 
 )

@@ -9,11 +9,13 @@ import CommonTable from "./CommonTable";
 import { employee_data } from "../utils/Dummy_Data";
 import Button from "./Button";
 import employee from "../services/employee";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Manager_Leave_Approval } from "../pages/Manager_Data";
 import { useState,useEffect } from "react";
 
 const Modal = ({ open, handleClose, historyData }) => {
+  const {empId} = useParams();
+
   const location = useLocation();
   const navigate = useNavigate();
   const [logData, setLogData] = useState([]);
@@ -22,6 +24,7 @@ const Modal = ({ open, handleClose, historyData }) => {
 
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
+  
 
 
  
@@ -111,14 +114,14 @@ const Modal = ({ open, handleClose, historyData }) => {
             <Leave_Details info={historyData} isclickedEditBtn={isclickedEditBtn} />
             {role === "Employee" ||
             (role === "Team Lead" &&
-              location.pathname === "/dashboard/manager_leave_history") ||
-            location.pathname === "/dashboard/manager_view_each_teamMember_leave_info" 
-            || location.pathname === "/dashboard/hr_leave_history"? (
+              location.pathname === "/dashboard/manager_leave_history") 
+              ||  location.pathname === `/dashboard/view-teamMember-leave-info/${empId}`
+            ||  location.pathname === "/dashboard/hr_leave_history"? (
               <CommonTable
                 columns={columns2}
                 rows={logData.length>0? logData:["not available"]}
                 viewDetails={handleClickOpen}
-                flag={"modal"}
+                // flag={"modal"}
             
               />
             ) : (
