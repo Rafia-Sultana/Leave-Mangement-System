@@ -16,14 +16,14 @@ const CommonTable = ({
   handleDelete,
   borderRadius,
   maxHeight = 600,
-  handleActive,flag
-  // handleCheckBoxInput
+  handleActive
 }) => {
  const navigate = useNavigate();
 
+
   return (
     <div
-    //  className={`${flag=="modal"?"":"min-h-screen"}`}
+
      
      >
       <Paper sx={{ width: "100%", borderRadius: borderRadius}}>
@@ -71,7 +71,7 @@ const CommonTable = ({
                           }}
                           onActive={()=>handleActive(index)}
                           index={index}
-                          // handleCheckBoxInput={handleCheckBoxInput}
+           
                         ></TableCells>
                       );
                     })}

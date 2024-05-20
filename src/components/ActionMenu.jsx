@@ -12,7 +12,8 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type,onActive }) => {
 
   let value = row["leave_status"];
   let status = row["status"];
-  let holiday = row["holidayDate"]
+  let holiday = row["duration"];
+
 
   let options;
 
@@ -30,7 +31,7 @@ if(status!== undefined){
 }
 
 if(holiday!== undefined){
-  options = ["Remove"];
+  options = ["Update"];
 }
 
 if(location.pathname == '/dashboard/manager-leave-request'){
@@ -59,7 +60,8 @@ if(location.pathname == '/dashboard/manager-leave-request'){
       View: viewDetails,
       Delete: handleDelete,
       Inactive: handleDelete,
-      Active: handleActive
+      Active: handleActive,
+      Update:viewDetails
     };
 
     const actionHandler = actionHandlers[option];

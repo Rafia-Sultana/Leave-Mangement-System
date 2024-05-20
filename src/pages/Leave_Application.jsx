@@ -25,6 +25,7 @@ const Leave_Application = () => {
   const { openSnackBar, setOpenSnackbar, handleSnackBarClose } =
     useContext(UserContext);
   const { state } = useLocation();
+ 
 // console.log(state);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;

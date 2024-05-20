@@ -66,7 +66,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
       const requestHistoryData = await employee.getEmployeeRequestHistory(
         userId
       );
-      console.log(requestHistoryData);
+      // console.log(requestHistoryData);
       let leaveTypeData = await employee.getLeaveTypes();
        let leave_names = leaveTypeData.map((x)=>x.leave_name);
        setLeaveTypesOption(leave_names);
@@ -113,12 +113,11 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
   //   setShowAll(e.target.checked);
   // };
 
-  const handleDelete =(index)=>{
-    console.log('handle deltr',index);
-  const updateRows =rows;
-  rows[index].leave_status = "Withdraw" ;
-  setRows(updateRows);
-   }
+  const handleDelete = async (index) => {
+    let selectedRow = rows[index];
+   await employee.putLeaveApplicationWithDrwan(selectedRow.application_id);
+  }
+  
   return (
     <div className="">
    
@@ -139,10 +138,7 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
             variant="standard"
           />
         </div>
-        {/* <div className="flex  items-center md:absolute top-8 right-0">
-          <CheckBoxInput onchange={handleShowAll}></CheckBoxInput>
-          <label>Show All</label>
-        </div> */}
+
       </div>
       {filteredRows.length >= 1 ? (
         <div className="">

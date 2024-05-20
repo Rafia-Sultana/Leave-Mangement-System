@@ -351,6 +351,7 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
   //postDecisionByHR
 const handleSendToEmployeeByHr = async () =>{
   const result = await employee.postDecisionByHR(deciosnByHR);
+  console.log(result);
   
   if(result){
   setOpenSnackbar(true);

@@ -52,13 +52,16 @@ const postRequest = async (url, params, errorMessage) => {
 };
 
 const putRequest = async(url,data,errorMessage) =>{
+
   try {
     const token = getToken();
-    const response = await axiosInstance.put(url,data,{
+    const response = await axiosInstance.put(url,data,
+      {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
+    }
+    );
     return response.data;
   } catch (error) {
     handleRequestError(error, errorMessage);
@@ -136,6 +139,16 @@ const employee = {
       "Error fetching to post leave infos Of User:"
     );
   },
+  ///employee/leave/application/withdrawn/:leave_id
+  putLeaveApplicationWithDrwan: async (appId) => {
+  return putRequest(
+      `/employee/leave/application/withdrawn/${appId}`,
+       {},
+      "Error fetching to put  leave application withdrawn"
+    );
+  },
+
+
   // http://ip:4040/api/leave/emp_history/{userId} http://IP:4040/api/leave/history/emp/{UserId}
   getEmployeeRequestHistory: async (userId) => {
     return getRequest(
@@ -249,13 +262,23 @@ status,
 
 //"/calender/weekly-holiday"
 officeHoliday:async(holidayInfo)=>{
+  console.log(holidayInfo);
 return postRequest("/holiday/office",holidayInfo,"Error for posting holidayInfo")
 },
-
+///holiday/office/{holiday_id}
+putOfficeHoliday:async(holidayId,holidayInfo)=>{
+  console.log(holidayId,holidayInfo);
+return putRequest(`/holiday/office/${holidayId}`,holidayInfo,"Error for posting holidayInfo")
+},
 
 getOfficeHoliday:async()=>{
 return getRequest("/holiday/office","Error for posting holidayInfo")
 },
+
+
+getOfficeHolidayList:async()=>{
+  return getRequest("/holiday/office?count=true","Error for posting holidayInfo")
+  },
 
 //http://ip:4040/api/employee/all
 getAllEmployee:async()=>{

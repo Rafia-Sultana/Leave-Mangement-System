@@ -12,20 +12,18 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive
     Pending: { color: "orange", fontWeight: "bold" },
     Rejected: { color: "red", fontWeight: "bold" },
     Active: {color: "green", fontWeight: "bold" },
-    Inactive: { color: "red", fontWeight: "bold" }
+    Inactive: { color: "red", fontWeight: "bold" },
+    Withdrawn:{ color: "purple", fontWeight: "bold" },
   };
 
   let value = row[column.id];
-  // console.log(value);
+
 
   if(column.id=== 'status'){
    value = value?.charAt(0).toUpperCase() + value?.slice(1);
   
   }
-//   if(row.status ==='active'){
-//     // value = Boolean(value)? value : value?.charAt(0).toUpperCase() + value?.slice(1);
-//     row.status="Active"
-//  }
+
 
 
 

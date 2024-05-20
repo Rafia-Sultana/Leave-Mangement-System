@@ -59,6 +59,7 @@ export function getYear(date) {
 }
 
  export  const convertToIsoString = (date, uptime) => {
+console.log(date);
   const [time, ampm] = uptime.split(" ");
   const [hours, minutes] = time.split(":").map(Number);
   const adjustHours = ampm == "PM" && hours !== 12 ? hours + 12 : hours;
