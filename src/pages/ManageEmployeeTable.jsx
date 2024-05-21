@@ -14,7 +14,6 @@ import employee from "../services/employee.jsx";
 import FormateDate from "../utils/FormateDate.js";
 
 const ManageEmployeeTable = () => {
-//  const {checkedRows} = useContext(UserContext);
 const navigate = useNavigate();
 const isSmallScreen = useMediaQuery("(max-width:768px)");
 
@@ -44,7 +43,7 @@ const isSmallScreen = useMediaQuery("(max-width:768px)");
   const handleAddEmployee = () => {
     navigate("/dashboard/hr-add-employee");
   };
-  // const [checkedRows, setCheckedRows] = useState([]);
+ 
   const [selectedColumn, setSelectedColumn] = useState("Name");
   const [searchValue, setSearchValue] = useState("");
 
@@ -54,50 +53,7 @@ const isSmallScreen = useMediaQuery("(max-width:768px)");
       secondary_des_1,secondary_dept_2,secondary_des_2 };
   }
 
-  //emp_id, name,email, FormateDate(new Date(joining_date)), status,role,primary_dept,primary_des,secondary_dept_1,
-  // secondary_des_1,secondary_dept_2,secondary_des_2
-  // let rows2 = [
-  //   createData(
-  //     0,
-  //     "Frozen yoghurt",
-  //     "Employee",
-  //     "software engineer",
-  //     "software development",
-  //     "active"
-  //   ),
-  //   createData(
-  //     1,
-  //     "Ice cream sandwich",
-  //     "Team Lead",
-  //     "urban planner",
-  //     "planning",
-  //     "inactive"
-  //   ),
-  //   createData(
-  //     2,
-  //     "Eclair",
-  //     "Admin",
-  //     "software engineer",
-  //     "software development",
-  //     "active"
-  //   ),
-  //   createData(
-  //     3,
-  //     "Cupcake",
-  //     "Employee",
-  //     "software engineer",
-  //     "software development",
-  //     "inactive"
-  //   ),
-  //   createData(
-  //     4,
-  //     "Gingerbread",
-  //     "Employee",
-  //     "software engineer",
-  //     "software development",
-  //     "active"
-  //   ),
-  // ];
+  
 
   const [rows, setRows] = useState([]);
 
@@ -130,12 +86,12 @@ const isSmallScreen = useMediaQuery("(max-width:768px)");
       let column = selectedColumn?.toLowerCase();
       let searchValues = searchValue?.toLowerCase();
       let allEmployee = await employee.getAllEmployee();
-console.log(allEmployee);
+
       const concatNames =(...names) =>{
         return names.filter(Boolean).join(" ");
       }
       allEmployee.map((x) => {
-        const {
+        let{
           emp_id,
           first_name,
           middle_name,
@@ -155,9 +111,11 @@ console.log(allEmployee);
         let secondary_des_1 = dept_des?.secondary[0]?.des_name;
         let secondary_dept_2 = dept_des?.secondary[1]?.dept_name;
         let secondary_des_2 = dept_des?.secondary[1]?.des_name;
+         status = status?.charAt(0).toUpperCase() + status?.slice(1);
         let infoObject = createData(emp_id, name,email, FormateDate(new Date(joining_date)), status,role,primary_dept,primary_des,secondary_dept_1,
         secondary_des_1,secondary_dept_2,secondary_des_2
         );
+    
         console.log(infoObject);
  setRows((prev) => [...prev, infoObject]);
       });
@@ -199,6 +157,7 @@ console.log(allEmployee);
   ];
 
   const handleInActive = async (index) => {
+
 let emp_id = rows[index].emp_id;
 await employee.inActiveEmployee(emp_id,{status:"inactive"});
 const updateRows = [...rows];

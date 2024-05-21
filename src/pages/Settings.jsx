@@ -27,11 +27,13 @@ const Settings = () => {
   const [changePass, setChangePass] = useState(initialState);
   const [error, setError] = useState("");
   const [match, setMatch] = useState("");
+  const [currentPassError, setCurrentPassError]=useState("")
 
   const validate = (value) => {
     if (value.length >= 6) {
     
       setError("");
+      setCurrentPassError("")
       return value;
     } else {
       setError("password must contain minimum 6 length");
@@ -51,7 +53,9 @@ const Settings = () => {
       return;
     } else {
       setMatch("");
+      
       try {
+        setCurrentPassError("")
         const { confirm_password, ...changePassWithoutConfirm } = changePass;
 
         const res = await employee.changePassword({
@@ -59,10 +63,14 @@ const Settings = () => {
           userId: userId,
         });
 
-        localStorage.setItem("accessToken", token);
+      localStorage.setItem("accessToken", res.token);
         setChangePass(initialState);
         setOpenSnackbar(true);
-      } catch (error) {}
+      } catch (error) {
+
+        setCurrentPassError(error.response.data.error);
+      
+  }
     }
   };
   return (
@@ -99,7 +107,9 @@ const Settings = () => {
             onchange={handleChange}
             value={changePass.current_password}
           />
-          {/*    {error && <p className="text-red">{error.characterValidation}</p>} */}
+       {currentPassError === "" ? null : (
+            <span className="text-red-dark font-bold">{currentPassError}</span>
+          )}
           <TextInput
             label={"New Password"}
             name={"new_password"}

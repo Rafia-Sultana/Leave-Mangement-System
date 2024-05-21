@@ -1,8 +1,6 @@
-import React, { useContext } from "react";
 import TableCell from "@mui/material/TableCell";
 import ActionMenu from "./ActionMenu";
-import CheckBoxInput from "./InputFields/CheckBoxInput";
-import { UserContext } from "../context api/Context";
+
 
 
 const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive}) => {
@@ -19,10 +17,9 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive
   let value = row[column.id];
 
 
-  if(column.id=== 'status'){
-   value = value?.charAt(0).toUpperCase() + value?.slice(1);
-  
-  }
+//   if(column.id=== 'status'){
+//    value = value?.charAt(0).toUpperCase() + value?.slice(1);
+// }
 
 
 
@@ -41,13 +38,7 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive
           />
         </TableCell>
       );
-    // case 'check':
-    //   return (
-    //     <TableCell key={column.id} align={column.align}>
-    //       <CheckBoxInput onchange={(e)=>handleCheckBoxInput(e,index)}   />
-          
-    //     </TableCell>
-    //   );
+
     default:
       return (
         <TableCell

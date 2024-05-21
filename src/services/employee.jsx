@@ -15,8 +15,9 @@ const axiosInstance = axios.create({
 
 // Error handling function
 const handleRequestError = (error, errorMessage) => {
-  console.error(errorMessage, error);
-  throw error;
+  console.error(error, errorMessage);
+throw error;
+
 };
 
 // Function to make GET requests http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
@@ -47,7 +48,7 @@ const postRequest = async (url, params, errorMessage) => {
   
     return response.data;
   } catch (error) {
-    handleRequestError(error, errorMessage);
+  handleRequestError(error, errorMessage);
   }
 };
 
@@ -64,7 +65,7 @@ const putRequest = async(url,data,errorMessage) =>{
     );
     return response.data;
   } catch (error) {
-    handleRequestError(error, errorMessage);
+ handleRequestError(error, errorMessage);
   }
 }
 
@@ -116,6 +117,10 @@ const employee = {
 
   getLeaveTypes: async () => {
     return getRequest("/list/leave-types", "Error fetching leave types:");
+  },
+  
+  getEmployeeLeaveChart: async () => {
+    return getRequest("/employee/leave/chart", "Error fetching employee leave chart");
   },
 
   // http://192.168.0.40:4040/api/auth/logout
@@ -262,12 +267,12 @@ status,
 
 //"/calender/weekly-holiday"
 officeHoliday:async(holidayInfo)=>{
-  console.log(holidayInfo);
+
 return postRequest("/holiday/office",holidayInfo,"Error for posting holidayInfo")
 },
 ///holiday/office/{holiday_id}
 putOfficeHoliday:async(holidayId,holidayInfo)=>{
-  console.log(holidayId,holidayInfo);
+  
 return putRequest(`/holiday/office/${holidayId}`,holidayInfo,"Error for posting holidayInfo")
 },
 

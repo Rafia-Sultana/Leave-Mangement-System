@@ -19,10 +19,12 @@ useContext(UserContext);
   const [row, setRow] = useState({});
 
   const handleOpen = () => {
+    setRow({});
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+    setRow({});
   };
 
   useEffect(() => {

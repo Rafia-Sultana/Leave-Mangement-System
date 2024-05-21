@@ -112,11 +112,10 @@ const Modal = ({ open, handleClose, historyData }) => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description" className="space-y-5">
             <Leave_Details info={historyData} isclickedEditBtn={isclickedEditBtn} />
-            {role === "Employee" ||
-            (role === "Team Lead" &&
-              location.pathname === "/dashboard/manager_leave_history") 
-              ||  location.pathname === `/dashboard/view-teamMember-leave-info/${empId}`
-            ||  location.pathname === "/dashboard/hr_leave_history"? (
+            {
+              location.pathname === `/dashboard/view-teamMember-leave-info/${empId}`
+              || location.pathname === `/dashboard/request-history`
+            ? (
               <CommonTable
                 columns={columns2}
                 rows={logData.length>0? logData:["not available"]}
@@ -129,6 +128,7 @@ const Modal = ({ open, handleClose, historyData }) => {
                 <Manager_Leave_Approval
                   applicationId={historyData?.application_id}
                   editButton={handleEditButton}
+                  handleClose={ handleClose}
                 />
               </>
             )}

@@ -48,6 +48,7 @@ const Leave_Application = () => {
   const [isoTime, setIsoTime] = useState(null);
   const [endIsoTime, setEndIsoTime] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState(null);
+  const [customLegendItems,setCustomLegendItems]= useState([]);
 
 
   useEffect(() => {
@@ -122,6 +123,8 @@ const Leave_Application = () => {
     const fetchData = async () => {
       let leaveTypeData = await employee.getLeaveTypes();
       let teamMembersList = await employee.getTeamMembersOfUser(userId);
+      let customLegendItems = await employee.getEmployeeLeaveChart();
+      setCustomLegendItems(customLegendItems);
       setTeamMembersList(teamMembersList);
       setLeaveTypes(leaveTypeData);
     };
@@ -211,44 +214,9 @@ const Leave_Application = () => {
 
 
 
-  let customLegendItems = [
-    {
-      val: 5,
-      exp: 14,
-      type: "Sick Leave",
-      color: "#829CBC",
-    },
-    {
-      val: 18,
-      exp: 18,
-      type: "Casual Leave",
-      color: "#6290C8",
-    },
-    {
-      val: 14,
-      exp: 10,
-      type: "Leave Without Pay",
-      color: "#376996",
-    },
-    {
-      val: 100,
-      exp: 120,
-      type: "Maternity Leave",
-      color: "#1F487E",
-    },
-    {
-      val: 1,
-      exp: 5,
-      type: "Paternity Leave",
-      color: "#1D3461",
-    },
-    {
-      val: 1,
-      exp: 5,
-      type: "Compensation Leave",
-      color: "#1D3461",
-    },
-  ];
+
+ 
+
   function remainingDate() {
     return customLegendItems.find(
       (option) => option.type === formData?.leave_name

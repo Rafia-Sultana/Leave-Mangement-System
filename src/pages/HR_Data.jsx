@@ -13,13 +13,13 @@ import HeadLine from "../components/HeadLine";
 import { Manager_Team_Leave_Info } from "./Manager_Data";
 import { useNavigate } from "react-router-dom";
 
-export const HR_Leave_History = () => {
-  return (
-    <div>
-      <Employee_Leave_Request />
-    </div>
-  );
-};
+// export const HR_Leave_History = () => {
+//   return (
+//     <div>
+//       <Employee_Leave_Request />
+//     </div>
+//   );
+// };
 
 export const HR_Leave_Request = () => {
   const [id, setId] = useState(0);

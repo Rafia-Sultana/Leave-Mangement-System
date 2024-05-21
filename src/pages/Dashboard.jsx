@@ -23,7 +23,7 @@ import managment from "../assets/styles/svg/managment.svg";
 const Dashboard = () => {
   const [open, setOpen] = useState({});
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
-  console.log(userInfoData);
+
   const location = useLocation();
   const navigate = useNavigate();
   const role = userInfoData.role;
@@ -49,7 +49,7 @@ const Dashboard = () => {
         category: "Personal",
         links: [
           createNavLink("leave-application", "Leave Application"),
-          createNavLink("manager_leave_history", "Leave Request"),
+          createNavLink("request-history", "Leave Request"),
         ],
         icon: personal,
       },
@@ -67,7 +67,7 @@ const Dashboard = () => {
         category: "Personal",
         links: [
           createNavLink("leave-application", "Leave Application"),
-          createNavLink("hr_leave_history", "My Leave History"),
+          createNavLink("request-history", "My Leave History"),
         ],
         icon: personal,
       },

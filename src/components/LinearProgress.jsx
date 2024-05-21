@@ -1,41 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
 import "./../assets/styles/LinearBar.css";
+import employee from "../services/employee";
 
 const ApexChart = () => {
-  let customLegendItems = [
-    {
-      val: 5,
-      exp: 14,
-      type: "Sick leave",
-      color: "#829CBC",
-    },
-    {
-      val: 18,
-      exp: 18,
-      type: "Annual leave",
-      color: "#6290C8",
-    },
-    {
-      val: 14,
-      exp: 10,
-      type: "Casual leave",
-      color: "#376996",
-    },
-    {
-      val: 100,
-      exp: 120,
-      type: "Maternity leave",
-      color: "#1F487E",
-    },
-    {
-      val: 1,
-      exp: 5,
-      type: "Paternity leave",
-      color: "#1D3461",
-    },
-  ];
+  const [customLegendItems,setCustomLegendItems]= useState([]);
+ 
+useEffect(()=>{
 
+  const fetch = async()=>{
+try {
+  let res = await employee.getEmployeeLeaveChart();
+ 
+  setCustomLegendItems(res);
+} catch (error) {
+  console.error(error);
+}
+  }
+  fetch();
+},[])
   return (
     <div className="font-poppins 
     border p-5 border-gray-lightest rounded-lg shadow-lg">

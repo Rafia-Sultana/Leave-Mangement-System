@@ -11,7 +11,8 @@ import { getYear } from "../utils/FormateDate.js";
 
 
 const Login = () => {
-  const { setUserInfo} = useContext(UserContext);
+  const { openSnackBar, setOpenSnackbar, handleSnackBarClose,setUserInfo } =
+  useContext(UserContext);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -46,15 +47,14 @@ const Login = () => {
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
         setUserInfo(userInfo);
 
-        // enqueueSnackbar('Logged In Successfully!', { variant: 'success' });
         navigate("/dashboard");
-      } else {
-        localStorage.removeItem("acccessToken");
-        enqueueSnackbar("Invalid email or password", { variant: "error" });
-      }
+        enqueueSnackbar('Logged In Successfully!', { variant: 'success' });
+      } 
+  
     } catch (error) {
+      localStorage.removeItem("acccessToken");
       console.error("Error logging in:", error);
-      enqueueSnackbar("Error logging in. Please try again.", {
+      enqueueSnackbar(`${error.response.data.error}`, {
         variant: "error",
       });
     }

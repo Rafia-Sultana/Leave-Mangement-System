@@ -115,7 +115,14 @@ const isSmallScreen= useMediaQuery('(max-width:600px)');
 
   const handleDelete = async (index) => {
     let selectedRow = rows[index];
-   await employee.putLeaveApplicationWithDrwan(selectedRow.application_id);
+    await employee.putLeaveApplicationWithDrwan(selectedRow.application_id);
+
+ let updatedRows = [...rows];
+ updatedRows[index]={
+  ...selectedRow,leave_status:"Withdrawn"
+ }
+ setRows(updatedRows);
+
   }
   
   return (

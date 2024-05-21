@@ -14,6 +14,8 @@ import  { convertToIsoString } from "../utils/FormateDate";
 import dayjs from "dayjs";
 
 const HolidayModal = ({ open, close, row }) => {
+
+
   const { openSnackBar, handleSnackBarClose, setOpenSnackbar,setHolidayList } =
     React.useContext(UserContext);
    const initialState = {
@@ -74,20 +76,24 @@ const HolidayModal = ({ open, close, row }) => {
 
     if (Object.keys(row).length !== 0) {
     result = await employee.putOfficeHoliday(holidayId, updateHolidayForm);
+   
     } else {
     result = await employee.officeHoliday(updateHolidayForm);
+  
   }
-
-    if ((result == "Success")) {
+    if ((result == "Success" )) {
       setOpenSnackbar(true);
-      setHolidayForm({
-        start_date:null,
-        end_date:null,
-        name:""
-      });
-      const getOfficeHolidays = await employee.getOfficeHolidayList();
+      
+        setHolidayForm({
+    start_date:null,
+    end_date:null,
+    name:""
+  });
+    const getOfficeHolidays = await employee.getOfficeHolidayList();
       setHolidayList(getOfficeHolidays);
+   
     }
+
   };
 
   return (
@@ -97,6 +103,7 @@ const HolidayModal = ({ open, close, row }) => {
           open={openSnackBar}
           handleClose={handleSnackBarClose}
           text={"Holiday Added SuccessFully"}
+          duration={1000}
         />
       }
 

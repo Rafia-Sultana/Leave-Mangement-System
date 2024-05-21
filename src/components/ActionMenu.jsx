@@ -3,45 +3,47 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
-import Swal from 'sweetalert2/dist/sweetalert2.js'
-import 'sweetalert2/src/sweetalert2.scss'
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 import { useLocation } from "react-router-dom";
 
-const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type,onActive }) => {
+const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
   const location = useLocation();
 
   let value = row["leave_status"];
   let status = row["status"];
   let holiday = row["duration"];
 
-
   let options;
 
-if(value == "Pending"){
-  options = ["Edit", "View", "Delete"];
-}else{
-  options = ["View"];
-}
-if(status!== undefined){
-  if(status=="active"){
-    options = ["View", "Inactive"];
-  }else{
-    options = ["View", "Active"];
+  if (value == "Pending") {
+    options = ["Edit", "View", "Delete"];
+  } else {
+    options = ["View"];
   }
-}
+  if (status !== undefined) {
+    if (status.toLowerCase() === "active") {
+      options = ["View", "Inactive"];
+    } else {
+      options = ["View", "Active"];
+    }
+  }
 
-if(holiday!== undefined){
-  options = ["Update"];
-}
+  if (holiday !== undefined) {
+    options = ["Update"];
+  }
 
-if(location.pathname == '/dashboard/manager-leave-request'){
-  options = ["View","Delete"];
-}
+  if (location.pathname == "/dashboard/manager-leave-request") {
+    options = ["View", "Delete"];
+  }
 
-
-
-
-
+  if (location.pathname == "/dashboard/request-history") {
+    if (value == "Pending") {
+      options = ["Edit", "View", "Withdrawn"];
+    } else {
+      options = ["View"];
+    }
+  }
 
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = useState(null);
@@ -53,62 +55,68 @@ if(location.pathname == '/dashboard/manager-leave-request'){
     setAnchorEl(null);
   };
 
+  const handleSweetAlert = (action, confirmText, successTitle, successText) => {
+   return () => {
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: confirmText,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        action();
+        Swal.fire({
+          title: successTitle,
+          text: successText,
+          icon: "success",
+        });
+      }
+    });
+   }
+  };
+
   const handleMenuOptionClick = (option) => {
     handleClose();
     const actionHandlers = {
       Edit: onEdit,
       View: viewDetails,
-      Delete: handleDelete,
-      Inactive: handleDelete,
-      Active: handleActive,
-      Update:viewDetails
+      Delete:
+        handleSweetAlert(
+          onDelete,
+          "Yes, Delete it!",
+          "Deleted!!",
+          "leave has been deleted.."
+        ),
+      Inactive:
+        handleSweetAlert(
+          onDelete,
+          "Yes, Inactive it!",
+          "Inativated!!",
+          "Status has been Inactivated."
+        ),
+      Active: 
+        handleSweetAlert(
+          onActive,
+          "Yes, Active it!",
+          "Activated!!",
+          "Status has been activated."
+        ),
+      Update: viewDetails,
+      Withdrawn:
+        handleSweetAlert(
+          onDelete,
+          "Yes, withdraw it!",
+          "WithDrawn!!",
+          "Your leave has been WithDrawn."
+        ),
     };
 
     const actionHandler = actionHandlers[option];
     actionHandler && actionHandler();
   };
 
-  const handleDelete=()=>{
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      onDelete();
-      Swal.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        icon: "success"
-      });
-    }
-  });
-}
-
-const handleActive=()=>{
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      onActive();
-      Swal.fire({
-        title: "Activated!",
-        text: "Your file has been Activated.",
-        icon: "success"
-      });
-    }
-  });
-}
   return (
     <div>
       <IconButton
@@ -132,7 +140,7 @@ const handleActive=()=>{
         PaperProps={{
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
-            width: "10ch",
+            width: "12ch",
           },
         }}
       >

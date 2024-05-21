@@ -17,9 +17,9 @@ import HeadLine from "../components/HeadLine";
 import { UserContext } from "../context api/Context";
 import ShowSnackbar from "../components/ShowSnackbar";
 
-export const Manager_Leave_History = () => {
-  return ( <Employee_Leave_Request />);
-};
+// export const Manager_Leave_History = () => {
+//   return ( <Employee_Leave_Request />);
+// };
 export const Manager_Team_Leave_Info = () => {
   const navigate = useNavigate();
 
@@ -70,7 +70,7 @@ export const Manager_Team_Leave_Info = () => {
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
       ) : (
         <div>
-          <HeadLine text={"Team's Leave History"}/>
+          <HeadLine text={"Team's Leave History"} />
           <CommonTable
             columns={columns}
             rows={rows}
@@ -92,7 +92,6 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
   const [employeeBasicData, setEmployeeBasicData] = useState(null);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
- 
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
@@ -121,13 +120,14 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
 
   useEffect(() => {
     const fecthData = async () => {
-      let teammembersLeaveInfos ;
-if(role==='HR'){
-
-teammembersLeaveInfos = await employee.getEachEmployeeLeaveHistoryByHR(empId);
-}else if(role==='Team Lead'){
- teammembersLeaveInfos = await employee.getTeamRequestHistory(empId);
-}
+      let teammembersLeaveInfos;
+      if (role === "HR") {
+        teammembersLeaveInfos = await employee.getEachEmployeeLeaveHistoryByHR(
+          empId
+        );
+      } else if (role === "Team Lead") {
+        teammembersLeaveInfos = await employee.getTeamRequestHistory(empId);
+      }
 
       const employeeBasicData = await employee.basicInfo(empId);
       setEmployeeBasicData(employeeBasicData);
@@ -276,7 +276,7 @@ export const Manager_Leave_Request = () => {
   );
   return (
     <div>
-      <HeadLine text={"Team's Request History"}/>
+      <HeadLine text={"Team's Request History"} />
       {rows.length === 0 ? (
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
       ) : (
@@ -284,7 +284,7 @@ export const Manager_Leave_Request = () => {
           columns={isSmallScreen ? smallScreenColumns : columns}
           rows={rows}
           viewDetails={handleClickOpen}
-           maxHeight={770}
+          maxHeight={770}
         />
       )}
 
@@ -295,16 +295,21 @@ export const Manager_Leave_Request = () => {
   );
 };
 
-export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
+export const Manager_Leave_Approval = ({
+  applicationId,
+  editButton,
+  handleClose,
+}) => {
   const { openSnackBar, handleSnackBarClose, setOpenSnackbar } =
- useContext(UserContext);
+    useContext(UserContext);
+
   const [selectedValue, setSelectedValue] = useState("Pending");
   const [comments, setComments] = useState("");
   const [logData, setLogData] = useState({});
   const [isBtnDisable, setIsBtnDisable] = useState(true);
+  const [isReturnBtnDisable, setIsReturnBtnDisable] = useState(true);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const role = userInfoData.role;
- 
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -321,23 +326,23 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
     processing_time: new Date().toISOString(),
   };
 
-
-
   const handleSendToHR = async () => {
-   
     const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
     console.log(result);
- 
-    if(result){
+
+    if (result) {
       setOpenSnackbar(true);
-      }
+    }
+    handleClose();
   };
 
   const handleReturnToEmployee = async () => {
     const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
-    if(result){
+
+    if (result) {
       setOpenSnackbar(true);
-      }
+    }
+    handleClose();
   };
 
   const deciosnByHR = {
@@ -349,22 +354,20 @@ export const Manager_Leave_Approval = ({ applicationId, editButton }) => {
     processing_time: new Date().toISOString(),
   };
   //postDecisionByHR
-const handleSendToEmployeeByHr = async () =>{
-  const result = await employee.postDecisionByHR(deciosnByHR);
-  console.log(result);
-  
-  if(result){
-  setOpenSnackbar(true);
-  }
-}
+  const handleSendToEmployeeByHr = async () => {
+    const result = await employee.postDecisionByHR(deciosnByHR);
+    console.log(result);
 
-
+    if (result) {
+      setOpenSnackbar(true);
+    }
+  };
 
   useEffect(() => {
     if (selectedValue === "Approved") {
       setIsBtnDisable(false);
-    } else {
-      setIsBtnDisable(true);
+    } else if(selectedValue === "Rejected"){
+      setIsReturnBtnDisable(false);
     }
   }, [selectedValue]);
 
@@ -374,10 +377,8 @@ const handleSendToEmployeeByHr = async () =>{
       setComments("");
     }
   }, [openSnackBar]);
-  const handleSubmit=()=>{
+  const handleSubmit = () => {};
 
-  }
-  console.log(selectedValue);
   return (
     <div className="flex flex-col  space-y-3">
       {
@@ -387,8 +388,7 @@ const handleSendToEmployeeByHr = async () =>{
           text={"Sent SuccessFully"}
         />
       }
-      <div className="flex   flex-col sm:flex-row justify-between  sm:items-center">
-     
+      <div className="flex   flex-col sm:flex-row justify-between items-baseline   sm:items-center">
         <div className="flex  flex-col sm:flex-row">
           <RadioInput
             label="Approved"
@@ -405,69 +405,73 @@ const handleSendToEmployeeByHr = async () =>{
             selectedValue={selectedValue}
           />
         </div>
-    
 
         <Button
           btnText={"Edit"}
           btnIcon={EditOutlinedIcon}
           textColor={"blue"}
           onClick={editButton}
+          padding={"p-2"}
         ></Button>
       </div>
 
-     
-        <TextInput
-          rows={4}
-          multiline={true}
-          onchange={handleCommentSection}
-          placeholder="Add comment ..."
-          value={comments}
-        />
- 
-{
-  role!== 'HR' ?
-  
-  <div className="flex gap-4 ">
-  <Button
-    fontWeight="semibold"
-    textColor="white"
-    btnText="Send to HR"
-    width="full"
-    type="submit"
-    backgroundColor={isBtnDisable ? "bg-gray" : "bg-green"}
-    padding={"p-3"}
-    onClick={handleSendToHR}
-    disable={isBtnDisable}
-  ></Button>
-  <Button
-    fontWeight="semibold"
-    textColor="white"
-    btnText="Return to Employee"
-    width="full"
-    type="submit"
-    backgroundColor={!isBtnDisable ? "bg-gray" : "bg-red"}
-    padding={"p-3"}
-    onClick={handleReturnToEmployee}
-    disable={!isBtnDisable}
-  ></Button>
-</div>
-:
-<Button
-  fontWeight="semibold"
-  textColor="white"
-  btnText="Send to Employee"
-  width="full"
-  type="submit"
-  backgroundColor={selectedValue === 'Approved' || selectedValue === 'Rejected' ? "bg-blue-light" : "bg-gray"}
-  padding={"p-3"}
-  cursor={selectedValue === 'Approved' || selectedValue === 'Rejected' ? "cursor-pointer" : "cursor-not-allowed"}
-  onClick={handleSendToEmployeeByHr}
-  disable={selectedValue !== 'Approved' && selectedValue !== 'Rejected'}
+      <TextInput
+        rows={4}
+        multiline={true}
+        onchange={handleCommentSection}
+        placeholder="Add comment ..."
+        value={comments}
+      />
 
-  // disable={selectedValue !== 'Approved' || selectedValue !== 'Rejected'}
-></Button>
+      {role !== "HR" ? (
+        <div className="flex gap-4 ">
+          <Button
+            fontWeight="semibold"
+            textColor="white"
+            btnText="Send to HR"
+            width="full"
+            type="submit"
+            backgroundColor={isBtnDisable ? "bg-gray" : "bg-green"}
+            padding={"p-3"}
+            onClick={handleSendToHR}
+            disable={isBtnDisable}
+          ></Button>
+          <Button
+            fontWeight="semibold"
+            textColor="white"
+            btnText="Return to Employee"
+            width="full"
+            type="submit"
+            backgroundColor={isReturnBtnDisable ? "bg-gray" : "bg-red"}
+            padding={"p-3"}
+            onClick={handleReturnToEmployee}
+            disable={isReturnBtnDisable}
+          ></Button>
+        </div>
+      ) : (
+        <Button
+          fontWeight="semibold"
+          textColor="white"
+          btnText="Send to Employee"
+          width="full"
+          type="submit"
+          backgroundColor={
+            selectedValue === "Approved" || selectedValue === "Rejected"
+              ? "bg-blue-light"
+              : "bg-gray"
+          }
+          padding={"p-3"}
+          cursor={
+            selectedValue === "Approved" || selectedValue === "Rejected"
+              ? "cursor-pointer"
+              : "cursor-not-allowed"
+          }
+          onClick={handleSendToEmployeeByHr}
+          disable={selectedValue !== "Approved" && selectedValue !== "Rejected"}
 
-}
+          // disable={selectedValue !== 'Approved' || selectedValue !== 'Rejected'}
+        ></Button>
+      )}
     </div>
   );
 };
