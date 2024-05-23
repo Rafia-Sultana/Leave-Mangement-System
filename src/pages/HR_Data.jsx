@@ -12,7 +12,7 @@ import { HR_other_leave_history } from "../utils/Dummy_Data";
 import HeadLine from "../components/HeadLine";
 import { Manager_Team_Leave_Info } from "./Manager_Data";
 import { useNavigate } from "react-router-dom";
-
+import useMediaQuery from '@mui/material/useMediaQuery';
 // export const HR_Leave_History = () => {
 //   return (
 //     <div>
@@ -25,6 +25,7 @@ export const HR_Leave_Request = () => {
   const [id, setId] = useState(0);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
+  const isSmallScreen= useMediaQuery('(max-width:600px)');
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 100 },
     { id: "delegated_to", label: "Delegated To", minWidth: 100 },
@@ -101,11 +102,13 @@ export const HR_Leave_Request = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await employee.getLeaveRequestOfEmployeesByHR();
-      console.log(res);
       setRows(res);
     };
     fetchData();
   }, []);
+  const smallScreenColumns = columns.filter(column => 
+   column.id === "employee_name" ||  column.id === "leave_name"  || column.id === "action"
+  );
 
   return (
     <div className="my-2">
@@ -114,10 +117,10 @@ export const HR_Leave_Request = () => {
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
       ) : (
         <CommonTable
-          columns={columns}
+          columns={isSmallScreen?smallScreenColumns:columns}
           rows={rows}
           viewDetails={handleClickOpen}
-        maxHeight={770}
+          maxHeight={770}
         />
       )}
       {open && (
@@ -182,11 +185,13 @@ export const HR_others_leave_history = () => {
      navigate(`/dashboard/view-teamMember-leave-info/${emp_id}`);
   };
   return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
+    <Box sx={{ width: "100%", typography: "body1"   } }>
       <Tabs
         value={value}
         onChange={handleChange}
-        aria-label="lab API tabs example"
+        variant="scrollable"
+        allowScrollButtonsMobile
+        aria-label="scrollable force tabs example"
       >
         {departments.map((department, index) => (
           <Tab label={department} value={index} key={index} />

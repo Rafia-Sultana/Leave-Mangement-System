@@ -55,7 +55,7 @@ const ViewAddEmpDetails = () => {
             <p className="text-lg sm:text-xl">{name}</p>
             <p
               className={`${
-              Boolean(status) ?  status === "active" ? "bg-green-dark" : "bg-red-dark" : ''
+              Boolean(status) ?  status === "Active" ? "bg-green-dark" : "bg-red-dark" : ''
               } w-3 h-3 rounded-full mr-2`}
             ></p>
           </div>
@@ -65,10 +65,10 @@ const ViewAddEmpDetails = () => {
       </div>
       <Box
         sx={{
-          // width: "30%",
+         width: {lg:"30%",md:'40%',sm:'60%'},
           typography: "body1",
           marginTop: "2%",
-          // marginLeft: "5%",
+
         }}
       >
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

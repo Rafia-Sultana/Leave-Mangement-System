@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useNavigate } from "react-router-dom";
 import TableCells from "./TableCells";
+import { TablePagination } from "@mui/material";
 
 const CommonTable = ({
   columns,
@@ -19,13 +20,18 @@ const CommonTable = ({
   handleActive
 }) => {
  const navigate = useNavigate();
+ const [page,setPage] = useState(0);
+ const [rowsPerPage, setRowsPerPage] = useState(10);
+ const handleChangePage = (event,newPage) => {
+  setPage(newPage);
+};
 
-
-  return (
-    <div
-
-     
-     >
+const handleChangeRowsPerPage = (event) => {
+  setRowsPerPage(+event.target.value);
+  setPage(0);
+};
+return (
+    <div>
       <Paper sx={{ width: "100%", borderRadius: borderRadius}}>
         <TableContainer
           sx={{ borderRadius: borderRadius, maxHeight:maxHeight}}
@@ -49,7 +55,9 @@ const CommonTable = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row, index) => {
+              {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {columns.map((column) => {
@@ -61,7 +69,7 @@ const CommonTable = ({
                           onDelete={() => {
                             console.log("Delete", index);
                             handleDelete(index);
-                            //  enqueueSnackbar(`SuccessFully Deleted on ${FormateDate(new Date())}!`, { variant: 'error' })
+                    
                           }}
                           onEdit={() => {
                             console.log("Edit", index);
@@ -81,6 +89,18 @@ const CommonTable = ({
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+  rowsPerPageOptions={[10, 25, 50]}
+  count={rows.length}
+  component="div"
+  rowsPerPage={rowsPerPage}
+  page={page}
+  onPageChange={handleChangePage} 
+  onRowsPerPageChange={handleChangeRowsPerPage}
+/>
+
+    
+
       </Paper>
 
    

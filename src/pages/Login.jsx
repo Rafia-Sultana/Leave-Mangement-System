@@ -8,10 +8,11 @@ import authJWT from "../services/auth.jsx";
 import Cookies from "js-cookie";
 import { UserContext } from "../context api/Context.jsx";
 import { getYear } from "../utils/FormateDate.js";
+import ShowSnackbar from "../components/ShowSnackbar.jsx";
 
 
 const Login = () => {
-  const { openSnackBar, setOpenSnackbar, handleSnackBarClose,setUserInfo } =
+  const { setOpenSnackbar,setUserInfo } =
   useContext(UserContext);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -46,9 +47,9 @@ const Login = () => {
         localStorage.setItem("accessToken", token);
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
         setUserInfo(userInfo);
-
+        setOpenSnackbar(true);
         navigate("/dashboard");
-        enqueueSnackbar('Logged In Successfully!', { variant: 'success' });
+        //enqueueSnackbar('Logged In Successfully!', { variant: 'success' });
       } 
   
     } catch (error) {
@@ -92,6 +93,7 @@ const Login = () => {
 
   return (
     <div className="">
+
       <div className="bg-[#DCF3FF] h-screen w-full flex flex-col   justify-center items-center relative">
         <div className="bg-blue-lightest w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
           <div className=" md:w-1/2 hidden md:flex flex-col justify-center  text-white pl-4">

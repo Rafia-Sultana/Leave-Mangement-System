@@ -19,8 +19,11 @@ import team from "../assets/styles/svg/team.svg";
 import personal from "../assets/styles/svg/personal.svg";
 import dashboard from "../assets/styles/svg/dashboard.svg";
 import managment from "../assets/styles/svg/managment.svg";
+import ShowSnackbar from "../components/ShowSnackbar.jsx";
 
 const Dashboard = () => {
+  const { openSnackBar, handleSnackBarClose } =
+  useContext(UserContext);
   const [open, setOpen] = useState({});
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -135,6 +138,14 @@ const Dashboard = () => {
 
   return (
     <div className="font-poppins">
+                {
+        <ShowSnackbar
+          open={openSnackBar}
+          handleClose={handleSnackBarClose}
+          text={"Logged In SuccessFully"}
+          duration={3000}
+        />
+      }
       <header className="h-20 bg-[#DCF3FF] flex items-center justify-between fixed w-full z-10 lg:relative ">
         <div className="flex items-center">
           <div className="menu-toggle" onClick={menuToggleClick}>

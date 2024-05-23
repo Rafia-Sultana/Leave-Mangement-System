@@ -183,7 +183,7 @@ console.log(rows);
       <div className="grid grid-cols-2 lg:grid-cols-4 my-5">
         {summary.map((x, index) => {
           return (
-            <section className="flex bg-[#add5f4] shadow-lg  p-[5%] m-[5%]  items-center ">
+            <section className="flex bg-[#add5f4] shadow-lg  p-[5%]  m-[3%] lg:m-[5%]  items-center ">
               <img
                 src={x.icon}
                 alt=""
