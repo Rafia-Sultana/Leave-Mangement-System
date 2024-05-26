@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import CommonTable from "../components/CommonTable";
 import Button from "../components/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import HolidayModal from "../components/HolidayModal";
 import HeadLine from "../components/HeadLine";
@@ -10,12 +9,8 @@ import { UserContext } from "../context api/Context";
 
 
 const ManageHoliday = () => {
-  const {holidayList,setHolidayList } =
-useContext(UserContext);
+  const {holidayList,setHolidayList } = useContext(UserContext);
   const [open, setOpen] = useState(false);
-
-  // const [officeHolidayEvents,setOfficeHolidayEvents] = useState([])
-  const [rows, setRows] = useState([]);
   const [row, setRow] = useState({});
 
   const handleOpen = () => {
@@ -36,9 +31,8 @@ useContext(UserContext);
     fetchData();
   }, []);
 
-  // let r ;
+
   const columns = [
-    // { id: "check", label:'', minWidth: 10 },
     { id: "name", label: "Title", minWidth: 10 },
     { id: "start_date", label: "Start Date", minWidth: 10 },
     { id: "end_date", label: "End Date", minWidth: 10 },
@@ -65,7 +59,7 @@ useContext(UserContext);
           fontSize={"sm"}
         ></Button>
       </div>
-      <CommonTable rows={holidayList} columns={columns} viewDetails={viewDetails} />
+      <CommonTable rows={holidayList} columns={columns} viewDetails={viewDetails} maxHeight={650} />
       {open && (
         <HolidayModal open={open} close={handleClose} row={row}></HolidayModal>
       )}

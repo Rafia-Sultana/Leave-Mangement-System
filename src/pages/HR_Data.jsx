@@ -3,29 +3,21 @@ import CommonTable from "../components/CommonTable";
 import { useEffect, useState } from "react";
 import employee from "../services/employee";
 import Modal from "../components/Modal";
-import { Employee_Leave_Request } from "./Employee_Data";
 import LottiePlayers from "../components/LottiePlayers";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
-import { HR_other_leave_history } from "../utils/Dummy_Data";
 import HeadLine from "../components/HeadLine";
-import { Manager_Team_Leave_Info } from "./Manager_Data";
 import { useNavigate } from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
-// export const HR_Leave_History = () => {
-//   return (
-//     <div>
-//       <Employee_Leave_Request />
-//     </div>
-//   );
-// };
+
 
 export const HR_Leave_Request = () => {
   const [id, setId] = useState(0);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const isSmallScreen= useMediaQuery('(max-width:600px)');
+
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 100 },
     { id: "delegated_to", label: "Delegated To", minWidth: 100 },
@@ -84,13 +76,8 @@ export const HR_Leave_Request = () => {
     //   align: "center",
     // }
   ];
-  // const rows = employee_data.leave_details;
-  const handleViewDetails = (id) => {
-    setId(id);
-  };
-  const handleGoBack = () => {
-    setId(0);
-  };
+
+
   const handleClickOpen = (value) => {
     setId(value);
     setOpen(true);
@@ -101,11 +88,12 @@ export const HR_Leave_Request = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await employee.getLeaveRequestOfEmployeesByHR();
-      setRows(res);
+      const result = await employee.getLeaveRequestOfEmployeesByHR();
+      setRows(result);
     };
     fetchData();
   }, []);
+
   const smallScreenColumns = columns.filter(column => 
    column.id === "employee_name" ||  column.id === "leave_name"  || column.id === "action"
   );
@@ -120,7 +108,7 @@ export const HR_Leave_Request = () => {
           columns={isSmallScreen?smallScreenColumns:columns}
           rows={rows}
           viewDetails={handleClickOpen}
-          maxHeight={770}
+          maxHeight={650}
         />
       )}
       {open && (
@@ -130,7 +118,7 @@ export const HR_Leave_Request = () => {
   );
 };
 
-const TabPanel = ({ children, value, index }) => {
+ export const TabPanel = ({ children, value, index }) => {
   return (
     <div className="" role="tabpanel" hidden={value !== index}>
       {value === index && <Box p={3}>{children}</Box>}
@@ -140,8 +128,11 @@ const TabPanel = ({ children, value, index }) => {
 
 export const HR_others_leave_history = () => {
   const navigate = useNavigate();
+
   const [departments,setDepartments]=useState([]);
   const [employeData,setEmployeeData]= useState({});
+  const [value, setValue] = useState(0);
+
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 100 },
     {
@@ -165,14 +156,6 @@ export const HR_others_leave_history = () => {
   ];
 
 
-  const [value, setValue] = useState(0);
- 
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
- 
   useEffect(() => {
     const fetchDataOfTeamLeave = async () => {
       const teamMembersDetails = await employee.getAllEmployeeLeaveHistoryByHR();
@@ -181,9 +164,16 @@ export const HR_others_leave_history = () => {
     };
     fetchDataOfTeamLeave();
   }, []);
+
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const handleViewDetails = async (index, emp_id) => {
      navigate(`/dashboard/view-teamMember-leave-info/${emp_id}`);
   };
+
   return (
     <Box sx={{ width: "100%", typography: "body1"   } }>
       <Tabs
@@ -196,8 +186,8 @@ export const HR_others_leave_history = () => {
         {departments.map((department, index) => (
           <Tab label={department} value={index} key={index} />
         ))}
-      </Tabs>
-      {departments.map((department, index) => (
+       </Tabs>
+       {departments.map((department, index) => (
         <TabPanel value={value} index={index} key={index}>
       
           <CommonTable 

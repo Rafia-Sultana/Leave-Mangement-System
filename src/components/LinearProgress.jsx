@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
 import "./../assets/styles/LinearBar.css";
 import employee from "../services/employee";
-import zIndex from "@mui/material/styles/zIndex";
+
 
 
 
@@ -15,7 +15,7 @@ useEffect(()=>{
   const fetch = async()=>{
 try {
   let res = await employee.getEmployeeLeaveChart();
-console.log(res);
+
  const sum = res.reduce((acc,{val})=>acc+val,0);
  setTotalLeave(sum);
   setCustomLegendItems(res);
@@ -42,7 +42,7 @@ let remaining = Math.abs(42-totalLeave)
       <div className="flex flex-col gap-2 border-s-2 border-gray">
         {customLegendItems.map(({ val, exp, type, color }, index) => {
           let percentage = exp === 0? 0:Math.min((val / exp) * 100, 100);
-          // console.log(val,exp,percentage);
+        
           let maxvalue = exp === 0? 0: Math.max(val/exp*100,100);
           let value =   (((maxvalue-100)/4)+10)/10;
           const maxPercentage = exp ===0? 0: Math.max(val/exp*100,100)/value;

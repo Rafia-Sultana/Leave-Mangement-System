@@ -6,7 +6,7 @@ body {
 
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
     body {
         overscroll-behavior: auto; 
         overflow: auto; 

@@ -11,23 +11,15 @@ import Button from "./Button";
 import employee from "../services/employee";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Manager_Leave_Approval } from "../pages/Manager_Data";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const Modal = ({ open, handleClose, historyData }) => {
-  const {empId} = useParams();
+  const { empId } = useParams();
 
   const location = useLocation();
   const navigate = useNavigate();
   const [logData, setLogData] = useState([]);
-  const [isclickedEditBtn,seIsClickedEditBtn]=useState(false);
-
-
-  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
-  const role = userInfoData.role;
-  
-
-
- 
+  const [isclickedEditBtn, seIsClickedEditBtn] = useState(false);
 
   const columns2 = [
     { id: "sender", label: "Sender", minWidth: 100 },
@@ -50,39 +42,27 @@ const Modal = ({ open, handleClose, historyData }) => {
       align: "right",
     },
   ];
-  const handleClickOpen = () => {
-    console.log("object");
-
-  };
+  const handleClickOpen = () => {};
 
   useEffect(() => {
-    
     const fetchData = async () => {
+      const logData = await employee?.getLog(historyData.application_id);
 
-    const logData = await employee?.getLog(historyData.application_id);
- 
-    setLogData(logData)
+      setLogData(logData);
+    };
 
-  };
-  
     fetchData();
   }, [historyData]);
 
-
   const handleEditButton = () => {
-  
     const data = {
       ...historyData,
-      btnText:'Send To Employee',
-      headerText:'Edit Leave Application'
-    }
-    navigate('/dashboard/manager_edit_leave_application',{state:data,
-    
-    
-    })
+      btnText: "Send To Employee",
+      headerText: "Edit Leave Application",
+    };
+    navigate("/dashboard/manager_edit_leave_application", { state: data });
+  };
 
-  }
-  
   return (
     <div className="w-full">
       <Dialog
@@ -90,11 +70,8 @@ const Modal = ({ open, handleClose, historyData }) => {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-       maxWidth={'lg'}
- 
+        maxWidth={"lg"}
         fullWidth
-        // style={{padding:"50px"}}
-       
       >
         <DialogTitle
           id="alert-dialog-title"
@@ -110,25 +87,28 @@ const Modal = ({ open, handleClose, historyData }) => {
           </div>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" className="space-y-5">
-            <Leave_Details info={historyData} isclickedEditBtn={isclickedEditBtn} />
-            {
-              location.pathname === `/dashboard/view-teamMember-leave-info/${empId}`
-              || location.pathname === `/dashboard/request-history`
-            ? (
+          <DialogContentText
+            id="alert-dialog-description"
+            className="space-y-5"
+          >
+            <Leave_Details
+              info={historyData}
+              isclickedEditBtn={isclickedEditBtn}
+            />
+            {location.pathname ===
+              `/dashboard/view-teamMember-leave-info/${empId}` ||
+            location.pathname === `/dashboard/request-history` ? (
               <CommonTable
                 columns={columns2}
-                rows={logData.length>0? logData:["not available"]}
+                rows={logData.length > 0 ? logData : ["not available"]}
                 viewDetails={handleClickOpen}
-                // flag={"modal"}
-            
               />
             ) : (
               <>
                 <Manager_Leave_Approval
                   applicationId={historyData?.application_id}
                   editButton={handleEditButton}
-                  handleClose={ handleClose}
+                  handleClose={handleClose}
                 />
               </>
             )}

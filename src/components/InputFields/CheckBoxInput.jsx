@@ -1,6 +1,8 @@
 import React from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+
+
 const CheckBoxInput = ({onchange,text,value="end"}) => {
     return (
         <div>
@@ -9,10 +11,7 @@ const CheckBoxInput = ({onchange,text,value="end"}) => {
             control={<Checkbox size='small'  onChange={onchange} />}
             label={text}
    />
-            
-
-
-         
+        
         </div>
     );
 };

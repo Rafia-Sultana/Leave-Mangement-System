@@ -8,7 +8,7 @@ import { UserContext } from "../context api/Context";
 import ShowSnackbar from "../components/ShowSnackbar";
 import Person2Icon from "@mui/icons-material/Person2";
 import employee from "../services/employee";
-// import validator from "validator";
+
 
 const Settings = () => {
   const { id } = useParams();

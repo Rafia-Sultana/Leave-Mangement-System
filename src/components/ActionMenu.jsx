@@ -56,25 +56,25 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
   };
 
   const handleSweetAlert = (action, confirmText, successTitle, successText) => {
-   return () => {
-    Swal.fire({
-      title: "Are you sure?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: confirmText,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        action();
-        Swal.fire({
-          title: successTitle,
-          text: successText,
-          icon: "success",
-        });
-      }
-    });
-   }
+    return () => {
+      Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: confirmText,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          action();
+          Swal.fire({
+            title: successTitle,
+            text: successText,
+            icon: "success",
+          });
+        }
+      });
+    };
   };
 
   const handleMenuOptionClick = (option) => {
@@ -82,35 +82,31 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
     const actionHandlers = {
       Edit: onEdit,
       View: viewDetails,
-      Delete:
-        handleSweetAlert(
-          onDelete,
-          "Yes, Delete it!",
-          "Deleted!!",
-          "leave has been deleted.."
-        ),
-      Inactive:
-        handleSweetAlert(
-          onDelete,
-          "Yes, Inactive it!",
-          "Inativated!!",
-          "Status has been Inactivated."
-        ),
-      Active: 
-        handleSweetAlert(
-          onActive,
-          "Yes, Active it!",
-          "Activated!!",
-          "Status has been activated."
-        ),
+      Delete: handleSweetAlert(
+        onDelete,
+        "Yes, Delete it!",
+        "Deleted!!",
+        "leave has been deleted.."
+      ),
+      Inactive: handleSweetAlert(
+        onDelete,
+        "Yes, Inactive it!",
+        "Inativated!!",
+        "Status has been Inactivated."
+      ),
+      Active: handleSweetAlert(
+        onActive,
+        "Yes, Active it!",
+        "Activated!!",
+        "Status has been activated."
+      ),
       Update: viewDetails,
-      Withdrawn:
-        handleSweetAlert(
-          onDelete,
-          "Yes, withdraw it!",
-          "WithDrawn!!",
-          "Your leave has been WithDrawn."
-        ),
+      Withdrawn: handleSweetAlert(
+        onDelete,
+        "Yes, withdraw it!",
+        "WithDrawn!!",
+        "Your leave has been WithDrawn."
+      ),
     };
 
     const actionHandler = actionHandlers[option];

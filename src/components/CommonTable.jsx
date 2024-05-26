@@ -22,7 +22,7 @@ const CommonTable = ({
  const navigate = useNavigate();
  const [page,setPage] = useState(0);
  const [rowsPerPage, setRowsPerPage] = useState(10);
- const handleChangePage = (event,newPage) => {
+ const handleChangePage = (_,newPage) => {
   setPage(newPage);
 };
 
@@ -67,20 +67,16 @@ return (
                           column={column}
                           viewDetails={() => viewDetails(index, row?.emp_id)}
                           onDelete={() => {
-                            console.log("Delete", index);
-                            handleDelete(index);
-                    
-                          }}
+                          handleDelete(index);
+                           }}
                           onEdit={() => {
-                            console.log("Edit", index);
-                            navigate("/dashboard/leave-application", {
+                           navigate("/dashboard/leave-application", {
                               state: row,
                             });
                           }}
                           onActive={()=>handleActive(index)}
                           index={index}
-           
-                        ></TableCells>
+                          ></TableCells>
                       );
                     })}
                   </TableRow>
@@ -98,10 +94,7 @@ return (
   onPageChange={handleChangePage} 
   onRowsPerPageChange={handleChangeRowsPerPage}
 />
-
-    
-
-      </Paper>
+ </Paper>
 
    
     </div>

@@ -16,13 +16,11 @@ const axiosInstance = axios.create({
 // Error handling function
 const handleRequestError = (error, errorMessage) => {
   console.error(error, errorMessage);
-throw error;
-
+  throw error;
 };
 
 // Function to make GET requests http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
 const getRequest = async (url, errorMessage) => {
-
   try {
     const token = getToken();
     const response = await axiosInstance.get(url, {
@@ -30,7 +28,7 @@ const getRequest = async (url, errorMessage) => {
         Authorization: `Bearer ${token}`,
       },
     });
-  
+
     return response.data;
   } catch (error) {
     if (error.response.data.error == "Token expired") {
@@ -45,29 +43,26 @@ const postRequest = async (url, params, errorMessage) => {
         Authorization: `Bearer ${token}`,
       },
     });
-  
+
     return response.data;
   } catch (error) {
-  handleRequestError(error, errorMessage);
+    handleRequestError(error, errorMessage);
   }
 };
 
-const putRequest = async(url,data,errorMessage) =>{
-
+const putRequest = async (url, data, errorMessage) => {
   try {
     const token = getToken();
-    const response = await axiosInstance.put(url,data,
-      {
+    const response = await axiosInstance.put(url, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
-    );
+    });
     return response.data;
   } catch (error) {
- handleRequestError(error, errorMessage);
+    handleRequestError(error, errorMessage);
   }
-}
+};
 
 const employee = {
   basicInfo: async (userId) => {
@@ -76,18 +71,16 @@ const employee = {
       "Error fetching basic info:"
     );
   },
- changePassword: async (userPassInfo) => {
+  changePassword: async (userPassInfo) => {
     return putRequest(
-      `/auth/change-password`,userPassInfo,
+      `/auth/change-password`,
+      userPassInfo,
       "Error fetching user Password info:"
     );
   },
 
-  employeeInfo:async (userId) => {
-    return getRequest(
-      `/employee/${userId}`,
-      "Error fetching employee info:"
-    );
+  employeeInfo: async (userId) => {
+    return getRequest(`/employee/${userId}`, "Error fetching employee info:");
   },
 
   leaveRequestSummary: async (userId) => {
@@ -118,9 +111,12 @@ const employee = {
   getLeaveTypes: async () => {
     return getRequest("/list/leave-types", "Error fetching leave types:");
   },
-  
+
   getEmployeeLeaveChart: async () => {
-    return getRequest("/employee/leave/chart", "Error fetching employee leave chart");
+    return getRequest(
+      "/employee/leave/chart",
+      "Error fetching employee leave chart"
+    );
   },
 
   // http://192.168.0.40:4040/api/auth/logout
@@ -137,7 +133,7 @@ const employee = {
   },
 
   postLeaveApplication: async (leaveInfo) => {
-    // console.log('leaveInfo',leaveInfo);
+    // ('leaveInfo',leaveInfo);
     return postRequest(
       `/employee/leave/apply`,
       leaveInfo,
@@ -146,13 +142,12 @@ const employee = {
   },
   ///employee/leave/application/withdrawn/:leave_id
   putLeaveApplicationWithDrwan: async (appId) => {
-  return putRequest(
+    return putRequest(
       `/employee/leave/application/withdrawn/${appId}`,
-       {},
+      {},
       "Error fetching to put  leave application withdrawn"
     );
   },
-
 
   // http://ip:4040/api/leave/emp_history/{userId} http://IP:4040/api/leave/history/emp/{UserId}
   getEmployeeRequestHistory: async (userId) => {
@@ -162,11 +157,14 @@ const employee = {
     );
   },
 
-  
   //http://ip:4040/api/leave/editapplication/{applicationID}
-  editLeaveApplication: async(applicationID,updateInfo) =>{
-   return putRequest(`/employee/leave/application/edit/${applicationID}`,updateInfo,"Error updating leave application");
-    },
+  editLeaveApplication: async (applicationID, updateInfo) => {
+    return putRequest(
+      `/employee/leave/application/edit/${applicationID}`,
+      updateInfo,
+      "Error updating leave application"
+    );
+  },
 
   //http://ip:4040/api/leave/logs/%7BApplication%20Id%7D%7D
   getLog: async (applicationId) => {
@@ -212,7 +210,7 @@ const employee = {
 
   // http://ip:4040/api/leave/decision?by=hr
   postDecisionByHR: async (decison) => {
-    console.log(decison);
+    decison;
     return postRequest(
       `/hr/leave/application/decision`,
       decison,
@@ -230,74 +228,123 @@ const employee = {
   },
 
   ///api/departments
-  getDepartmentList: async () =>{
-    return getRequest(`/list/departments`,
-    "Error Fetching to get departments"
-    )
+  getDepartmentList: async () => {
+    return getRequest(`/list/departments`, "Error Fetching to get departments");
   },
 
-    ///api/designations
-  getDesignationList: async () =>{
-    return getRequest(`/list/designations`,
-    "Error Fetching to get designations")
+  ///api/designations
+  getDesignationList: async () => {
+    return getRequest(
+      `/list/designations`,
+      "Error Fetching to get designations"
+    );
   },
-  getRoleList: async () =>{
-    return getRequest(`/list/roles`,
-    "Error Fetching to get roles")
+  getRoleList: async () => {
+    return getRequest(`/list/roles`, "Error Fetching to get roles");
   },
-
 
   //http://ip:4040/api/employee/add
-  addEmployee: async (employeeInfo) =>{
-   return postRequest(`/hr/add-employee`,employeeInfo,"Error Fetching to add employee by hr")
-  },
-  //body{
-// "status" : "active" / "inactive"
-// }				
-//  editLeaveApplication: async(applicationID,updateInfo) =>{
-//   return putRequest(`/leave/editapplication/${applicationID}`,updateInfo,"Error updating leave application");
-// },
-// http://IP:4040/api/employee/activity/{employee_id}
-  
-inActiveEmployee:async(employeeId,status) =>{
-  return putRequest(`/hr/employee-activity/${employeeId}`,
-status,
-  "Error when inactive employee")
-},
-
-//"/calender/weekly-holiday"
-officeHoliday:async(holidayInfo)=>{
-
-return postRequest("/holiday/office",holidayInfo,"Error for posting holidayInfo")
-},
-///holiday/office/{holiday_id}
-putOfficeHoliday:async(holidayId,holidayInfo)=>{
-  
-return putRequest(`/holiday/office/${holidayId}`,holidayInfo,"Error for posting holidayInfo")
-},
-
-getOfficeHoliday:async()=>{
-return getRequest("/holiday/office","Error for posting holidayInfo")
-},
-
-
-getOfficeHolidayList:async()=>{
-  return getRequest("/holiday/office?count=true","Error for posting holidayInfo")
+  addEmployee: async (employeeInfo) => {
+    return postRequest(
+      `/hr/add-employee`,
+      employeeInfo,
+      "Error Fetching to add employee by hr"
+    );
   },
 
-//http://ip:4040/api/employee/all
-getAllEmployee:async()=>{
-  return getRequest("/hr/employee-list","Error for getting all employee Info");
-},
+  inActiveEmployee: async (employeeId, status) => {
+    return putRequest(
+      `/hr/employee-activity/${employeeId}`,
+      status,
+      "Error when inactive employee"
+    );
+  },
 
-getAllEmployeeLeaveHistoryByHR: async()=>{
-  return getRequest("/hr/leave/all-history","Error for getting all employee  Info from hr side")
-},
-///hr/leave/members-history/:empId
+  //"/calender/weekly-holiday"
+  officeHoliday: async (holidayInfo) => {
+    return postRequest(
+      "/holiday/office",
+      holidayInfo,
+      "Error for posting holidayInfo"
+    );
+  },
+  ///holiday/office/{holiday_id}
+  putOfficeHoliday: async (holidayId, holidayInfo) => {
+    return putRequest(
+      `/holiday/office/${holidayId}`,
+      holidayInfo,
+      "Error for posting holidayInfo"
+    );
+  },
 
-getEachEmployeeLeaveHistoryByHR: async(empId)=>{
-  return getRequest(`/hr/leave/members-history/${empId}`,"Error for getting all employee  Info from hr side")
-},
+  getOfficeHoliday: async () => {
+    return getRequest("/holiday/office", "Error for posting holidayInfo");
+  },
+
+  getOfficeHolidayList: async () => {
+    return getRequest(
+      "/holiday/office?count=true",
+      "Error for posting holidayInfo"
+    );
+  },
+
+  //http://ip:4040/api/employee/all
+  getAllEmployee: async () => {
+    return getRequest(
+      "/hr/employee-list",
+      "Error for getting all employee Info"
+    );
+  },
+
+  getAllEmployeeLeaveHistoryByHR: async () => {
+    return getRequest(
+      "/hr/leave/all-history",
+      "Error for getting all employee  Info from hr side"
+    );
+  },
+  ///hr/leave/members-history/:empId
+
+  getEachEmployeeLeaveHistoryByHR: async (empId) => {
+    return getRequest(
+      `/hr/leave/members-history/${empId}`,
+      "Error for getting all employee  Info from hr side"
+    );
+  },
+
+  ///hr/employee/stat
+  getCardsInfoOfEmployeesByHR: async () => {
+    return getRequest(
+      `/hr/employee/stat`,
+      "Error for Cards Info Of Employees By HR"
+    );
+  },
+
+  ///hr/add-role
+  postDepartmentByHR: async (department) => {
+    return postRequest(
+      "/hr/add-department",
+      { department: department },
+      "Error for posting department"
+    );
+  },
+  postDesignationByHR: async (designation) => {
+    return postRequest(
+      "/hr/add-designation",
+      { designation: designation },
+      "Error for posting designation"
+    );
+  },
+  postRoleByHR: async (role) => {
+    return postRequest(
+      "/hr/add-role",
+      { role: role },
+      "Error for posting department"
+    );
+  },
+  ///hr/employee/on-leave
+  getOnLeaveEmployee: async (timestamp) => {
+    return getRequest(`/hr/employee/on-leave?date=${timestamp}`, "Error for getting on leave employee");
+  },
 };
 
 export default employee;

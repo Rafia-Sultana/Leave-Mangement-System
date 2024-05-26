@@ -157,10 +157,8 @@ const HolidayModal = ({ open, close, row }) => {
                   padding={"p-3"}
                   fontSize={"sm"}
                   width={"full"}
-                  //  onClick={handleFormSubmit}
-                  cursor={"cursor-pointer"}
-                  //  disable={hasSubmit?false:true}
-                ></Button>
+                 cursor={"cursor-pointer"}
+             ></Button>
               </Grid>
             </Grid>
           </form>

@@ -2,7 +2,6 @@ import TableCell from "@mui/material/TableCell";
 import ActionMenu from "./ActionMenu";
 
 
-
 const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive}) => {
 
   const statusStyles = {
@@ -15,13 +14,6 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive
   };
 
   let value = row[column.id];
-
-
-//   if(column.id=== 'status'){
-//    value = value?.charAt(0).toUpperCase() + value?.slice(1);
-// }
-
-
 
 
   switch (column.id) {

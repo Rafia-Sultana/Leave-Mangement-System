@@ -1,11 +1,9 @@
-
 import { createContext,useState } from "react";
-
 export const UserContext = createContext('');
 
 export const UserProvider = ({children}) => {
     const [userInfo, setUserInfo] = useState([]);
-    const [holidayList,setHolidayList] = useState([])
+    const [holidayList,setHolidayList] = useState([]);
     const [openSnackBar, setOpenSnackbar]= useState(false);
     
     const handleSnackBarClose=(reason)=>{
@@ -16,7 +14,8 @@ export const UserProvider = ({children}) => {
       }
 
 return (
-    <UserContext.Provider value={{userInfo, setUserInfo,openSnackBar,setOpenSnackbar, handleSnackBarClose,setHolidayList,holidayList}} >
+    <UserContext.Provider 
+    value={{userInfo, setUserInfo,openSnackBar,setOpenSnackbar, handleSnackBarClose,setHolidayList,holidayList}} >
      {children}
     </UserContext.Provider> 
 )

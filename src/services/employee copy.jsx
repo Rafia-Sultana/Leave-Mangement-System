@@ -116,7 +116,7 @@ const employee = {
   },
 
   postLeaveApplication: async (leaveInfo) => {
-    // console.log('leaveInfo',leaveInfo);
+    // ('leaveInfo',leaveInfo);
     return postRequest(
       `/leave/apply`,
       leaveInfo,
@@ -182,7 +182,7 @@ const employee = {
 
   // http://ip:4040/api/leave/decision?by=hr
   postDecisionByHR: async (decison) => {
-    console.log(decison);
+    (decison);
     return postRequest(
       `/leave/decision?by=hr`,
       decison,
@@ -226,7 +226,7 @@ const employee = {
 // http://IP:4040/api/employee/activity/{employee_id}
   
 inActiveEmployee:async(employeeId,status) =>{
-  console.log(employeeId);
+  (employeeId);
   return putRequest(`/employee/activity/${employeeId}`,
 status,
   "Error when inactive employee")

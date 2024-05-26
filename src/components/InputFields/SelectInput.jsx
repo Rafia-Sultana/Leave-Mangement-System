@@ -1,7 +1,6 @@
 import React from "react";
 import Select from "@mui/material/Select";
 import { FormControl } from "@mui/material";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 
@@ -19,7 +18,6 @@ const SelectInput = ({
   required=false,width=250
 }) => {
 
-  // console.log(value);
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {

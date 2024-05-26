@@ -56,7 +56,7 @@
 .fc-toolbar-title {
   font-size: 1.5rem !important;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   .menu-toggle {
     opacity: 100;
   }

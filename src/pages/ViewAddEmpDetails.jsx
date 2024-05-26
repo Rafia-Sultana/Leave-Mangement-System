@@ -16,7 +16,7 @@ const TabPanel = ({ children, value, index }) => {
 
 const ViewAddEmpDetails = () => {
   const location = useLocation();
-  console.log(location.state);
+  (location.state);
   const navigate = useNavigate();
   const {
     name,
@@ -31,7 +31,7 @@ const ViewAddEmpDetails = () => {
     secondary_des_2,
     email,
   } = location.state;
-  const [value, setValue] = React.useState(0); // State for managing tab value
+  const [value, setValue] = React.useState(0); 
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

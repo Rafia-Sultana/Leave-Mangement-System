@@ -5,38 +5,25 @@ import TextInput from "../components/InputFields/TextInput";
 import employee from "../services/employee";
 import Modal from "../components/Modal";
 import RadioInput from "../components/InputFields/RadioInput";
-import { Employee_Leave_Request } from "./Employee_Data";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import LottiePlayers from "../components/LottiePlayers";
 import Cards from "../components/Cards";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Avatar from "@mui/material/Avatar";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Leave_Application from "./Leave_Application";
 import HeadLine from "../components/HeadLine";
 import { UserContext } from "../context api/Context";
 import ShowSnackbar from "../components/ShowSnackbar";
 
-// export const Manager_Leave_History = () => {
-//   return ( <Employee_Leave_Request />);
-// };
+
 export const Manager_Team_Leave_Info = () => {
   const navigate = useNavigate();
+const [rows, setRows] = useState([]);
+ const [open, setOpen] = useState(false);
+ const isSmallScreen = useMediaQuery("(max-width:600px)");
 
-  const [rows, setRows] = useState([]);
 
-  const [open, setOpen] = useState(false);
-
-  const isSmallScreen = useMediaQuery("(max-width:600px)");
-
-  const handleClickOpen = (value) => {
-    setId(value);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 170 },
@@ -58,7 +45,6 @@ export const Manager_Team_Leave_Info = () => {
   useEffect(() => {
     const fetchDataOfTeamLeave = async () => {
       const teamMembersDetails = await employee.getLeaveHistroryOfTeam();
-      // console.log(teamMembersDetails);
       setRows(teamMembersDetails);
     };
     fetchDataOfTeamLeave();
@@ -178,7 +164,8 @@ export const Manager_View_Each_TeamMember_Leave_Info = () => {
           rows={rows2}
           viewDetails={handleClickOpen}
           borderRadius={"10px"}
-          // maxHeight={400}
+          maxHeight={440}
+          
         />
       </div>
       {open && (
@@ -266,7 +253,7 @@ export const Manager_Leave_Request = () => {
     };
     fetchData();
   }, []);
-  console.log(rows);
+  (rows);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const smallScreenColumns = columns.filter(
     (column) =>
@@ -328,7 +315,7 @@ export const Manager_Leave_Approval = ({
 
   const handleSendToHR = async () => {
     const result = await employee.postDecisionByTeamLead(deciosnByTeamLead);
-    console.log(result);
+    (result);
 
     if (result) {
       setOpenSnackbar(true);
@@ -349,14 +336,13 @@ export const Manager_Leave_Approval = ({
     application_id: applicationId,
     leave_status: selectedValue,
     comments: comments,
-    // sent_by: role,
-    sent_to: "Applicant",
+ sent_to: "Applicant",
     processing_time: new Date().toISOString(),
   };
   //postDecisionByHR
   const handleSendToEmployeeByHr = async () => {
     const result = await employee.postDecisionByHR(deciosnByHR);
-    console.log(result);
+    (result);
 
     if (result) {
       setOpenSnackbar(true);

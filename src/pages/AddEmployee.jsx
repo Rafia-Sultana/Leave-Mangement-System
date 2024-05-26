@@ -59,24 +59,7 @@ const AddEmployee = () => {
   const [openOtherDepartments, setOpenOtherDepartments] = useState(false);
   const [hasSubmit, setHasSubmit] = useState(false);
 
-  // let roleOptions = [
-  //   {
-  //     id: 1,
-  //     role: "Admin",
-  //   },
-  //   {
-  //     id: 2,
-  //     role:"HR" ,
-  //   },
-  //   {
-  //     id: 3,
-  //     role:"Team Lead" ,
-  //   },
-  //   {
-  //     id: 4,
-  //     role: "Employee",
-  //   },
-  // ];
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -98,13 +81,14 @@ const AddEmployee = () => {
       const departments = await employee.getDepartmentList();
       const roleOptions = await employee.getRoleList();
       const designations = await employee.getDesignationList();
+     
       setRoleOptions(roleOptions);
-      setDepartmentsList(departments);  // Setting departmentList here
+      setDepartmentsList(departments);  
       
       setDesignationsList(designations);
     };
-    fetchData();  // Calling fetchData here
-}, []);  // useEffect dependency
+    fetchData();  
+}, []);  
 
 
 
@@ -131,8 +115,7 @@ const AddEmployee = () => {
     setOpenOtherDepartments(!openOtherDepartments);
   };
  const hashedPassword = bcrypt.hashSync(addEmployeeForm.password,'$2a$10$CwTycUXWue0Thq9StjUM0u');
-// console.log({...logInData,password:hashedPassword});
-// console.log(logInData);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -199,20 +182,18 @@ const AddEmployee = () => {
         role: roleId,
       };
     }
-    // Submit the updated form data
+  
     let timestamp = convertToIsoString(
       updatedFormData?.joining_date,
       "6:00 PM"
     );
     let res = { ...updatedFormData, joining_date: timestamp };
-    // console.log(res); 
+
     let result = await employee.addEmployee(res);
     setAddEmployeeForm(initialFormState);
     if (result.success == true) {
       setOpenSnackbar(true);
-      //  setTimeout(()=>{
-      //   navigate('/dashboard/manage-employee')
-      //  },600)
+   
     }
   };
 
@@ -228,7 +209,7 @@ const AddEmployee = () => {
       Object.values(addEmployeeForm).every((val) => val !== "");
     setHasSubmit(isFilled);
   }, [addEmployeeForm]);
-console.log(departmentsList);
+(departmentsList);
   return (
     <Box className="">
       {
@@ -251,7 +232,7 @@ console.log(departmentsList);
         gap-5 lg:gap-20 lg:mt-6 lg:pl-4"
         >
           <div className="bg-[#CCCCCC] rounded-full h-40 w-40 relative  shadow-md ">
-            {/* Your file input and camera icon */}
+      
             {imageURL ? (
               <img
                 src={imageURL}

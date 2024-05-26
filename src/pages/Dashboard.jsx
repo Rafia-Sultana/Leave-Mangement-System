@@ -1,37 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { usersInfo } from "../utils/Dummy_Data.js";
-import Button from "../components/Button.jsx";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Tooltip } from "@mui/material";
-import { Box } from "@mui/material";
+import React, { useContext, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import Overview from "./Overview.jsx";
 import "../assets/styles/Dashboard.css";
 import NavProfile from "../components/NavProfile.jsx";
 import Badge from "@mui/material/Badge";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import { UserContext } from "../context api/Context.jsx";
-import employee from "../services/employee.jsx";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import team from "../assets/styles/svg/team.svg";
 import personal from "../assets/styles/svg/personal.svg";
 import dashboard from "../assets/styles/svg/dashboard.svg";
 import managment from "../assets/styles/svg/managment.svg";
-import ShowSnackbar from "../components/ShowSnackbar.jsx";
+
 
 const Dashboard = () => {
-  const { openSnackBar, handleSnackBarClose } =
-  useContext(UserContext);
+
   const [open, setOpen] = useState({});
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
 
   const location = useLocation();
   const navigate = useNavigate();
   const role = userInfoData.role;
-  const userId = userInfoData.emp_id;
-  const name = userInfoData.name;
+
 
   const menuToggleClick = () => {
     let menuToggle = document.querySelector(".menu-toggle");
@@ -87,10 +76,8 @@ const Dashboard = () => {
         links: [
           createNavLink("manage-employee", "Employee"),
           createNavLink("hr-add-holiday", "Holiday"),
-          // createNavLink("hr-remove-employee","Remove Employee"),
-          // createNavLink("hr-add-hoilday","Add Holiday"),
-          // createNavLink("hr-remove-hoilday","Remove Hoilday"),
-          // createNavLink("hr-edit-employee","Edit Employee"),
+          createNavLink("hr-add-accordion-form","Others"),
+    
         ],
         icon: managment,
       },
@@ -117,10 +104,8 @@ const Dashboard = () => {
         links: [
           createNavLink("manage-employee", "Employee"),
           createNavLink("hr-add-holiday", "Holiday"),
-          // createNavLink("hr-remove-employee","Remove Employee"),
-          // createNavLink("hr-add-hoilday","Add Holiday"),
-          // createNavLink("hr-remove-hoilday","Remove Hoilday"),
-          // createNavLink("hr-edit-employee","Edit Employee"),
+         
+  
         ],
         icon: managment,
       },
@@ -131,22 +116,13 @@ const Dashboard = () => {
     setOpen({ [index]: !open[index] });
   };
   const isNavActive = (to) => {
-    // console.log(location.pathname === to);
-
-    return location.pathname === to;
+ return location.pathname === to;
   };
 
   return (
     <div className="font-poppins">
-                {
-        <ShowSnackbar
-          open={openSnackBar}
-          handleClose={handleSnackBarClose}
-          text={"Logged In SuccessFully"}
-          duration={3000}
-        />
-      }
-      <header className="h-20 bg-[#DCF3FF] flex items-center justify-between fixed w-full z-10 lg:relative ">
+     
+      <header className="h-20 bg-[#DCF3FF] flex items-center justify-between fixed w-full z-10  ">
         <div className="flex items-center">
           <div className="menu-toggle" onClick={menuToggleClick}>
             <div className="hamburger"></div>
@@ -158,7 +134,7 @@ const Dashboard = () => {
           >
             LMS
           </p>
-          {/* <p className="mt-2 text-sm"  style={{fontFamily:'Nova Flat'}}>Tiller</p> */}
+         
           <p className="hidden lg:block text-2xl absolute left-96">
             Leave Management System
           </p>
@@ -172,21 +148,23 @@ const Dashboard = () => {
       </header>
 
       <div className="flex">
-        <nav
-          className="h-[calc(100vh-80px)]  bg-[#DCF3FF] text-black w-[60%] md:w-[30%] lg:w-[22%]
-        
-        site-nav  border-t-white  mt-20  lg:mt-0"
+        <nav 
+          className="h-[100vh]  bg-[#DCF3FF] text-black 
+          w-[60%] md:w-[30%] lg:w-[22%] xl:w-[18%]
+  site-nav  border-t-white  mt-20 lg:mt-0 fixed"
         >
           <ul className="flex flex-col items-center  gap-8 ml-2 ">
             <li
-              className="mt-10 w-[100%] xl:w-[80%] 
+              className=" mt-10 lg:mt-32 w-[100%] xl:w-[80%] 
              bg-[#DCF3FF] rounded flex justify-start items-center gap-3 py-1 "
             >
               <img src={dashboard} alt="" className="w-6 h-6" />
               <NavLink
                 to={"/dashboard"}
                 style={{
+                  
                   color: isNavActive("/dashboard") ? "white" : "black",
+                  fontWeight:"bold",
                   backgroundColor: isNavActive("/dashboard")
                     ? "#7BD3FF"
                     : "transparent",
@@ -227,9 +205,9 @@ const Dashboard = () => {
             ))}
           </ul>
         </nav>
-        {/* please add this color  //bg-[#E8F7FF] */}
+  
         <main 
-        className="w-full  px-8   bg-[#E8F7FF] min-h-screen  mt-20 lg:mt-0 ">
+        className=" w-full px-8 bg-[#E8F7FF] min-h-screen mt-20 lg:ml-[22%] xl:ml-[18%]">
           <Outlet />
         </main>
       </div>

@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../components/Button.jsx";
-import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import FormateDate from "../utils/FormateDate.js";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
+import { useLocation } from "react-router-dom";
 import AutoComplete from "../components/InputFields/AutoComplete.jsx";
 import InputAdornment from "@mui/material/InputAdornment";
 import employee from "../services/employee.jsx";
@@ -21,14 +19,16 @@ import {
 } from "../utils/FormateDate.js";
 import { UserContext } from "../context api/Context.jsx";
 import ShowSnackbar from "../components/ShowSnackbar.jsx";
+
+
+
 const Leave_Application = () => {
   const { openSnackBar, setOpenSnackbar, handleSnackBarClose } =
     useContext(UserContext);
   const { state } = useLocation();
- 
-// console.log(state);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
+
   const initialState = {
     emp_id: userId,
     leave_name: state?.leave_name || "",
@@ -40,6 +40,8 @@ const Leave_Application = () => {
     reason: state?.reason || "",
     delegated_to: state?.delegated_to || "",
   };
+
+
   const [formData, setFormData] = useState(initialState);
   const [leaveTypes, setLeaveTypes] = useState(null);
   const [teamMembersList, setTeamMembersList] = useState(null);
@@ -48,7 +50,7 @@ const Leave_Application = () => {
   const [isoTime, setIsoTime] = useState(null);
   const [endIsoTime, setEndIsoTime] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState(null);
-  const [customLegendItems,setCustomLegendItems]= useState([]);
+  const [remaining,setRemaining]= useState(0);
 
 
   useEffect(() => {
@@ -64,22 +66,26 @@ const Leave_Application = () => {
       setEndIsoTime(endTimestamp);
     }
   }, [startTime, endTime, formData?.start_date, formData?.end_date]);
+
   const handleDateChange = (date, label) => {
     setFormData((prevState) => ({
       ...prevState,
       [label]: date,
     }));
   };
+
   const disablePreviousDates = (date) => {
     if (formData.end_date) {
       return new Date(formData.end_date) < new Date(date.$d);
     }
   };
+
   const disableFutureDates = (date) => {
     if (formData.start_date) {
       return new Date(formData.start_date) > new Date(date.$d);
     }
   };
+
   const getTotalDays = () => {
     //  per day Miliseconds = 1000*60*60*24 = 86400000 ;
     if (isoTime !== null && endIsoTime !== null) {
@@ -119,17 +125,30 @@ const Leave_Application = () => {
       return { days: 0, half: 0 };
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       let leaveTypeData = await employee.getLeaveTypes();
+    
       let teamMembersList = await employee.getTeamMembersOfUser(userId);
-      let customLegendItems = await employee.getEmployeeLeaveChart();
-      setCustomLegendItems(customLegendItems);
       setTeamMembersList(teamMembersList);
       setLeaveTypes(leaveTypeData);
+      let customLegendItems = await employee.getEmployeeLeaveChart();
+      let remaining ;
+      if(formData.leave_name) {
+        let leaveCount = customLegendItems.find(x => x.type == formData.leave_name);
+        console.log(leaveCount);
+        remaining = leaveCount.exp - leaveCount.val;
+    
+         setRemaining(remaining);
+      }
+ 
+     
     };
     fetchData();
-  }, []);
+  }, [formData.leave_name]);
+
+
   const handleInputChange = (e, newValue, field) => {
     const { name, value } = e?.target;
     setFormData((prevFormData) => ({
@@ -137,14 +156,19 @@ const Leave_Application = () => {
       [name || field]: value || newValue,
     }));
   };
+
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     setSelectedFiles(file);
   };
+
   const LeaveNames = leaveTypes?.map((leave) => leave?.leave_name);
   const teamNames = teamMembersList?.map((team) => team?.employee_name);
   let joiningdate2 = getJoiningDate(formData?.end_date);
   let numberOfDays = formData?.end_date ? getTotalDays()?.half : 0;
+
+
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -159,72 +183,62 @@ const Leave_Application = () => {
     isoTime,
     endIsoTime,
   ]);
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let leaveTypeId = leaveTypes?.find(
-      (x) => x.leave_name == formData?.leave_name
-    )?.id;
-    let delegatedId = teamMembersList?.find(
-      (x) => x.employee_name == formData?.delegated_to
-    )?.emp_id;
-    let joiningDateTimestamp = joiningdate2?.toISOString();
-    let durations = getTotalDays()?.days;
-    let updateForm = {
-      ...formData,
-      start_date: isoTime,
-      end_date: endIsoTime,
-      leave_type_id: leaveTypeId,
-      delegated_to: delegatedId,
-      joining_date: joiningDateTimestamp,
-      duration: durations,
-      application_date: new Date().toISOString(),
-    };
-   
-    // let result = await employee.postLeaveApplication(updateForm);
-    let result;
-    if(state){
-       result =  await employee.editLeaveApplication(
-        state.application_id,
-        updateForm
-      )
-      console.log(result);
-      }
-      else{
-         result =  await employee.postLeaveApplication(
-          updateForm
+  
+    try {
+      const leaveTypeId = leaveTypes?.find((x) => x.leave_name === formData?.leave_name)?.id;
+      const delegatedId = teamMembersList?.find((x) => x.employee_name === formData?.delegated_to)?.emp_id;
+      const joiningDateTimestamp = joiningdate2?.toISOString();
+      const durations = getTotalDays()?.days;
+  
+      const updateForm = {
+        ...formData,
+        start_date: isoTime,
+        end_date: endIsoTime,
+        leave_type_id: leaveTypeId,
+        delegated_to: delegatedId,
+        joining_date: joiningDateTimestamp,
+        duration: durations,
+        application_date: new Date().toISOString(),
+      };
+  
+      let result;
+      if (state) {
+
+          result = await employee.editLeaveApplication(state.application_id, updateForm);
     
-         );
-         console.log(result);
+      } else { result = await employee.postLeaveApplication(updateForm); }
+  
+      if (result) {
+        setOpenSnackbar(true);
       }
-    if (result) {
-      setOpenSnackbar(true);
+  
+      setFormData({
+        emp_id: userId,
+        leave_name: "",
+        start_date: null,
+        end_date: null,
+        duration: 0,
+        joining_date: "",
+        reason: "",
+        delegated_to: "",
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
-
-    setFormData({
-      emp_id: userId,
-      leave_name: "",
-      start_date: null,
-      end_date: null,
-      duration: 0,
-      joining_date: "",
-      reason: "",
-      delegated_to: "",
-    });
   };
-
-
+  
 
 
  
 
-  function remainingDate() {
-    return customLegendItems.find(
-      (option) => option.type === formData?.leave_name
-    ).val;
-  }
   const getSelectStartTime = (e) => {
     setStartTime(e.target.value);
   };
+  
   const getSelectEndTime = (e) => {
     setEndTime(e.target.value);
   };
@@ -268,7 +282,7 @@ const Leave_Application = () => {
             />
             {formData?.leave_name && (
               <div className="text-xs">
-                {`Remaining Days:${remainingDate()}`}{" "}
+                {`${remaining<0?"Over":"Remaining"} Days:${Math.abs(remaining)}`}{" "}
               </div>
             )}
           </Grid>

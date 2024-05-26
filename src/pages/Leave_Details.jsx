@@ -7,9 +7,11 @@ import employee from "../services/employee";
 import AutoComplete from "../components/InputFields/AutoComplete";
 
 const Leave_Details = ({ info, isclickedEditBtn }) => {
-  console.log(info);
+
+
   const [leaveTypes, setLeaveTypes] = useState(null);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
+
   const {
     delegated_to,
     leave_name,
@@ -19,9 +21,9 @@ const Leave_Details = ({ info, isclickedEditBtn }) => {
     start_date,
     end_date,
     total_days,
-    
     application_id,
   } = info;
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +33,7 @@ const Leave_Details = ({ info, isclickedEditBtn }) => {
 
     fetchData();
   }, []);
+
   const handleInputChange = () => {};
 
   return (
@@ -57,7 +60,7 @@ const Leave_Details = ({ info, isclickedEditBtn }) => {
               label={"Leave Type"}
               field={"leave_type_id"}
               handleInputChange={handleInputChange}
-              // value={selectedLeaveType || selectedOptionOfLeaveName || null}
+    
             />
           ) : (
             <div>
