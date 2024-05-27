@@ -48,7 +48,7 @@ setLogInData((prevFormData) => ({ ...prevFormData, [name]: value }));
   
     } catch (error) {
       localStorage.removeItem("acccessToken");
-      console.error("Error logging in:", error);
+      console.error("Error  logging in :", error);
       enqueueSnackbar(`${error.response.data.error}`, {
         variant: "error",
       });
