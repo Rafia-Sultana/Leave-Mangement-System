@@ -106,7 +106,7 @@ setLogInData((prevFormData) => ({ ...prevFormData, [name]: value }));
         <p className="absolute bottom-5">
           Copyright © {getYear(new Date())} Tiller | All rights Reserved.
         </p>
-      {/* </div> */}
+     
     </div>
   );
 };
