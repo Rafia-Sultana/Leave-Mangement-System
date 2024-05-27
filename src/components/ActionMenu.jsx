@@ -8,6 +8,7 @@ import "sweetalert2/src/sweetalert2.scss";
 import { useLocation } from "react-router-dom";
 
 const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
+
   const location = useLocation();
 
   let value = row["leave_status"];
@@ -45,6 +46,10 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
     }
   }
 
+  
+if(location.pathname === "/dashboard/hr-view-on-leave"){
+  options = ["View"];
+}
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);

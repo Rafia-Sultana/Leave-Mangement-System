@@ -137,7 +137,7 @@ const Leave_Application = () => {
       let remaining ;
       if(formData.leave_name) {
         let leaveCount = customLegendItems.find(x => x.type == formData.leave_name);
-        console.log(leaveCount);
+      
         remaining = leaveCount.exp - leaveCount.val;
     
          setRemaining(remaining);

@@ -14,6 +14,7 @@ import { Manager_Leave_Approval } from "../pages/Manager_Data";
 import { useState, useEffect } from "react";
 
 const Modal = ({ open, handleClose, historyData }) => {
+  
   const { empId } = useParams();
 
   const location = useLocation();
@@ -44,15 +45,15 @@ const Modal = ({ open, handleClose, historyData }) => {
   ];
   const handleClickOpen = () => {};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const logData = await employee?.getLog(historyData.application_id);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const logData = await employee?.getLog(historyData.application_id);
 
-      setLogData(logData);
-    };
+  //     setLogData(logData);
+  //   };
 
-    fetchData();
-  }, [historyData]);
+  //   fetchData();
+  // }, [historyData]);
 
   const handleEditButton = () => {
     const data = {

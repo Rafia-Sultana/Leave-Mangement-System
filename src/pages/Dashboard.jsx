@@ -164,7 +164,7 @@ const Dashboard = () => {
                 style={{
                   
                   color: isNavActive("/dashboard") ? "white" : "black",
-                  fontWeight:"bold",
+                  // fontWeight:"bold",
                   backgroundColor: isNavActive("/dashboard")
                     ? "#7BD3FF"
                     : "transparent",

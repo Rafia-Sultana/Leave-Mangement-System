@@ -7,13 +7,18 @@ import { convertToIsoString } from "../utils/FormateDate";
 import CommonTable from "../components/CommonTable";
 import LottiePlayers from "../components/LottiePlayers";
 
+
 const OnLeave = () => {
   const [rows, setRows] = useState([]);
   const [selectedDate, setSelectedDate] = useState(dayjs());
+
   const columns = [
     { id: "name", label: "Name", minWidth: 100 },
+    { id: "leave_name", label: "Leave Type", minWidth: 100 },
+    { id: "designation", label: "Designation", minWidth: 100 },
+    { id: "department", label: "Department", minWidth: 100 },
     { id: "delegated_to", label: "Delegated To", minWidth: 100 },
-    { id: "leave_type", label: "Leave Type", minWidth: 100 },
+   
     {
       id: "start_date",
       label: "Start Date",
@@ -33,18 +38,14 @@ const OnLeave = () => {
       align: "right",
     },
 
-    {
-      id: "action",
-      label: "Action",
-      minWidth: 170,
-      align: "center",
-    },
+
   ];
 
   const fetchData = useCallback(async () => {
     try {
       const timestamp = convertToIsoString(selectedDate, "12:00 AM");
       const res = await employee.getOnLeaveEmployee(timestamp);
+     
       setRows(res);
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -58,6 +59,7 @@ const OnLeave = () => {
   const handleDateChange = useCallback((newDate) => {
     setSelectedDate(newDate);
   });
+
 
   return (
     <div>
@@ -78,6 +80,7 @@ const OnLeave = () => {
           <CommonTable rows={rows} columns={columns} />
         )}
       </div>
+      
     </div>
   );
 };
