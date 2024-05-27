@@ -2,7 +2,7 @@
 const Spinner = () => {
     return (
         <div>
-            <span className="loading loading-dots loading-md"></span>
+            <span className= "loading loading-dots loading-md"></span>
             
         </div>
     );
