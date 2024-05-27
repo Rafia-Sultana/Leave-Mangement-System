@@ -73,7 +73,7 @@ const OnLeave = () => {
           value={dayjs()}
         />
       </div>
-      <div className="mt-[2%]">
+      <div className="mt-[3%]">
         {rows.length === 0 ? (
         <LottiePlayers src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json" />
         ) : (
