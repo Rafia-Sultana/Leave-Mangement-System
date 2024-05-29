@@ -16,7 +16,6 @@ import { useState, useEffect } from "react";
 const Modal = ({ open, handleClose, historyData }) => {
   
   const { empId } = useParams();
-
   const location = useLocation();
   const navigate = useNavigate();
   const [logData, setLogData] = useState([]);

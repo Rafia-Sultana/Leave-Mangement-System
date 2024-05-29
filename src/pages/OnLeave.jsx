@@ -70,7 +70,7 @@ const OnLeave = () => {
           required={false}
           handleDateChange={handleDateChange}
           variant="standard"
-          value={dayjs()}
+          value={selectedDate}
         />
       </div>
       <div className="mt-[3%]">

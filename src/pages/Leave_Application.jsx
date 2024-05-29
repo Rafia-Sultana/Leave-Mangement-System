@@ -26,6 +26,7 @@ const Leave_Application = () => {
   const { openSnackBar, setOpenSnackbar, handleSnackBarClose } =
     useContext(UserContext);
   const { state } = useLocation();
+
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
 
@@ -130,7 +131,7 @@ const Leave_Application = () => {
     const fetchData = async () => {
       let leaveTypeData = await employee.getLeaveTypes();
     
-      let teamMembersList = await employee.getTeamMembersOfUser(userId);
+      let teamMembersList = await employee.getTeamMembersOfUser( state? state.emp_id: userId);
       setTeamMembersList(teamMembersList);
       setLeaveTypes(leaveTypeData);
       let customLegendItems = await employee.getEmployeeLeaveChart();

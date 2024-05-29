@@ -3,7 +3,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SelectInput from "../components/InputFields/SelectInput.jsx";
 import TextInput from "../components/InputFields/TextInput.jsx";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import totalEmployee from "../assets/styles/svg/totalEmployee.svg";
 import activeEmployee from "../assets/styles/svg/activeEmployee.svg";
 import leaveEmployee from "../assets/styles/svg/leaveEmployee.svg";
@@ -170,9 +170,9 @@ const ManageEmployeeTable = () => {
     navigate(`/dashboard/view-add-emp/${empId}`, { state: empDetails });
   };
   
-const handleOnLeaveEmployee = () => {
-navigate("/dashboard/hr-view-on-leave");
-}
+const handleOnLeaveEmployee = useCallback( () => {
+  navigate("/dashboard/hr-view-on-leave");
+  },[navigate])
   return (
     <div className="">
       {/* //cards */}

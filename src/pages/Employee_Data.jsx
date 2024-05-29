@@ -58,6 +58,7 @@ export const Employee_Leave_Request = () => {
         userId
       );
 
+
        let leaveTypeData = await employee.getLeaveTypes();
        let leave_names = leaveTypeData.map((x)=>x.leave_name);
        setLeaveTypesOption(leave_names);
