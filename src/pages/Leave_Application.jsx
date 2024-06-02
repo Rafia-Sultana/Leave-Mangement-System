@@ -129,16 +129,19 @@ const Leave_Application = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let leaveTypeData = await employee.getLeaveTypes();
-    
-      let teamMembersList = await employee.getTeamMembersOfUser( state? state.emp_id: userId);
+      const [leaveTypeData,customLegendItems,teamMembersList] = await Promise.all([employee.getLeaveTypes(),
+        employee.getEmployeeLeaveChart(),employee.getTeamMembersOfUser( state? state.emp_id: userId)
+      
+      ]);
+
       setTeamMembersList(teamMembersList);
       setLeaveTypes(leaveTypeData);
-      let customLegendItems = await employee.getEmployeeLeaveChart();
+    
       let remaining ;
       if(formData.leave_name) {
+ 
         let leaveCount = customLegendItems.find(x => x.type == formData.leave_name);
-      
+    
         remaining = leaveCount.exp - leaveCount.val;
     
          setRemaining(remaining);

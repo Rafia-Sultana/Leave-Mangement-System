@@ -77,9 +77,11 @@ const ManageEmployeeTable = () => {
     const matchedRows = async () => {
       let column = selectedColumn?.toLowerCase();
       let searchValues = searchValue?.toLowerCase();
-      const cardsInfo = await employee.getCardsInfoOfEmployeesByHR();
+
+      const [cardsInfo,allEmployee] = await Promise.all([employee.getCardsInfoOfEmployeesByHR(),
+      employee.getAllEmployee()]
+      )
       setSummary(cardsInfo);
-      let allEmployee = await employee.getAllEmployee();
 
       const concatNames = (...names) => {
         return names.filter(Boolean).join(" ");

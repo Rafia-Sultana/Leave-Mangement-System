@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import Avatars from "../components/Avatars";
@@ -16,7 +16,7 @@ const TabPanel = ({ children, value, index }) => {
 
 const ViewAddEmpDetails = () => {
   const location = useLocation();
-  (location.state);
+
   const navigate = useNavigate();
   const {
     name,

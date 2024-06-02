@@ -26,8 +26,7 @@ const ManageHoliday = () => {
     const fetchData = async () => {
       const getOfficeHolidays = await employee.getOfficeHolidayList();
       setHolidayList(getOfficeHolidays);
-
-    };
+ };
     fetchData();
   }, []);
 

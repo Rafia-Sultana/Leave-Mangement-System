@@ -5,29 +5,22 @@ import employee from "../services/employee";
 
 const ApexChart = () => {
   const [customLegendItems, setCustomLegendItems] = useState([]);
-  const [totalLeave, setTotalLeave] = useState(0);
+  const [leaveBasic, setLeaveBasic] = useState({});
+  const {totalYearlyLeave,totalLeaveTaken,leaveRemaining}=leaveBasic;
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        let res = await employee.getEmployeeLeaveChart();
-
-        let filteredResult = res.filter(
-          (x) =>
-            x.type !== "Leave Without Pay" && x.type !== "Compensation Leave"
-        );
-
-        const sum = filteredResult.reduce((acc, { val }) => acc + val, 0);
-
-        setTotalLeave(sum);
-        setCustomLegendItems(res);
+      let [employeeLeaveChart, basicInfoChart] = await Promise.all([ employee.getEmployeeLeaveChart(), employee.basicInfoChart()]);
+        setLeaveBasic(basicInfoChart);
+        setCustomLegendItems(employeeLeaveChart);
       } catch (error) {
         console.error(error);
       }
     };
     fetch();
   }, []);
-  let remaining = Math.abs(42 - totalLeave);
+ 
   return (
     <div
       className="font-poppins 
@@ -38,16 +31,16 @@ const ApexChart = () => {
         <div className="text-xs">
           <p>
             {" "}
-            Total Yearly Leave: <span className="font-bold">42</span>
+            Total Yearly Leave: <span className="font-bold">{totalYearlyLeave}</span>
           </p>
           <p>
-            {" "}
-            Leave Taken: <span className="font-bold">{totalLeave}</span>
+      
+            Leave Taken: <span className="font-bold">{totalLeaveTaken}</span>
           </p>
           <p>
-            {" "}
-            Leave {remaining > 42 ? "Extra" : "Remaining"}:{" "}
-            <span className="font-bold">{remaining}</span>{" "}
+        
+            Leave {leaveRemaining > 42 ? "Extra" : "Remaining"}:{" "}
+            <span className="font-bold">{leaveRemaining}</span>{" "}
           </p>
         </div>
       </div>

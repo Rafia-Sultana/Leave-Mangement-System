@@ -118,6 +118,12 @@ const employee = {
       "Error fetching employee leave chart"
     );
   },
+  basicInfoChart: async () => {
+    return getRequest(
+      "/employee/leave/chart/basic",
+      "Error fetching basic Info chart"
+    );
+  },
 
   // http://192.168.0.40:4040/api/auth/logout
   logOut: async () => {

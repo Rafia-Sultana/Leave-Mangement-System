@@ -292,7 +292,7 @@ export const Manager_Leave_Approval = ({
 
   const [selectedValue, setSelectedValue] = useState("Pending");
   const [comments, setComments] = useState("");
-  const [logData, setLogData] = useState({});
+  // const [logData, setLogData] = useState({});
   const [isBtnDisable, setIsBtnDisable] = useState(true);
   const [isReturnBtnDisable, setIsReturnBtnDisable] = useState(true);
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
@@ -363,7 +363,7 @@ export const Manager_Leave_Approval = ({
       setComments("");
     }
   }, [openSnackBar]);
-  const handleSubmit = () => {};
+  // const handleSubmit = () => {};
 
   return (
     <div className="flex flex-col  space-y-3">
