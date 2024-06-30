@@ -7,17 +7,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Grid } from "@mui/material";
 import Button from "./Button";
 import employee from "../services/employee";
-import { UserContext } from "../context api/Context";
-import ShowSnackbar from "./ShowSnackbar";
-import { useState, useEffect } from "react";
+
+import { useState} from "react";
 import  { convertToIsoString } from "../utils/FormateDate";
 import dayjs from "dayjs";
+import { useSnackbar } from "notistack";
 
 const HolidayModal = ({ open, close, row }) => {
 
 
-  const { openSnackBar, handleSnackBarClose, setOpenSnackbar,setHolidayList } =
-    React.useContext(UserContext);
+  // const {setHolidayList } = React.useContext(UserContext);
+    const { enqueueSnackbar } = useSnackbar();
+
    const initialState = {
     start_date: row?.start_date ? dayjs(row?.start_date) : null,
     end_date: row?.end_date ? dayjs(row?.end_date) : null,
@@ -82,8 +83,10 @@ const HolidayModal = ({ open, close, row }) => {
   
   }
     if ((result == "Success" )) {
-      setOpenSnackbar(true);
-      
+
+      enqueueSnackbar(`Holiday Added SuccessFully`, {
+        variant: "success",
+      });
         setHolidayForm({
     start_date:null,
     end_date:null,
@@ -98,14 +101,6 @@ const HolidayModal = ({ open, close, row }) => {
 
   return (
     <div className="">
-      {
-        <ShowSnackbar
-          open={openSnackBar}
-          handleClose={handleSnackBarClose}
-          text={"Holiday Added SuccessFully"}
-          duration={1000}
-        />
-      }
 
       <Modal
         open={open}
@@ -132,7 +127,7 @@ const HolidayModal = ({ open, close, row }) => {
                 <DateInput
                   label={"end_date"}
                   handleDateChange={handleDateChange}
-                value={(addHolidayForm?.end_date)}
+                 value={(addHolidayForm?.end_date)}
                   disableDates={disableFutureDates}
                   required={false}
                 />
@@ -150,15 +145,15 @@ const HolidayModal = ({ open, close, row }) => {
 
               <Grid item xs={12}>
                 <Button
-                  btnText={"SUBMIT"}
+                 
                   type={"submit"}
-                  backgroundColor={"bg-[#6AB2EB]"}
-                  textColor={"white"}
+                  backgroundColor={"bg-blue-lightest"}
+          
                   padding={"p-3"}
                   fontSize={"sm"}
                   width={"full"}
                  cursor={"cursor-pointer"}
-             ></Button>
+             >SUBMIT</Button>
               </Grid>
             </Grid>
           </form>

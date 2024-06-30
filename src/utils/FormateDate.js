@@ -80,3 +80,20 @@ export   const getJoiningDate = (toDate) => {
     return;
   }
 };
+
+export const Time = (time) =>{
+  console.log(time);
+
+
+
+  if(time){
+    let t = time.split(', ');
+
+    let t1 = t[1].split(" ");
+
+      return (t1[0].slice(0,-3)+' '+ t[1].slice(-2));
+  }else{
+    return;
+  }
+
+}

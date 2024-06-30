@@ -1,7 +1,10 @@
 import TextField from "@mui/material/TextField";
 
 const TextInput = ({ label,name,width,
-   InputProps, value, onchange,rows ,multiline,placeholder,focused,required,type="text",variant="outlined"}) => {
+   InputProps, value, onchange,rows ,
+   multiline,placeholder,focused,
+   required,type="text",variant="outlined", autoFocus=false,
+   multiple=false}) => {
 
   return (
     <div>
@@ -21,7 +24,8 @@ const TextInput = ({ label,name,width,
         type={type}
         variant={variant}
         sx={{width: width }}
-        
+        multiple={multiple}
+        autoFocus={autoFocus}
       />
     </div>
   );

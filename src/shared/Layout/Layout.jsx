@@ -1,26 +1,25 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import "../assets/styles/Dashboard.css";
-import NavProfile from "../components/NavProfile.jsx";
+
 import Badge from "@mui/material/Badge";
-import { UserContext } from "../context api/Context.jsx";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import team from "../assets/styles/svg/team.svg";
-import personal from "../assets/styles/svg/personal.svg";
-import dashboard from "../assets/styles/svg/dashboard.svg";
-import managment from "../assets/styles/svg/managment.svg";
 
+import team from "../../assets/styles/svg/team.svg";
+import personal from "../../assets/styles/svg/personal.svg";
+import dashboard from "../../assets/styles/svg/dashboard.svg";
+import managment from "../../assets/styles/svg/managment.svg";
 
-const Dashboard = () => {
+import NavProfile from "../Profile/NavProfile.jsx";
+import "../../assets/styles/Dashboard.css";
 
+const Layout = () => {
   const [open, setOpen] = useState({});
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
 
   const location = useLocation();
   const navigate = useNavigate();
   const role = userInfoData.role;
-
 
   const menuToggleClick = () => {
     let menuToggle = document.querySelector(".menu-toggle");
@@ -31,11 +30,11 @@ const Dashboard = () => {
 
   const createNavLink = (to, text, icon) => ({ to, text, icon });
   const navLinks = {
-    "Employee": [
+    Employee: [
       createNavLink("leave-application", "Leave Application", personal),
       createNavLink("request-history", "Request History", team),
     ],
- 
+
     "Team Lead": [
       {
         category: "Personal",
@@ -49,12 +48,12 @@ const Dashboard = () => {
         category: "Team",
         links: [
           createNavLink("manager-leave-request", "Pending Request"),
-          createNavLink("manager_team_leave_info", "Leave History"),
+          createNavLink("manager-team-leave-info", "Leave History"),
         ],
         icon: team,
       },
     ],
-    "HR": [
+    HR: [
       {
         category: "Personal",
         links: [
@@ -67,7 +66,7 @@ const Dashboard = () => {
         category: "Others",
         links: [
           createNavLink("hr-leave-request", "Pending Request "),
-          createNavLink("hr_others_leave_history", "Leave History"),
+          createNavLink("hr-others-leave-history", "Leave History"),
         ],
         icon: team,
       },
@@ -76,39 +75,30 @@ const Dashboard = () => {
         links: [
           createNavLink("manage-employee", "Employee"),
           createNavLink("hr-add-holiday", "Holiday"),
-          createNavLink("hr-add-accordion-form","Others"),
-    
+          createNavLink("hr-add-accordion-form", "Others"),
         ],
         icon: managment,
       },
     ],
-    "Admin": [
+    Admin: [
       {
         category: "Personal",
         links: [
           createNavLink("leave-application", "Leave Application"),
-          createNavLink("hr_leave_history", "My Leave History"),
+          createNavLink("request-history", "My Leave History"),
         ],
         icon: personal,
       },
       {
         category: "Others",
         links: [
-          createNavLink("hr-leave-request", "Pending Request "),
-          createNavLink("hr_others_leave_history", "Leave History"),
+          createNavLink("admin-pending-request", "Pending Request "),
+          createNavLink("admin-others-leave-history", "Leave History"),
+         
         ],
         icon: team,
       },
-      {
-        category: "Managment",
-        links: [
-          createNavLink("manage-employee", "Employee"),
-          createNavLink("hr-add-holiday", "Holiday"),
-         
   
-        ],
-        icon: managment,
-      },
     ],
   };
 
@@ -116,12 +106,11 @@ const Dashboard = () => {
     setOpen({ [index]: !open[index] });
   };
   const isNavActive = (to) => {
- return location.pathname === to;
+    return location.pathname === to;
   };
 
   return (
     <div className="font-poppins">
-     
       <header className="h-20 bg-[#DCF3FF] flex items-center justify-between fixed w-full z-10  ">
         <div className="flex items-center">
           <div className="menu-toggle" onClick={menuToggleClick}>
@@ -134,7 +123,7 @@ const Dashboard = () => {
           >
             LMS
           </p>
-         
+
           <p className="hidden lg:block text-2xl absolute left-96">
             Leave Management System
           </p>
@@ -148,7 +137,7 @@ const Dashboard = () => {
       </header>
 
       <div className="flex">
-        <nav 
+        <nav
           className="h-[100vh]  bg-[#DCF3FF] text-black 
           w-[60%] md:w-[30%] lg:w-[22%] xl:w-[18%]
   site-nav  border-t-white  mt-20 lg:mt-0 fixed"
@@ -162,7 +151,6 @@ const Dashboard = () => {
               <NavLink
                 to={"/dashboard"}
                 style={{
-                  
                   color: isNavActive("/dashboard") ? "white" : "black",
                   // fontWeight:"bold",
                   backgroundColor: isNavActive("/dashboard")
@@ -180,17 +168,22 @@ const Dashboard = () => {
               <ul key={index} className="w-[100%] xl:w-[80%]  rounded  py-1 ">
                 <li className="flex gap-2 ">
                   <img src={section?.icon} alt="" className="w-6 h-6" />
-                  <NavLink
-                    className={`px-${section?.category ? 0 : 2}`}
-                    to={section?.to}
-                  >
-                    {section?.text}
-                  </NavLink>
-                  <li className="font-bold "> {section.category}</li>
+                  <div className="">
+                    {section?.category ? (
+                      <span className="font-bold ">{section.category}</span>
+                    ) : (
+                      <NavLink
+                        className={`px-${section?.category ? 0 : 2}`}
+                        to={section?.to}
+                      >
+                        {section?.text}
+                      </NavLink>
+                    )}
+                  </div>
                 </li>
                 <li className="ml-12">
                   {section.links?.map((link, linkIndex) => (
-                    <li key={linkIndex}>
+                    <div key={linkIndex}>
                       <NavLink
                         className={`my-2 px-2 py-1 text-[0.80rem]  lg:text-sm
                           `}
@@ -198,16 +191,15 @@ const Dashboard = () => {
                       >
                         {link.text}
                       </NavLink>
-                    </li>
+                    </div>
                   ))}
                 </li>
               </ul>
             ))}
           </ul>
         </nav>
-  
-        <main 
-        className=" w-full px-8 bg-[#E8F7FF] min-h-screen mt-20 lg:ml-[22%] xl:ml-[18%]">
+
+        <main className=" w-full px-8 bg-[#E8F7FF] min-h-screen pt-20  lg:ml-[22%] xl:ml-[18%]">
           <Outlet />
         </main>
       </div>
@@ -215,4 +207,4 @@ const Dashboard = () => {
   );
 };
 
-export { Dashboard };
+export default Layout;

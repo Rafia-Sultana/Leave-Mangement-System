@@ -28,7 +28,7 @@ const SelectInput = ({
       },
     },
   };
-
+console.log(options);
   return (
     <div>
       <FormControl variant={variant} sx={{ width: "100%" }} required={required}  >

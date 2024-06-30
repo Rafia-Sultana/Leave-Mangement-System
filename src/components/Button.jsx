@@ -1,8 +1,7 @@
 const Button = ({
   fontWeight,
   fontSize,
-  textColor,
-  btnText,
+  textColor="white",
   width,
   type,
   onClick,
@@ -11,17 +10,23 @@ const Button = ({
   backgroundColor,
   disable,
   cursor,
+ children
 }) => {
+
   return (
+
     <button
       type={type}
       onClick={onClick}
       disabled={disable}
-      className={` font-${fontWeight} text-${textColor} w-${width} 
-              border-r-black focus:outline-none rounded ${padding}  ${backgroundColor}  text-${fontSize} ${cursor}`}
+      style={{
+        color:textColor,
+      }}
+      className={`font-${fontWeight}  w-${width}
+           rounded ${padding}  ${backgroundColor}  text-${fontSize} ${cursor}`}
     >
       {BtnIcon && <BtnIcon />}
-      {btnText}
+      {children}
     </button>
   );
 };

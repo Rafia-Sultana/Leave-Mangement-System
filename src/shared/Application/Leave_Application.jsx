@@ -1,57 +1,70 @@
-import React, { useContext, useEffect, useState } from "react";
-import Button from "../components/Button.jsx";
-import Grid from "@mui/material/Grid";
-import FormateDate from "../utils/FormateDate.js";
-import { useLocation } from "react-router-dom";
-import AutoComplete from "../components/InputFields/AutoComplete.jsx";
-import InputAdornment from "@mui/material/InputAdornment";
-import employee from "../services/employee.jsx";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import dayjs from "dayjs";
-import TextInput from "../components/InputFields/TextInput.jsx";
-import SelectInput from "../components/InputFields/SelectInput.jsx";
-import DateInput from "../components/InputFields/DateInput.jsx";
-import HeadLine from "../components/HeadLine.jsx";
+
+import Grid from "@mui/material/Grid";
+import InputAdornment from "@mui/material/InputAdornment";
+
+import Button from "../../components/Button.jsx";
+import HeadLine from "../../components/HeadLine.jsx";
+import DateInput from "../../components/InputFields/DateInput.jsx";
+import TextInput from "../../components/InputFields/TextInput.jsx";
+import SelectInput from "../../components/InputFields/SelectInput.jsx";
+import AutoComplete from "../../components/InputFields/AutoComplete.jsx";
+
+import employee from "../../services/employee.jsx";
+import FormateDate, { Time } from "../../utils/FormateDate.js";
+
 import {
   startTimeArray,
   endTimeArray,
   convertToIsoString,
   getJoiningDate,
-} from "../utils/FormateDate.js";
-import { UserContext } from "../context api/Context.jsx";
-import ShowSnackbar from "../components/ShowSnackbar.jsx";
-
+} from "../../utils/FormateDate.js";
+import { UserContext } from "../../context api/Context.jsx";
+import { TextField, duration } from "@mui/material";
 
 
 const Leave_Application = () => {
-  const { openSnackBar, setOpenSnackbar, handleSnackBarClose } =
-    useContext(UserContext);
+  // const { openSnackBar, setOpenSnackbar, handleSnackBarClose } =
+  //   useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
   const { state } = useLocation();
+  const navigate = useNavigate();
+console.log(state);
+
 
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userInfoData?.emp_id;
 
+  
   const initialState = {
     emp_id: userId,
     leave_name: state?.leave_name || "",
     start_date: state ? dayjs(state.start_date, "M/D/YYYY, h:mm:ss A") : null,
     end_date: state ? dayjs(state.end_date, "M/D/YYYY, h:mm:ss A") : null,
-    duration: state?.duration || 0,
+    duration: state?.total_days || 0,
     joining_date: "",
-    // file: null,
     reason: state?.reason || "",
     delegated_to: state?.delegated_to || "",
+  
   };
 
 
   const [formData, setFormData] = useState(initialState);
-  const [leaveTypes, setLeaveTypes] = useState(null);
-  const [teamMembersList, setTeamMembersList] = useState(null);
-  const [startTime, setStartTime] = useState("9:00 AM");
-  const [endTime, setEndTime] = useState("6:00 PM");
-  const [isoTime, setIsoTime] = useState(null);
-  const [endIsoTime, setEndIsoTime] = useState(null);
-  const [selectedFiles, setSelectedFiles] = useState(null);
+
   const [remaining,setRemaining]= useState(0);
+  const [isoTime, setIsoTime] = useState(null);
+  const [leaveTypes, setLeaveTypes] = useState(null);
+  const [endIsoTime, setEndIsoTime] = useState(null);
+  const [endTime, setEndTime]  = useState("6:00 PM");
+  const [startTime, setStartTime]=useState("9:00 AM");
+  const [selectedFiles, setSelectedFiles] = useState(null);
+  const [teamMembersList, setTeamMembersList] = useState(null);
+  
+  const fileInputRef = useRef(null);
+  
 
 
   useEffect(() => {
@@ -76,14 +89,17 @@ const Leave_Application = () => {
   };
 
   const disablePreviousDates = (date) => {
+// console.log(date.add(1,'day').$d);
+   console.log(    "p" ,date);
     if (formData.end_date) {
       return new Date(formData.end_date) < new Date(date.$d);
     }
   };
 
   const disableFutureDates = (date) => {
+    console.log(  "f" ,date);
     if (formData.start_date) {
-      return new Date(formData.start_date) > new Date(date.$d);
+      return new Date(formData.start_date) > new Date(state? date.add(1,'day').$d : date.$d);
     }
   };
 
@@ -107,12 +123,12 @@ const Leave_Application = () => {
         if (startHour < 6 && endHour <= 6) {
           return {
             days: differenceInDays + 0.5,
-            half: differenceInDays + " " + "(First Half)",
+            half: differenceInDays + " & " + "(First Half)",
           };
         } else if (startHour >= 6 && endHour > 6) {
           return {
             days: differenceInDays + 0.5,
-            half: differenceInDays + " " + "(Half)",
+            half: differenceInDays + " & " + "(Half)",
           };
         } else if (startHour < 6 && endHour > 6) {
           return {
@@ -122,14 +138,12 @@ const Leave_Application = () => {
         }
       }
       return { days: differenceInDays + 1, half: differenceInDays + 1 };
-    } else {
-      return { days: 0, half: 0 };
-    }
+    }else return ;
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const [leaveTypeData,customLegendItems,teamMembersList] = await Promise.all([employee.getLeaveTypes(),
+      const [leaveTypeData,customLegendItems,teamMembersList] = await Promise.all([employee.getLeaveTypes( state? state.emp_id: userId),
         employee.getEmployeeLeaveChart(),employee.getTeamMembersOfUser( state? state.emp_id: userId)
       
       ]);
@@ -163,8 +177,11 @@ const Leave_Application = () => {
 
 
   const handleFileUpload = (e) => {
-    const file = e.target.files[0];
+  
+    const file = Array.from(e.target.files);
     setSelectedFiles(file);
+  
+    
   };
 
   const LeaveNames = leaveTypes?.map((leave) => leave?.leave_name);
@@ -197,7 +214,20 @@ const Leave_Application = () => {
       const delegatedId = teamMembersList?.find((x) => x.employee_name === formData?.delegated_to)?.emp_id;
       const joiningDateTimestamp = joiningdate2?.toISOString();
       const durations = getTotalDays()?.days;
-  
+
+
+      const formFileData = new FormData();
+      formFileData.append("files", selectedFiles);
+      
+   
+      
+      if (selectedFiles) {
+        selectedFiles.forEach(file => {
+            formFileData.append("files", file); 
+        });
+    }
+
+
       const updateForm = {
         ...formData,
         start_date: isoTime,
@@ -207,17 +237,34 @@ const Leave_Application = () => {
         joining_date: joiningDateTimestamp,
         duration: durations,
         application_date: new Date().toISOString(),
+        // file:selectedFiles
       };
-  
-      let result;
-      if (state) {
 
-          result = await employee.editLeaveApplication(state.application_id, updateForm);
+      for (const key in updateForm) {
+        formFileData.append(key, updateForm[key]);
+      }
+
+      let result;
     
-      } else { result = await employee.postLeaveApplication(updateForm); }
+      if (state) {
+        formFileData.append("applicant_id", state.emp_id);
+        result = await employee.editLeaveApplication(state.application_id, formFileData);
+       
+      } 
+      else {
+      result = await employee.postLeaveApplication(formFileData);
+    }
   
       if (result) {
-        setOpenSnackbar(true);
+      
+        enqueueSnackbar(`Application submitted successfully.Your request is being processed.`, {
+          variant: "success",
+        });
+
+        setTimeout(() => {
+          navigate(-1);
+        }, 1000);
+     
       }
   
       setFormData({
@@ -229,15 +276,22 @@ const Leave_Application = () => {
         joining_date: "",
         reason: "",
         delegated_to: "",
+    
       });
+      setSelectedFiles(null);
+      setStartTime(null);
+      setEndTime(null);
+      if(fileInputRef.current){
+        fileInputRef.current.value = null;
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
+      enqueueSnackbar(`Something Went Wrong!`, {
+        variant: "error",
+      });
     }
   };
   
-
-
- 
 
   const getSelectStartTime = (e) => {
     setStartTime(e.target.value);
@@ -245,17 +299,22 @@ const Leave_Application = () => {
   
   const getSelectEndTime = (e) => {
     setEndTime(e.target.value);
+
   };
+
+  useEffect(()=>{
+    if (state && state.start_date) {
+      setStartTime(Time(state.start_date));
+    }
+    if (state && state.end_date) {
+      setEndTime(Time(state.end_date));
+    }
+
+  },[])
 
   return (
     <div className="lg:px-8  my-4">
-      <ShowSnackbar
-        open={openSnackBar}
-        handleClose={handleSnackBarClose}
-        text={
-          "Application submitted successfully.Your request is being processed."
-        }
-      />
+
       <HeadLine
         text={`${
           state && state.headerText ? state.headerText : "Leave Application"
@@ -323,18 +382,16 @@ const Leave_Application = () => {
             />
           </Grid>
           <Grid item xs={12} lg={6} md={6}>
-            <TextInput
+          {/*   //state ? state.total_days : getTotalDays()?.days */}
+
+          <TextInput
               label={"Number of Days Applied"}
               InputProps={{ readOnly: true }}
               value={formData?.duration}
               onchange={handleInputChange}
             />
+  
           </Grid>
-
-
-
-
-
 
           <Grid item xs={12} lg={6} md={6}>
             <AutoComplete
@@ -349,20 +406,25 @@ const Leave_Application = () => {
             />
           </Grid>
           <Grid item xs={12} lg={6} md={6}>
-            <TextInput
-             type="file"
-             variant="outlined"
-             multiple
-             onChange={handleFileUpload}
-             InputProps={{
-               startAdornment: (
-                 <InputAdornment position="start">
-                   Upload File :
-                 </InputAdornment>
-               ),
-             }}
-            
-            ></TextInput>
+    
+
+    <TextField
+      type="file"
+      InputLabelProps={{ shrink: true }}
+      inputProps={{ multiple: true }}
+      onChange={handleFileUpload}
+      inputRef={fileInputRef}
+      InputProps={{
+     startAdornment: (
+          <InputAdornment position="start">
+            Upload File:
+          </InputAdornment>
+        ),
+      }}
+      variant="outlined"
+      fullWidth
+    />
+              {/* <input type="file" id="files" name="files" multiple    onChange={handleFileUpload}></input> */}
           
           </Grid>
           <Grid item xs={12}>
@@ -390,18 +452,16 @@ const Leave_Application = () => {
             <Button
               fontWeight="semibold"
               textColor="white"
-              btnText="Send to Employee"
               width="full"
               type="submit"
               backgroundColor={"bg-red"}
               padding={"p-3"}
               // onClick={handleSendToHR}
-            ></Button>
+            >SUBMIT</Button>
           ) : (
             <Button
               fontWeight="bold"
               textColor="white"
-              btnText="SUBMIT"
               width="full"
               padding={"p-3"}
               type="submit"
@@ -409,7 +469,7 @@ const Leave_Application = () => {
               cursor={"cursor-pointer" }
             
               // disable={hasSubmit?false:true}
-            ></Button>
+            >SUBMIT</Button>
           )}
         </div>
       </form>

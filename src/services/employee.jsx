@@ -8,9 +8,9 @@ const getToken = () => {
 // Reusable Axios instance with default headers
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  // },
 });
 
 // Error handling function
@@ -31,6 +31,7 @@ const getRequest = async (url, errorMessage) => {
 
     return response.data;
   } catch (error) {
+    console.log(error)
     if (error.response.data.error == "Token expired") {
     } else handleRequestError(error, errorMessage);
   }
@@ -38,6 +39,10 @@ const getRequest = async (url, errorMessage) => {
 const postRequest = async (url, params, errorMessage) => {
   try {
     const token = getToken();
+    // if (!!(data instanceof FormData)) {
+    //   axiosInstance = axios.create({
+    //      baseURL: BASE_URL,
+    //  });
     const response = await axiosInstance.post(url, params, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -63,6 +68,46 @@ const putRequest = async (url, data, errorMessage) => {
     handleRequestError(error, errorMessage);
   }
 };
+
+const patchRequest = async (url, data, errorMessage) => {
+  try {
+    const token = getToken();
+    let axiosInstance;
+    // If data is FormData, do not set Content-Type header
+    if (!!(data instanceof FormData)) {
+     axiosInstance = axios.create({
+        baseURL: BASE_URL,
+    });
+ }
+ const response = await axiosInstance.patch(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    handleRequestError(error, errorMessage);
+  }
+};
+const deleteRequest = async (url, data, errorMessage) => {
+  try {
+    const token = getToken();
+    // let axiosInstance;
+   const response = await axiosInstance.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    handleRequestError(error, errorMessage);
+  }
+};
+
+
+
+
+
 
 const employee = {
   basicInfo: async (userId) => {
@@ -108,8 +153,8 @@ const employee = {
     );
   },
 
-  getLeaveTypes: async () => {
-    return getRequest("/list/leave-types", "Error fetching leave types:");
+  getLeaveTypes: async (userId) => {
+    return getRequest(`/list/leave-types/${userId}`, "Error fetching leave types:");
   },
 
   getEmployeeLeaveChart: async () => {
@@ -124,6 +169,15 @@ const employee = {
       "Error fetching basic Info chart"
     );
   },
+  
+  sendProfilePicture: async (data) => {
+
+    return patchRequest(
+      "/employee/profile/edit",data,
+      "Error fetching employee profile edit"
+    );
+  },
+
 
   // http://192.168.0.40:4040/api/auth/logout
   logOut: async () => {
@@ -139,6 +193,7 @@ const employee = {
   },
 
   postLeaveApplication: async (leaveInfo) => {
+    console.log(leaveInfo);
     // ('leaveInfo',leaveInfo);
     return postRequest(
       `/employee/leave/apply`,
@@ -157,6 +212,7 @@ const employee = {
 
   // http://ip:4040/api/leave/emp_history/{userId} http://IP:4040/api/leave/history/emp/{UserId}
   getEmployeeRequestHistory: async (userId) => {
+ 
     return getRequest(
       `/employee/leave/history/${userId}`,
       "Error Fetching to get employee request history"
@@ -216,6 +272,7 @@ const employee = {
 
   // http://ip:4040/api/leave/decision?by=hr
   postDecisionByHR: async (decison) => {
+    console.log(decison);
     decison;
     return postRequest(
       `/hr/leave/application/decision`,
@@ -351,6 +408,53 @@ const employee = {
   getOnLeaveEmployee: async (timestamp) => {
     return getRequest(`/hr/employee/on-leave?date=${timestamp}`, "Error for getting on leave employee");
   },
+
+  //files
+  getFiles :async(fileId) =>{
+    return getRequest(`/files/leave-files/view/${fileId}`, "Error for getting on file");
+  },
+
+  deleteFiles :async(fileId) => {
+    return deleteRequest(`/files/leave-file/${fileId}`, "Error for getting deleting on file ");
+  },
+
+  ///files/leave-files/{leave app id}
+  getNewFiles :async(appId) =>{
+    return getRequest(`/files/leave-files/${appId}`, "Error for getting on file");
+  },
+
+
+  //------------------------------ADMIN----------------------------------------------------------------
+  ///api/hr/leave/pending-application
+  getPendingApplicationByAdmin : async () => {
+    return getRequest(
+      `/admin/leave/pending-application`,
+      "Error Fetching to get Leave Request Of Employee By Admin"
+    );
+  },
+  postDecisionByAdmin: async (decison) => {
+    console.log(decison);
+
+    return postRequest(
+      `/admin/leave/application/decision`,
+      decison,
+      "Error Fetching to get decision By Admin"
+    );
+  },
+
+  getLeaveHistroryOfTeamByAdmin: async () => {
+    return getRequest(
+      "/admin/leave/all-history",
+      "Error Fetching to get Leave Request Of Team By admin"
+    );
+  },
+  getEachEmployeeLeaveHistoryByAdmin: async (empId) => {
+    return getRequest(
+      `/admin/leave/members-history/${empId}`,
+      "Error for getting all employee  Info from admin side"
+    );
+  },
+
 };
 
 export default employee;

@@ -2,20 +2,21 @@ import { createContext,useState } from "react";
 export const UserContext = createContext('');
 
 export const UserProvider = ({children}) => {
-    const [userInfo, setUserInfo] = useState([]);
-    const [holidayList,setHolidayList] = useState([]);
-    const [openSnackBar, setOpenSnackbar]= useState(false);
-    
-    const handleSnackBarClose=(reason)=>{
-        if(reason=='clickaway'){
-          return;
-        }
-        setOpenSnackbar(false);
-      }
+    const [loading, setLoading] = useState(true); 
+    // const [profileImg, setProfileImg] = useState(null);
 
-return (
+
+    const delayedLoading = (value) =>{
+        setLoading(value);
+        if(value === false){
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        }
+    }
+   return (
     <UserContext.Provider 
-    value={{userInfo, setUserInfo,openSnackBar,setOpenSnackbar, handleSnackBarClose,setHolidayList,holidayList}} >
+    value={{loading, setLoading:delayedLoading }} >
      {children}
     </UserContext.Provider> 
 )

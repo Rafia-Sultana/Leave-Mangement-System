@@ -11,6 +11,8 @@ const TableCells = ({ row, column, viewDetails, onDelete, onEdit,index ,onActive
     Active: {color: "green", fontWeight: "bold" },
     Inactive: { color: "red", fontWeight: "bold" },
     Withdrawn:{ color: "purple", fontWeight: "bold" },
+    Processing: { color: "orange", fontWeight: "bold" },
+    Processed: { color: "green", fontWeight: "bold" },
   };
 
   let value = row[column.id];

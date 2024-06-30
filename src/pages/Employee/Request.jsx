@@ -1,35 +1,66 @@
-import CommonTable from "../components/CommonTable";
-import { useEffect, useState, useMemo } from "react";
-import SelectInput from "../components/InputFields/SelectInput";
-import employee from "../services/employee";
-import Modal from "../components/Modal";
+
+import { useEffect, useState, useMemo, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
-import LottiePlayers from "../components/LottiePlayers";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import HeadLine from "../components/HeadLine";
+
+import SelectInput from "../../components/InputFields/SelectInput";
+import employee from "../../services/employee";
+import LottiePlayers from "../../components/LottiePlayers";
+import HeadLine from "../../components/HeadLine";
+import CommonTable from "../../components/CommonTable";
+import { UserContext } from "../../context api/Context";
 
 
 
 export const Employee_Leave_Request = () => {
+
+const navigate= useNavigate();
+const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
+const empId = userInfoData?.emp_id;
 
   const [id, setId] = useState(0);
   const [rows, setRows] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedType, setSelectedType] = useState("All");
   const [leaveTypesOptions,setLeaveTypesOption]= useState([]);  
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [value,setValue]= useState(0);
+  const [isFileId, setIsFileId] = useState(null);
+
 
   const isSmallScreen= useMediaQuery('(max-width:600px)');
 
-  const handleClickOpen = (value) => {
-    setId(value);
-    setOpen(true);
+
+
+  const handleDeleteFile = (fileId) => {
+    const updatedRows = rows.map(row => {
+      return {
+        ...row,
+        files: row.files.filter(file => file.file_id !== fileId)
+      };
+    });
+    setRows(updatedRows);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClickOpen = (value) => {
+    setId(value);
+    console.log(rows[value]);
+
+    setTimeout(() => {
+      navigate(`/dashboard/view-log/${empId}`,{state:{...rows[value]}});
+    }, 1000);
+
+  //  navigate(`/dashboard/view-log/${empId}`,{state:rows[value]});
   };
+ 
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
+
+
+ 
  const columns = [
     { id: "leave_name", label: "Leave Type", minWidth: 100 },
     { id: "application_date", label: "Applied Date", minWidth: 100 },
@@ -49,26 +80,35 @@ export const Employee_Leave_Request = () => {
     column.id === "leave_name" || column.id === "leave_status" || column.id === "action"
   );
 
-  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
-  const userId = userInfoData?.emp_id;
+
 
   useEffect(() => {
     const fetchRequestHistory = async () => {
-      const requestHistoryData = await employee.getEmployeeRequestHistory(
-        userId
-      );
 
+    try {
+      const [requestHistoryData,leaveTypeData] = await Promise.all([ employee.getEmployeeRequestHistory(
+        empId
+      ),employee.getLeaveTypes(empId)]);
 
-       let leaveTypeData = await employee.getLeaveTypes();
        let leave_names = leaveTypeData.map((x)=>x.leave_name);
+       leave_names = [...leave_names,"All"]
        setLeaveTypesOption(leave_names);
        setRows(requestHistoryData);
-       setLoading(false);
+
+    
+    } catch (error) {
+      console.error(error);
+    } finally{
+   setTimeout(() => {
+    setLoading(false);
+   }, 500);
+    }
+    
     };
-    if (userId) {
+    if (empId) {
       fetchRequestHistory();
     }
-  }, [userId]);
+  }, [empId]);
 
    const leaveStatusOptions = ["Pending", "Approved", "Rejected", "All" ];
 
@@ -106,7 +146,8 @@ export const Employee_Leave_Request = () => {
    setRows(updatedRows);
 
   }
-  
+ 
+
   return (
     <div>
    
@@ -129,6 +170,12 @@ export const Employee_Leave_Request = () => {
         </div>
 
       </div>
+
+      {/* <LoadingOrTable  columns={isSmallScreen ? smallScreenColumns:columns}
+            rows={filteredRows}
+            viewDetails={handleClickOpen}
+            handleDelete ={handleDelete}
+             maxHeight={660} /> */}
       {filteredRows.length >= 1 ? (
         <div className="">
           <CommonTable
@@ -141,15 +188,11 @@ export const Employee_Leave_Request = () => {
         </div>
       ) : loading ? (
         <div>
-         
-              <Player
-        src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json"
-        className="player"
-        loop
-        autoplay
-        speed={5}
-       style={{ height: "300px", width: "300px", marginTop: "100px" }}
-      />
+           <LottiePlayers
+            src="https://lottie.host/1a4165a8-80b0-4ddc-a267-4517694bc515/7pIEzJlIzw.json"
+           
+          />
+     
         </div>
       ) : (
         <>
@@ -160,9 +203,12 @@ export const Employee_Leave_Request = () => {
           />
         </>
       )}
-      {open && (
+      {/* {open && (
         <Modal open={open} handleClose={handleClose} historyData={rows[id]} />
-      )}
+      )} */}
+      {/* {
+        id>0 && <ViewLog  historyData={rows[id]}/>
+      } */}
     </div>
   );
 };

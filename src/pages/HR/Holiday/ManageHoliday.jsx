@@ -1,15 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-import CommonTable from "../components/CommonTable";
-import Button from "../components/Button";
+import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import HolidayModal from "../components/HolidayModal";
-import HeadLine from "../components/HeadLine";
-import employee from "../services/employee";
-import { UserContext } from "../context api/Context";
+
+import CommonTable from "../../../components/CommonTable";
+import Button from "../../../components/Button";
+import HolidayModal from "../../../components/HolidayModal";
+import HeadLine from "../../../components/HeadLine";
+import employee from "../../../services/employee";
+
 
 
 const ManageHoliday = () => {
-  const {holidayList,setHolidayList } = useContext(UserContext);
+
+  const [holidayList,setHolidayList] = useState([]);
   const [open, setOpen] = useState(false);
   const [row, setRow] = useState({});
 
@@ -25,7 +27,8 @@ const ManageHoliday = () => {
   useEffect(() => {
     const fetchData = async () => {
       const getOfficeHolidays = await employee.getOfficeHolidayList();
-      setHolidayList(getOfficeHolidays);
+      const updateHolidays =getOfficeHolidays.map(x=>({...x,status:'holiday'}))
+      setHolidayList(updateHolidays);
  };
     fetchData();
   }, []);
@@ -49,18 +52,18 @@ const ManageHoliday = () => {
       <div className="col-span-3 flex justify-between gap-2 my-5">
         <HeadLine text={"Holiday"}></HeadLine>
         <Button
-          textColor={"white"}
-          btnText={"Add Holiday"}
+  
+          // btnText={"Add Holiday"}
           backgroundColor={"bg-[#add5f4]"}
           padding={"p-2"}
           btnIcon={AddIcon}
           onClick={handleOpen}
           fontSize={"sm"}
-        ></Button>
+        >Add Holiday</Button>
       </div>
-      <CommonTable rows={holidayList} columns={columns} viewDetails={viewDetails} maxHeight={650} />
+      <CommonTable rows={holidayList} columns={columns} viewDetails={viewDetails}  />
       {open && (
-        <HolidayModal open={open} close={handleClose} row={row}></HolidayModal>
+        <HolidayModal open={open} close={handleClose} row={row}  setHolidayList={setHolidayList}></HolidayModal>
       )}
     </div>
   );

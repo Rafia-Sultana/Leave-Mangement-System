@@ -13,7 +13,7 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
 
   let value = row["leave_status"];
   let status = row["status"];
-  let holiday = row["duration"];
+  // let holiday = row["duration"];
 
   let options;
 
@@ -30,12 +30,12 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
     }
   }
 
-  if (holiday !== undefined) {
-    options = ["Update"];
+  if (status === "holiday") {
+    options = ["Edit"];
   }
 
   if (location.pathname == "/dashboard/manager-leave-request") {
-    options = ["View", "Delete"];
+    options = ["View"];
   }
 
   if (location.pathname == "/dashboard/request-history") {
@@ -48,6 +48,9 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
 
   
 if(location.pathname === "/dashboard/hr-view-on-leave"){
+  options = ["View"];
+}
+if(location.pathname === "/dashboard/admin-pending-request"){
   options = ["View"];
 }
   const ITEM_HEIGHT = 48;

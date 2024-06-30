@@ -8,14 +8,14 @@ import HeadLine from "./HeadLine";
 import TextInput from "./InputFields/TextInput";
 import Button from "./Button";
 import employee from "../services/employee";
-import { useContext } from "react";
-import { UserContext } from "../context api/Context";
-import ShowSnackbar from "./ShowSnackbar";
+
+import { useSnackbar } from "notistack";
+
 
 const AccordionInput = () => {
-  const { openSnackBar, handleSnackBarClose, setOpenSnackbar } =
-    useContext(UserContext);
+ 
   const [expanded, setExpanded] = React.useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (index) => (event, isExpanded) => {
     setExpanded(isExpanded ? index : false);
@@ -47,7 +47,9 @@ const AccordionInput = () => {
       if (value) {
         let res = await submitFunctions[key](value);
         if (res.success === true) {
-          setOpenSnackbar(true);
+          enqueueSnackbar(`Added SuccessFully`, {
+            variant: "success",
+          }); 
         }
       }
     }
@@ -57,14 +59,7 @@ const AccordionInput = () => {
     <div>
       <HeadLine text={"Add Others"}></HeadLine>
 
-      {
-        <ShowSnackbar
-          open={openSnackBar}
-          handleClose={handleSnackBarClose}
-          text={"Added SuccessFully"}
-          duration={3000}
-        />
-      }
+
 
       {addProperty.map((x, index) => (
         <Accordion
@@ -80,24 +75,22 @@ const AccordionInput = () => {
           >
             <Typography sx={{ width: "33%", flexShrink: 0 }}>{x}</Typography>
           </AccordionSummary>
-          <AccordionDetails className="space-y-5">
+          <AccordionDetails className=" flex flex-wrap  space-y-2 sm:space-x-5">
             <TextInput
               placeholder={`Add New ${x}`}
-              width={350}
+              // width={350}
               onchange={handleInputChange}
               name={x.toLowerCase()}
               value={formData[x.toLowerCase()]}
             />
 
             <Button
-              btnText={"ADD"}
               backgroundColor={"bg-blue-light"}
               padding={"p-3"}
-              textColor={"white"}
-              width={"1/4"}
+              width={32}
               cursor={"cursor-pointer"}
               onClick={handleSubmit}
-            ></Button>
+            >Add</Button>
           </AccordionDetails>
         </Accordion>
       ))}

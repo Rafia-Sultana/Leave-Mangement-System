@@ -4,6 +4,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import employee from "../services/employee";
 import "../assets/styles/Dashboard.css";
+// import {userId} from "../utils/getUserInfo";
+
 const Calendar = () => {
   const [currentMonthNumber, setcurrentMonthNumber] = useState(null);
 
@@ -42,6 +44,7 @@ const Calendar = () => {
           ({ leave_type, leave_date, color }) =>
             createEventObject(leave_type, leave_date, color)
         );
+
         const leaveDatesByMonthEvents = leaveDatesByMonth.map(
           ({ leave_type, leave_date, color }) =>
             createEventObject(leave_type, leave_date, color)
@@ -95,6 +98,19 @@ const Calendar = () => {
           end: "next",
         }}
       />
+            {/* <div className="flex flex-wrap gap-4 my-5">
+            {customLegendItems.map(({ type, color }, index) => (
+          <div key={index} className="">
+            <p className="text-xs">
+              <span
+                style={{ backgroundColor: color }}
+                className={`rounded-full inline-block w-2 h-2 mr-1 shadow-lg`}
+              ></span>
+              {type}
+            </p>
+          </div>
+        ))}
+      </div> */}
     </div>
   );
 };

@@ -6,10 +6,10 @@ export default {
   ],
   theme: {
     colors:{
-      white:'#FFFFFF',
-      black:'#000000',
-      red:'#991b1b',
-      green: {
+       white:'#FFFFFF',
+       black:'#000000',
+       red:'#991b1b',
+       green: {
         'darkest':'',
         'dark':'#65a30d',
         'DEFAULT': '#71BC78',

@@ -1,20 +1,23 @@
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
-import Leave_Details from "../pages/Leave_Details";
-import CommonTable from "./CommonTable";
-import { employee_data } from "../utils/Dummy_Data";
+
+
 import Button from "./Button";
+import CommonTable from "./CommonTable";
 import employee from "../services/employee";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Manager_Leave_Approval } from "../pages/Manager_Data";
-import { useState, useEffect } from "react";
+import Leave_Details from "../pages/Employee/Details";
+import { Manager_Leave_Approval } from "../pages/Team Lead/Approval";
+
 
 const Modal = ({ open, handleClose, historyData }) => {
-  
+  // console.log(historyData);
   const { empId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,15 +26,10 @@ const Modal = ({ open, handleClose, historyData }) => {
 
   const columns2 = [
     { id: "sender", label: "Sender", minWidth: 100 },
+
     {
-      id: "timestamp",
-      label: "Date",
-      minWidth: 170,
-      align: "center",
-    },
-    {
-      id: "status",
-      label: "Status",
+      id: "sent_to",
+      label: "Sent To",
       minWidth: 170,
       align: "center",
     },
@@ -41,18 +39,32 @@ const Modal = ({ open, handleClose, historyData }) => {
       minWidth: 170,
       align: "right",
     },
+ 
+    {
+      id: "status",
+      label: "Status",
+      minWidth: 170,
+      align: "center",
+    },
+    {
+      id: "timestamp",
+      label: "Date",
+      minWidth: 170,
+      align: "center",
+    },
   ];
   const handleClickOpen = () => {};
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const logData = await employee?.getLog(historyData.application_id);
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(historyData.application_id);
+      const logData = await employee?.getLog(historyData.application_id);
+      setLogData(logData);
+    };
 
-  //     setLogData(logData);
-  //   };
-
-  //   fetchData();
-  // }, [historyData]);
+    fetchData();
+  }, [historyData]);
+  
 
   const handleEditButton = () => {
     const data = {
@@ -60,7 +72,7 @@ const Modal = ({ open, handleClose, historyData }) => {
       btnText: "Send To Employee",
       headerText: "Edit Leave Application",
     };
-    navigate("/dashboard/manager_edit_leave_application", { state: data });
+    navigate("/dashboard/manager-edit-leave-application", { state: data });
   };
 
   return (
@@ -95,23 +107,35 @@ const Modal = ({ open, handleClose, historyData }) => {
               info={historyData}
               isclickedEditBtn={isclickedEditBtn}
             />
+                  {/* <CommonTable
+                columns={columns2}
+                rows={logData.length > 0 ? logData : ["not available"]}
+                viewDetails={handleClickOpen}
+              /> */}
             {location.pathname ===
               `/dashboard/view-teamMember-leave-info/${empId}` ||
-            location.pathname === `/dashboard/request-history` ? (
-              <CommonTable
+            location.pathname === `/dashboard/request-history` ?
+            <CommonTable
+                columns={columns2}
+                rows={logData.length > 0 ? logData : ["not available"]}
+                viewDetails={handleClickOpen}
+              />:
+         <>
+         
+         <CommonTable
                 columns={columns2}
                 rows={logData.length > 0 ? logData : ["not available"]}
                 viewDetails={handleClickOpen}
               />
-            ) : (
-              <>
                 <Manager_Leave_Approval
                   applicationId={historyData?.application_id}
                   editButton={handleEditButton}
                   handleClose={handleClose}
                 />
-              </>
-            )}
+         </>
+              
+             
+            }
           </DialogContentText>
         </DialogContent>
         <DialogActions></DialogActions>

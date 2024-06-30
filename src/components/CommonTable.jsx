@@ -19,6 +19,7 @@ const CommonTable = ({
   maxHeight = 600,
   handleActive
 }) => {
+
  const navigate = useNavigate();
  const [page,setPage] = useState(0);
  const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -30,9 +31,25 @@ const handleChangeRowsPerPage = (event) => {
   setRowsPerPage(+event.target.value);
   setPage(0);
 };
+
+
+const handleEdit = (index,row)=>{
+ switch (row.status) {
+   case 'holiday':
+     viewDetails(index);
+   break;
+
+ default:
+  navigate("/dashboard/leave-application", {
+ state: row,
+  });
+    break;
+}
+}
+
 return (
     <div>
-      <Paper sx={{ width: "100%", borderRadius: borderRadius}}>
+      <Paper sx={{ width: "100%", borderRadius: borderRadius,backgroundColor:"#E8F7FF"}}>
         <TableContainer
           sx={{ borderRadius: borderRadius, maxHeight:maxHeight}}
         >
@@ -61,19 +78,17 @@ return (
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {columns.map((column) => {
+            
                       return (
                         <TableCells
+                        key={column.id}
                           row={row}
                           column={column}
                           viewDetails={() => viewDetails(index, row?.emp_id)}
                           onDelete={() => {
                           handleDelete(index);
                            }}
-                          onEdit={() => {
-                           navigate("/dashboard/leave-application", {
-                              state: row,
-                            });
-                          }}
+                          onEdit={() =>handleEdit(index,row)}
                           onActive={()=>handleActive(index)}
                           index={index}
                           ></TableCells>

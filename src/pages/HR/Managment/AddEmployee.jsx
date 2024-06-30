@@ -1,30 +1,36 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, useContext  } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Box from "@mui/material/Box";
-import TextInput from "../components/InputFields/TextInput";
-import Button from "../components/Button";
-import DateInput from "../components/InputFields/DateInput";
-import RadioInput from "../components/InputFields/RadioInput";
 import RadioGroup from "@mui/material/RadioGroup";
-import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
-import SelectInput from "../components/InputFields/SelectInput"; 
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import employee from "../services/employee";
-import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
-import { useNavigate } from "react-router-dom";
-import { convertToIsoString } from "../utils/FormateDate";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
-import ShowSnackbar from "../components/ShowSnackbar";
-import { useContext } from "react";
-import { UserContext } from "../context api/Context";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+
+import TextInput from "../../../components/InputFields/TextInput";
+import Button from "../../../components/Button";
+import DateInput from "../../../components/InputFields/DateInput";
+import RadioInput from "../../../components/InputFields/RadioInput";
+
+
+import SelectInput from "../../../components/InputFields/SelectInput"; 
+import employee from "../../../services/employee";
+import { convertToIsoString } from "../../../utils/FormateDate";
+import { UserContext } from "../../../context api/Context";
+
 import bcrypt from 'bcryptjs';
+import { useSnackbar } from "notistack";
+
+
 const salt = bcrypt.genSaltSync(10);
 
 const AddEmployee = () => {
   const navigate = useNavigate();
-  const { openSnackBar, handleSnackBarClose, setOpenSnackbar } =
-    useContext(UserContext);
+
+    const { enqueueSnackbar } = useSnackbar();
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -52,7 +58,7 @@ const AddEmployee = () => {
   };
 
   const [addEmployeeForm, setAddEmployeeForm] = useState(initialFormState);
-  const [imageURL, setImageURL] = useState(null);
+
   const [departmentsList, setDepartmentsList] = useState([]);
   const [designationsList, setDesignationsList] = useState([]);
   const [roleOptions, setRoleOptions] = useState([]);
@@ -92,12 +98,7 @@ const AddEmployee = () => {
 
 
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
-    setImageURL(url);
-  };
-  
+
 
   const setDepartment = (value, field, index = null) => {
     setAddEmployeeForm((prev) => {
@@ -189,11 +190,33 @@ const AddEmployee = () => {
     );
     let res = { ...updatedFormData, joining_date: timestamp };
 
-    let result = await employee.addEmployee(res);
-    setAddEmployeeForm(initialFormState);
-    if (result.success == true) {
-      setOpenSnackbar(true);
-   
+    // let result = await employee.addEmployee(res);
+    // setAddEmployeeForm(initialFormState);
+    // if (result.success == true) {
+    //   // setOpenSnackbar(true);
+    //   enqueueSnackbar(`Employee Added SuccessFully`, {
+    //     variant: "success",
+    //   });
+    // }
+    // else{
+    //   enqueueSnackbar(`Something went wrong!!`, {
+    //     variant: "error",
+    //   });
+    // }
+    try {
+      let result = await employee.addEmployee(res);
+      setAddEmployeeForm(initialFormState);
+      if (result.success == true) {
+        enqueueSnackbar(`Employee Added SuccessFully`, {
+          variant: "success",
+        });
+      } else {
+        throw new Error("Something went wrong!!");
+      }
+    } catch (error) {
+      enqueueSnackbar("Something went wrong!!", {
+        variant: "error",
+      });
     }
   };
 
@@ -212,13 +235,13 @@ const AddEmployee = () => {
 (departmentsList);
   return (
     <Box className="">
-      {
+      {/* {
         <ShowSnackbar
           open={openSnackBar}
           handleClose={handleSnackBarClose}
           text={"Employee Added SuccessFully"}
         />
-      }
+      } */}
       <div className="flex items-center ">
         <ArrowBackIosNewOutlinedIcon
           className="cursor-pointer"
@@ -231,41 +254,7 @@ const AddEmployee = () => {
           className="flex flex-col lg:flex-row justify-center  items-center lg:justify-start lg:items-start
         gap-5 lg:gap-20 lg:mt-6 lg:pl-4"
         >
-          <div className="bg-[#CCCCCC] rounded-full h-40 w-40 relative  shadow-md ">
-      
-            {imageURL ? (
-              <img
-                src={imageURL}
-                alt="new user image"
-                className="rounded-full h-40 w-40"
-              />
-            ) : (
-              <>
-                <input
-                  type="file"
-                  id="imageInput"
-                  accept="image/*"
-                  style={{ display: "none", marginTop: "4rem" }}
-                  onChange={handleFileChange}
-                />
-                <label htmlFor="imageInput" className="absolute left-7 top-16 ">
-                  Choose Picture
-                </label>
-                <label htmlFor="imageInput">
-                  <CameraAltOutlinedIcon
-                    style={{
-                      position: "absolute",
-                      right: 10,
-                      top: "7rem",
-                      backgroundColor: "#DDDDDD",
-                      borderRadius: "50%",
-                      padding: "4px",
-                    }}
-                  />
-                </label>
-              </>
-            )}
-          </div>
+    
           <div className="flex flex-col gap-5 w-[100%] md:w-[60%] lg:w-[40%]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10">
               <TextInput
@@ -356,11 +345,11 @@ const AddEmployee = () => {
                   <AddOutlinedIcon />
                 )}
                 <Button
-                  btnText={"Add Department"}
+                  // btnText={"Add Department"}
                   textColor={"blue"}
                   fontWeight={"bold"}
                   btnIcon={"AddOutlinedIcon"}
-                ></Button>
+                >Add Department</Button>
                 <p className="text-blue">(if any)</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-10">
@@ -424,15 +413,15 @@ const AddEmployee = () => {
               </FormControl>
             </>
             <Button
-              btnText={"SUBMIT"}
+             
               backgroundColor={hasSubmit ? "bg-blue-light" : "bg-gray"}
               padding={"p-3"}
-              textColor={"white"}
+           
               width={"1/2"}
               cursor={hasSubmit ? "cursor-pointer" : "cursor-not-allowed"}
               onClick={handleSubmit}
               disable={hasSubmit?false:true}
-            ></Button>
+            >SUBMIT</Button>
           </div>
         </Box>
       </form>

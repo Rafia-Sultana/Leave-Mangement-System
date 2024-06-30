@@ -1,22 +1,32 @@
-import React, { useContext, useState } from "react";
-import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
-import { useNavigate, useParams } from "react-router-dom";
-import TextInput from "../components/InputFields/TextInput";
-import Button from "../components/Button";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
+
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
-import { UserContext } from "../context api/Context";
-import ShowSnackbar from "../components/ShowSnackbar";
-import Person2Icon from "@mui/icons-material/Person2";
-import employee from "../services/employee";
+
+
+import Button from "../../components/Button.jsx";
+import Avatars from "../../components/Avatars.jsx";
+import HeadLine from "../../components/HeadLine.jsx";
+import TextInput from "../../components/InputFields/TextInput.jsx";
+
+import employee from "../../services/employee.jsx";
+import { setProfileImage } from "../../Redux/profileImageSlice.js";
 
 
 const Settings = () => {
   const { id } = useParams();
-  const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
-  const userId = userInfoData?.emp_id;
-  const navigate = useNavigate();
-  const { openSnackBar, setOpenSnackbar, handleSnackBarClose } =
-    useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const userInfoData = localStorage.getItem("userInfo");
+  const parsedUserInfo = JSON.parse(userInfoData);
+  const userId = parsedUserInfo?.emp_id;
+
+
+  // const proImg = useSelector((state)=>state.profileImage.profileImage);
+  const dispatch = useDispatch();
+
   const initialState = {
     current_password: "",
     new_password: "",
@@ -27,13 +37,41 @@ const Settings = () => {
   const [changePass, setChangePass] = useState(initialState);
   const [error, setError] = useState("");
   const [match, setMatch] = useState("");
-  const [currentPassError, setCurrentPassError]=useState("")
+  const [currentPassError, setCurrentPassError] = useState("");
+ 
+
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+
+    if (file.size / 1024 >= 500) {
+      enqueueSnackbar("Image file must be less than 500kb!", {
+        variant: "error",
+      });
+      return;
+    } else {
+
+      const formData = new FormData();
+      formData.append("profile_img", file);
+
+      let res = await employee.sendProfilePicture(formData);
+      if (res.success) {
+        let employeeInfo = await employee.basicInfo(userId);
+       
+      const newProfileImgUrl = `https://tillerbd.com:4040${employeeInfo.profile_img}?timestamp=${Date.now()}`
+      dispatch(setProfileImage(newProfileImgUrl));
+      enqueueSnackbar("Profile picture updated successfully!", {
+          variant: "success",
+        });
+      }
+    }
+  
+  };
 
   const validate = (value) => {
     if (value.length >= 6) {
-    
       setError("");
-      setCurrentPassError("")
+      setCurrentPassError("");
       return value;
     } else {
       setError("password must contain minimum 6 length");
@@ -53,43 +91,74 @@ const Settings = () => {
       return;
     } else {
       setMatch("");
-      
+
       try {
-        setCurrentPassError("")
+        setCurrentPassError("");
         const { confirm_password, ...changePassWithoutConfirm } = changePass;
 
         const res = await employee.changePassword({
           ...changePassWithoutConfirm,
           userId: userId,
         });
-
-      localStorage.setItem("accessToken", res.token);
+         
+        localStorage.setItem("accessToken", res.token);
+        if(res.token){
+          enqueueSnackbar("Password Changed SuccessFully!", {
+            variant: "success",
+          });
+        }
         setChangePass(initialState);
-        setOpenSnackbar(true);
+        setSnack({
+          severity: "success",
+          text: "Password Changed SuccessFully!",
+        });
+        // setOpenSnackbar(true);
       } catch (error) {
-
+       if(error){
         setCurrentPassError(error.response.data.error);
-      
-  }
+        enqueueSnackbar("Something went wrong!", {
+          variant: "error",
+        });
+       }
+      }
     }
   };
+
+
+
   return (
     <div>
-      {
-        <ShowSnackbar
-          open={openSnackBar}
-          handleClose={handleSnackBarClose}
-          text={"Password Changed SuccessFully!"}
-        />
-      }
-      <div className="flex items-center">
-        <ArrowBackIosNewOutlinedIcon
-          className="cursor-pointer"
-          onClick={() => navigate(-1)}
-        />
-        <h2 className="font-bold text-xl p-4">Settings</h2>
+ 
+
+      <HeadLine text={"Settings"}></HeadLine>
+
+      <div className="flex items-center gap-4 mt-5">
+        <div className="relative h-32 w-32 ">
+ 
+          <Avatars width={120} height={120}/>
+
+          <input
+            type="file"
+            id="imageInput"
+            accept="image/*"
+            style={{ display: "none", marginTop: "4rem" }}
+            onChange={handleFileChange}
+          />
+        </div>
+        <div className="space-y-1">
+          <p className="font-semibold">Profile Picture</p>
+          <p className="text-sm">PNG, JPG upto 500Kb.</p>
+          <Button
+          
+            textColor={"blue"}
+            fontWeight={"bold"}
+            onClick={() => {
+              document.getElementById("imageInput").click();
+            }}
+          >Update</Button>
+        </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mt-8">
         <SettingsApplicationsIcon sx={{ fontSize: 25 }} />
         <p className="text-blue cursor-pointer" onClick={() => setShow(!show)}>
           Change Password
@@ -107,7 +176,7 @@ const Settings = () => {
             onchange={handleChange}
             value={changePass.current_password}
           />
-       {currentPassError === "" ? null : (
+          {currentPassError === "" ? null : (
             <span className="text-red-dark font-bold">{currentPassError}</span>
           )}
           <TextInput
@@ -139,21 +208,16 @@ const Settings = () => {
           )}
           <div className="w-24">
             <Button
-              btnText={"Reset"}
+        
               width={24}
-              textColor={"white"}
+         
               backgroundColor={"bg-blue"}
               padding={"p-2"}
               onClick={handleResetButton}
-            ></Button>
+            >Reset</Button>
           </div>
         </div>
       )}
-
-      <div className="flex space-x-2 items-center mt-5">
-        <Person2Icon sx={{ fontSize: 25 }} />
-        <p className="text-blue cursor-pointer">Add Profile Picture</p>
-      </div>
     </div>
   );
 };

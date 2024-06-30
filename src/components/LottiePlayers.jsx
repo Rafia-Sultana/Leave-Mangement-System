@@ -8,13 +8,6 @@ const LottiePlayers = ({ src }) => {
       loop
       autoplay
       speed={5}
-    //   sx={{
-    //     height:{xs:'150px', sm:"200px", lg:'300px'},
-    //     width:{xs:'100px', sm:"150px", lg:'200px'},
-    //     marginTop: "100px",
-    //     transition:"all"
-    
-    // }}
      style={{ height: "300px", width: "200px", marginTop: "100px" }}
     />
   );

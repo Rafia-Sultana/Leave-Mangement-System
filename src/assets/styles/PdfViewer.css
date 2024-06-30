@@ -1,0 +1,6 @@
+.pdf-viewer-container{
+    max-height: 100vh;
+    /* overflow: hidden; */
+    border:1px solid #ccc;
+    height:100vh;
+}

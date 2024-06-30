@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
 import "./../assets/styles/LinearBar.css";
 import employee from "../services/employee";
+import { getYear } from "../utils/FormateDate";
 
 const ApexChart = () => {
   const [customLegendItems, setCustomLegendItems] = useState([]);
@@ -20,14 +21,14 @@ const ApexChart = () => {
     };
     fetch();
   }, []);
- 
+
   return (
     <div
       className="font-poppins 
     border p-5 border-gray-lightest rounded-lg shadow-lg"
     >
-      <div className="flex justify-between">
-        <p className="text-center mb-10 mt-4 text-2xl ">Total Leave Chart</p>
+      <div className="flex flex-wrap justify-between mb-4">
+        <p className="text-center  mt-4 text-2xl ">{`Yearly Leave Chart - ${getYear(new Date)}`} </p>
         <div className="text-xs">
           <p>
             {" "}
@@ -62,7 +63,8 @@ const ApexChart = () => {
               {/* Bar */}
               <div className="overflow-hidden bg-[#d0ebfa] rounded-r-md relative">
                 <Tooltip title={` Taken:${val} || Total:${exp} `} arrow>
-                  <div className="py-2 h-[40px]">
+                <React.Fragment>
+                <div className="py-2 h-[40px]">
                     <div
                       className="bar 
                       rounded-r-md whitespace-nowrap h-6 "
@@ -90,6 +92,7 @@ const ApexChart = () => {
                       }}
                     ></div>
                   )}
+                </React.Fragment>
                 </Tooltip>
               </div>
 
@@ -114,7 +117,7 @@ const ApexChart = () => {
         })}
       </div>
 
-      <div className="flex gap-4 my-5">
+      <div className="flex flex-wrap gap-4 my-5">
         {customLegendItems.map(({ type, color }, index) => (
           <div key={index} className="">
             <p className="text-xs">
