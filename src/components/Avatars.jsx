@@ -4,31 +4,26 @@ import { useSelector, useDispatch } from "react-redux";
 import employee from "../services/employee";
 import { UserContext } from "../context api/Context";
 
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: "#00000",
-      width: 70,
-      height: 70,
-    },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
-  };
-}
+
 
 const Avatars = ({ width, height }) => {
   const proImg = useSelector((state) => state.profileImage.profileImage);
+
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const empId = userInfoData?.emp_id;
   const [userData, setUserData] = React.useState(null);
-//  const {loading,setLoading}= React.useContext(UserContext);
+
  const [loading,setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchData = async () => {
-      // setLoading(true);
+      
       try {
         const userBasicData = await employee.basicInfo(empId);
+         let splitedImgArr = userBasicData.profile_img.split("/");
+        if(splitedImgArr[3]!=="null"){
         setUserData(userBasicData);
+        }
      
       } catch (error) {
         console.log(error);
@@ -43,11 +38,12 @@ const Avatars = ({ width, height }) => {
     }
   }, [empId, proImg]);
 
+
   return (
     <div>
-      {!loading && userData ? (
+      {!loading  ? (
         <Avatar
-          src={ `https://tillerbd.com:4040${userData.profile_img}?timestamp=${Date.now()}`}
+          src={ `https://tillerbd.com:4040${userData!==null?userData.profile_img:"/null"}`}
           sx={{ width: width, height: height }}
         />
       ) : (

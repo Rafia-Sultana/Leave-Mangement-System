@@ -56,7 +56,7 @@ const Login = () => {
       localStorage.removeItem("acccessToken");
       console.error("Error  logging in :", error);
 
-      enqueueSnackbar(`${error.message}`, {
+      enqueueSnackbar(`Something Went Wrong.`, {
         variant: "error",
       });
     }

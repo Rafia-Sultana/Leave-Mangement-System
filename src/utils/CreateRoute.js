@@ -18,6 +18,8 @@ import TestFile from "../shared/Test"
 import PDF_Viewer from "../Files/PDF Viewer";
 import { Pending } from "../pages/Admin/Pending";
 import { Teams_Leave_History } from "../pages/Admin/Teams Leave History";
+import Stepper from "../components/Stepper";
+import BreadCumbs from "../components/BreadCumbs";
 
 const createRoute = (path, element) =>{
     return {path:path , element:element}
@@ -40,7 +42,8 @@ const routes = [
   //hr routes
   createRoute("hr-leave-request", HR_Leave_Request),
   createRoute("hr-others-leave-history", HR_others_leave_history),
-  createRoute("hr-add-employee", AddEmployee),
+  createRoute("hr-add-employee", BreadCumbs),
+  createRoute("hr-add-application-steps", Stepper),
   createRoute("hr-add-holiday", ManageHoliday),
   createRoute("hr-add-accordion-form",AccordionInput),
   createRoute("hr-view-on-leave",OnLeave),

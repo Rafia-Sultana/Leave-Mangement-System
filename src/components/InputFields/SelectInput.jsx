@@ -28,7 +28,7 @@ const SelectInput = ({
       },
     },
   };
-console.log(options);
+
   return (
     <div>
       <FormControl variant={variant} sx={{ width: "100%" }} required={required}  >
@@ -49,7 +49,7 @@ console.log(options);
           //render value and onChange works like same but which one you need to use depends on
           //requirements . render value is useful when you want to show additional information, format the display differently, or trigger some side effect when a value is selected.
           onChange={getSelectedValue}
-          MenuProps={MenuProps}
+            MenuProps={MenuProps}
           required={true}
           multiple={multiple}
         >

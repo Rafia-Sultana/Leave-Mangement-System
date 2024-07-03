@@ -23,6 +23,7 @@ const NavProfile = () => {
   const [rotateIcon, setRotateIcon] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [profileImg, setProfileImg] = useState(null);
+  console.log(userData?.name);
 
   const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
   const empId = userInfoData?.emp_id;
@@ -34,6 +35,7 @@ const NavProfile = () => {
     const fetchData = async () => {
       try {
         const userBasicData = await employee.basicInfo(empId);
+    
         setUserData(userBasicData);
       
         // const newProfileImgUrl = `http://192.168.0.40:4040${userBasicData.profile_img}?timestamp=${Date.now()}`;

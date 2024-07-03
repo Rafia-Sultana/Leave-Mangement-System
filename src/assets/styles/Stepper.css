@@ -1,0 +1,48 @@
+.progress-steps {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.step {
+  position: relative;
+}
+
+.step-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border: 1px solid #7BD3FF;
+  transition: background-color 0.3s, transform 0.3s;
+  z-index: 10;
+}
+
+.step.active .step-circle {
+  background-color: transparent;
+  color: black;
+  transform: scale(1.2);
+}
+
+.step-line {
+  width: 120px;
+  height: 2px;
+  background-color: #7BD3FF;
+  transition: width 0.3s;
+  z-index: -1;
+ 
+
+}
+
+@keyframes translateAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(120px);
+  }
+}

@@ -27,7 +27,7 @@ const Layout = () => {
     siteNav.classList.toggle("site-nav-open");
     menuToggle.classList.toggle("open");
   };
-
+console.log("parent");
   const createNavLink = (to, text, icon) => ({ to, text, icon });
   const navLinks = {
     Employee: [

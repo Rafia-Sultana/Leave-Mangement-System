@@ -24,9 +24,6 @@ import { UserContext } from "../../../context api/Context";
 import bcrypt from "bcryptjs";
 import { useSnackbar } from "notistack";
 import './../../../assets/styles/Stepper.css';
-import HeadLine from "../../../components/HeadLine";
-import Stepper from "../../../components/Stepper";
-import BreadCumbs from "../../../components/BreadCumbs";
 
 
 
@@ -60,7 +57,11 @@ const AddEmployee = () => {
     role: "",
   };
 
-
+  const initialSteps = {
+    step_count: 0,
+    step_emp_name: "",
+    isFinal: false,
+  };
 
   const [addEmployeeForm, setAddEmployeeForm] = useState(initialFormState);
   const [departmentsList, setDepartmentsList] = useState([]);
@@ -68,7 +69,10 @@ const AddEmployee = () => {
   const [roleOptions, setRoleOptions] = useState([]);
   const [openOtherDepartments, setOpenOtherDepartments] = useState(false);
   const [hasSubmit, setHasSubmit] = useState(false);
+  const [applicationSteps, setApplicationSteps] = useState([initialSteps]);
+  const [count, setCount] = useState(1);
 
+  const employeeList = ["a", "b", "c", "d", "e"];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -217,8 +221,9 @@ const AddEmployee = () => {
         variant: "error",
       });
     }
-
-    //  navigate("/dashboard/hr-add-application-steps")
+  
+  // navigate("dashboard/hr-add-application-steps");
+  
   };
 
   useEffect(() => {
@@ -235,18 +240,41 @@ const AddEmployee = () => {
   }, [addEmployeeForm]);
   departmentsList;
 
+  const handleEmpNameChange = (e, index) => {
+    const { name, value } = e.target;
+    setApplicationSteps((prevSteps) =>
+      prevSteps.map((step, i) =>
+       i === index ? { ...step, [name]: value } : step
+      )
+ 
+    );
+  };
 
+console.log(applicationSteps);
+
+const handleStepSubmit = ()=>{
+  const getEmpName = applicationSteps[0].step_emp_name;
+  let p = applicationSteps.map((step) => ({...step,"emp_name": getEmpName}));
+console.log(p.slice(1));
+}
   return (
-    <Box className="mt-5">
-     
-      {/* <HeadLine text={"Add New Employee"}/> */}
-      {/* <BreadCumbs/> */}
-      <div className="grid md:grid-cols-2  gap-10">
-       
-          <section className="space-y-5">
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-10">
-           <TextInput
+    <Box className="">
+      <div className="flex items-center ">
+        <ArrowBackIosNewOutlinedIcon
+          className="cursor-pointer"
+          onClick={() => navigate(-1)}
+        />
+        <h2 className="font-bold text-xl p-4">Add New Employee</h2>
+      </div>
+      <form>
+        <Box
+          className="flex flex-col lg:flex-row justify-center  
+          items-center lg:justify-start lg:items-start
+        gap-5 lg:gap-20 lg:mt-6 lg:pl-4"
+        >
+          <div className="flex flex-col gap-5 w-[100%] md:w-[60%] lg:w-[40%]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10">
+              <TextInput
                 label={"First Name"}
                 onchange={handleInputChange}
                 variant="standard"
@@ -260,9 +288,7 @@ const AddEmployee = () => {
                 variant="standard"
                 value={addEmployeeForm?.last_name}
               />
-           </div>
-              
-         
+            </div>
 
             <SelectInput
               options={roleOptions.map((role) => role.role)}
@@ -380,7 +406,7 @@ const AddEmployee = () => {
               </div>
             </div>
 
-           
+            <>
               <FormControl>
                 <FormLabel>Gender</FormLabel>
                 <RadioGroup
@@ -404,24 +430,78 @@ const AddEmployee = () => {
                   ></RadioInput>
                 </RadioGroup>
               </FormControl>
-        
+            </>
 
-   
+ 
+
+       <div className="space-x-2">
+       
+                  
+                  <Button
+                    fontSize={"bold"}
+                    textColor="white"
+                    backgroundColor={"bg-gray"}
+                    padding={"p-1"}
+                    // btnIcon={KeyboardArrowLeftIcon}
+                    onClick={() =>
+                      setApplicationSteps((prevSteps) => prevSteps.slice(0,prevSteps.length-1))
+                    }
+                  >Back</Button>
+                  <Button
+                    fontSize={"bold"}
+                    textColor="white"
+                    padding={"p-1"}
+                    backgroundColor={"bg-blue-lightest"}
+                    // btnIcon={KeyboardArrowRightIcon}
+                    onClick={() =>
+                      setApplicationSteps((prevSteps) => [
+                        ...prevSteps,
+                        { ...initialSteps, step_count:applicationSteps.length },
+                      ])
+                    }
+                  >Add</Button>
+           
+       </div>
+              <div
+                
+               className="flex gap-5"
+              >
+                     {Array.from({ length: applicationSteps.length }, (_, index) => (
+               <div  key={index} className="w-24">
+                <SelectInput
+                  options={employeeList.map((emp) => emp)}
+                  placeholder={`Name`}
+                  getSelectedValue={(e) => handleEmpNameChange(e, index)}
+                  name={"step_emp_name"}
+                  variant="standard"
+                />
+        </div>
+                    ))}
+              </div>
+        
+        {/* <Button
+              backgroundColor={ "bg-blue-light"}
+              padding={"p-3"}
+              width={"1/2"}
+              cursor={"cursor-pointer" }
+              onClick={handleStepSubmit}
+             
+            >
+              SUBMIT
+            </Button> */}
             <Button
               backgroundColor={hasSubmit ? "bg-blue-light" : "bg-gray"}
               padding={"p-3"}
-              width={"full"}
+              width={"1/2"}
               cursor={hasSubmit ? "cursor-pointer" : "cursor-not-allowed"}
               onClick={handleSubmit}
               disable={hasSubmit ? false : true}
             >
               SUBMIT
             </Button>
-          </section>
-
-        
-     
-      </div>
+          </div>
+        </Box>
+      </form>
     </Box>
   );
 };
