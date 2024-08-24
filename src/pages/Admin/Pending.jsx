@@ -18,7 +18,8 @@ const [ loading, setLoading]= useState(true)
 const isSmallScreen= useMediaQuery('(max-width:600px)');
 const location = useLocation();
 const navigate = useNavigate();
-
+const userInfoData = JSON.parse(localStorage.getItem("userInfo"));
+const role = userInfoData.role;
 
   const columns = [
     { id: "employee_name", label: "Name", minWidth: 100 },
@@ -61,12 +62,17 @@ const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-
+let result;
       try {
-        const result = await employee.getPendingApplicationByAdmin();
-     
+
+       if(role === "Line Manager"){
+     result = await employee.getPendingApplicationByLineManager();
+     console.log(result);
+       }else if(role === "Admin"){
+        result = await employee.getPendingApplicationByAdmin();
+       }
          setRows(result);
-        
+           
      
       } catch (error) {
         console.error(error);

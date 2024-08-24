@@ -62,7 +62,7 @@ const ViewLog = () => {
   const handleEditButton = () => {
     const data = {
       ...historyData,
-      btnText: "Send To Employee",
+      btnText: "SUbmit",
       headerText: "Edit Leave Application",
     };
     navigate("/dashboard/manager-edit-leave-application", { state: data });

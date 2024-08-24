@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { useNavigate } from "react-router-dom";
 import TableCells from "./TableCells";
 import { TablePagination } from "@mui/material";
+import AddEmployee from "../pages/HR/Managment/AddEmployee";
 
 const CommonTable = ({
   columns,
@@ -17,7 +18,8 @@ const CommonTable = ({
   handleDelete,
   borderRadius,
   maxHeight = 600,
-  handleActive
+  handleActive,
+  // editEmployee
 }) => {
 
  const navigate = useNavigate();
@@ -34,14 +36,23 @@ const handleChangeRowsPerPage = (event) => {
 
 
 const handleEdit = (index,row)=>{
+ 
  switch (row.status) {
    case 'holiday':
      viewDetails(index);
    break;
-
+    // case 'Active':
+    //   editEmployee(row?.emp_id); 
+    //   break;
  default:
+  const data = {
+    ...row,
+    // btnText: "Submit",
+    headerText: "Edit Leave Application",
+  };
+  // console.log(data);
   navigate("/dashboard/leave-application", {
- state: row,
+ state: data,
   });
     break;
 }

@@ -55,7 +55,7 @@ export const HR_others_leave_history = () => {
   ];
 
   useEffect(() => {
-    // setLoading(true);
+   setLoading(true);
     const fetchDataOfTeamLeave = async () => {
       try {
         const teamMembersDetails =

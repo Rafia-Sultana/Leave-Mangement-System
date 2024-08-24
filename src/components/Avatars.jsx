@@ -17,7 +17,7 @@ const Avatars = ({ width, height }) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      
+      setLoading(true)
       try {
         const userBasicData = await employee.basicInfo(empId);
          let splitedImgArr = userBasicData.profile_img.split("/");

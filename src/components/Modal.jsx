@@ -69,7 +69,7 @@ const Modal = ({ open, handleClose, historyData }) => {
   const handleEditButton = () => {
     const data = {
       ...historyData,
-      btnText: "Send To Employee",
+      btnText: "Submit",
       headerText: "Edit Leave Application",
     };
     navigate("/dashboard/manager-edit-leave-application", { state: data });

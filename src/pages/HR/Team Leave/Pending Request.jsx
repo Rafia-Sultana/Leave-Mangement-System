@@ -72,7 +72,7 @@ const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-    // setLoading(true);
+setLoading(true) 
       try {
         const result = await employee.getLeaveRequestOfEmployeesByHR();
       

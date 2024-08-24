@@ -11,9 +11,7 @@ import employee from "../services/employee";
 
 import { useSnackbar } from "notistack";
 
-
 const AccordionInput = () => {
- 
   const [expanded, setExpanded] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,7 +47,7 @@ const AccordionInput = () => {
         if (res.success === true) {
           enqueueSnackbar(`Added SuccessFully`, {
             variant: "success",
-          }); 
+          });
         }
       }
     }
@@ -58,8 +56,6 @@ const AccordionInput = () => {
   return (
     <div>
       <HeadLine text={"Add Others"}></HeadLine>
-
-
 
       {addProperty.map((x, index) => (
         <Accordion
@@ -90,7 +86,9 @@ const AccordionInput = () => {
               width={32}
               cursor={"cursor-pointer"}
               onClick={handleSubmit}
-            >Add</Button>
+            >
+              Add
+            </Button>
           </AccordionDetails>
         </Accordion>
       ))}

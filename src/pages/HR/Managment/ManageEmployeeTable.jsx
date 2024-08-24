@@ -181,6 +181,11 @@ const ManageEmployeeTable = () => {
   const handleOnLeaveEmployee = useCallback(() => {
     navigate("/dashboard/hr-view-on-leave");
   }, [navigate]);
+
+  // const editEmployee = async (empId) => {
+    
+  //   navigate("/dashboard/hr-add-employee",{state:{employeeId: empId}})
+  // };
   return (
     <div className="">
       {/* //cards */}
@@ -265,6 +270,7 @@ const ManageEmployeeTable = () => {
             handleActive={handleActive}
             viewDetails={viewDetails}
             maxHeight={isSmallScreen ? 500 : 450}
+            // editEmployee={editEmployee}
           ></CommonTable>
         )}
       </div>

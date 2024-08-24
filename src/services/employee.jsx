@@ -454,7 +454,33 @@ const employee = {
       "Error for getting all employee  Info from admin side"
     );
   },
+  getEmployeeNameListByHR: async () => {
+    return getRequest(
+      `/hr/application-steps-emp-list`,
+      "Error for getting all employee name from hr side"
+    );
+  },
+  postAplicationStepsByHR: async (steps) => {
+    return postRequest(
+      `/hr/add-application-steps`,steps,
+      "Error for getting all employee name from hr side"
+    );
+  },
 
+/// line mmanager
+getPendingApplicationByLineManager : async () => {
+  return getRequest(
+    `/line-manager/leave/pending-application`,
+    "Error Fetching to get Leave Request Of Employee By line-manager"
+  );
+},
+postDecisionByLineManager: async (decison) => {
+  return postRequest(
+    `/line-manager/leave/application/decision`,
+    decison,
+    "Error Fetching to get decision By Line Manager"
+  );
+},
 };
 
 export default employee;

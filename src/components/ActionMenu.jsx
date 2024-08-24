@@ -8,12 +8,10 @@ import "sweetalert2/src/sweetalert2.scss";
 import { useLocation } from "react-router-dom";
 
 const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
-
   const location = useLocation();
 
   let value = row["leave_status"];
   let status = row["status"];
-  // let holiday = row["duration"];
 
   let options;
 
@@ -46,13 +44,13 @@ const ActionMenu = ({ viewDetails, onEdit, onDelete, row, type, onActive }) => {
     }
   }
 
-  
-if(location.pathname === "/dashboard/hr-view-on-leave"){
-  options = ["View"];
-}
-if(location.pathname === "/dashboard/admin-pending-request"){
-  options = ["View"];
-}
+  if (location.pathname === "/dashboard/hr-view-on-leave") {
+    options = ["View"];
+  }
+  if (location.pathname === "/dashboard/admin-pending-request") {
+    options = ["View"];
+  }
+
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);

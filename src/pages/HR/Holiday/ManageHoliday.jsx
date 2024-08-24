@@ -61,7 +61,11 @@ const ManageHoliday = () => {
           fontSize={"sm"}
         >Add Holiday</Button>
       </div>
-      <CommonTable rows={holidayList} columns={columns} viewDetails={viewDetails}  />
+      
+      <CommonTable 
+      rows={holidayList}
+       columns={columns}
+        viewDetails={viewDetails}  />
       {open && (
         <HolidayModal open={open} close={handleClose} row={row}  setHolidayList={setHolidayList}></HolidayModal>
       )}

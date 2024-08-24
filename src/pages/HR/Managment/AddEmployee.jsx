@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -33,7 +33,12 @@ import BreadCumbs from "../../../components/BreadCumbs";
 const AddEmployee = () => {
   const navigate = useNavigate();
 
+  // const location = useLocation();
+  // const employeeId = location.state.employeeId;
+  // console.log(location.state);
+
   const { enqueueSnackbar } = useSnackbar();
+
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -59,8 +64,6 @@ const AddEmployee = () => {
     },
     role: "",
   };
-
-
 
   const [addEmployeeForm, setAddEmployeeForm] = useState(initialFormState);
   const [departmentsList, setDepartmentsList] = useState([]);

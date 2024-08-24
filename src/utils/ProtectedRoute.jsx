@@ -9,8 +9,6 @@ const ProtectedRoute = () => {
   useEffect(() => {
     const handleStorageChange = () => {
       try {
-     
-
         let  auth = localStorage.getItem("accessToken");
 
         if (auth) {

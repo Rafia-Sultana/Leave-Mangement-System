@@ -13,28 +13,28 @@ import { useState } from "react";
 import { CssBaseline, Switch, ThemeProvider, createTheme } from "@mui/material";
 
 function App() {
-  const[toggleDarkMode, setToggleDarkMode] = useState(true);
-  const toggleDarkTheme = () =>{
-    setToggleDarkMode(!toggleDarkMode);
-  }
+  // const[toggleDarkMode, setToggleDarkMode] = useState(true);
+  // const toggleDarkTheme = () =>{
+  //   setToggleDarkMode(!toggleDarkMode);
+  // }
   
-  const darkTheme = createTheme({
-    palette :{
-      mode: toggleDarkMode ? "light" : "dark",
-      primary: {
-        main: '#90caf9',
-      },
-      secondary: {
-        main: '#131052',
+  // const darkTheme = createTheme({
+  //   palette :{
+  //     mode: toggleDarkMode ? "light" : "dark",
+  //     primary: {
+  //       main: '#90caf9',
+  //     },
+  //     secondary: {
+  //       main: '#131052',
 
-      },
-    }
-  })
+  //     },
+  //   }
+  // })
   return (
     <div>
       <Router>
-        <ThemeProvider theme={darkTheme}>
-  <CssBaseline/>
+        {/* <ThemeProvider theme={darkTheme}> */}
+  {/* <CssBaseline/> */}
   {/* <Switch checked={toggleDarkMode} onChange={toggleDarkTheme} /> */}
 
 
@@ -45,7 +45,7 @@ function App() {
           maxSnack={3}
           dense={true}
         >
-          <UserProvider>
+          {/* <UserProvider> */}
             <Routes>
               <Route path="/" element={<Login />}></Route>
               <Route path="/files/:fileId" element={<PDF_Viewer />}></Route>
@@ -63,9 +63,9 @@ function App() {
               </Route>
               <Route path="*" element={<No_Match />}></Route>
             </Routes>
-          </UserProvider>
+          {/* </UserProvider> */}
         </SnackbarProvider>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
      
       </Router>
     </div>

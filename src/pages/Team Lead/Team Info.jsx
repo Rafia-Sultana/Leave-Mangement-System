@@ -38,7 +38,7 @@ export const Manager_Team_Leave_Info = () => {
   
     useEffect(() => {
       const fetchDataOfTeamLeave = async () => {
-        // setLoading(true);
+    setLoading(true);
         try {
           const teamMembersDetails = await employee.getLeaveHistroryOfTeam();
           setRows(teamMembersDetails);

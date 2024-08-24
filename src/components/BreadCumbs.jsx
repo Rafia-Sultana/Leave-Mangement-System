@@ -2,10 +2,11 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import AddEmployee from "../pages/HR/Managment/AddEmployee";
 import Stepper from "./Stepper";
 import { Box } from "@mui/material";
+import employee from "../services/employee";
 
 const BreadCumb = ({ label, component,color, onClick }) => {
   return (
@@ -27,6 +28,8 @@ const BreadCumbs = () => {
     { label: "Add New Employee", component: <AddEmployee /> },
     { label: "Application Steps", component: <Stepper /> },
   ];
+
+
 
   return (
     <Box sx={{ mt: 3 }}>

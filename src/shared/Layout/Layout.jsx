@@ -27,10 +27,12 @@ const Layout = () => {
     siteNav.classList.toggle("site-nav-open");
     menuToggle.classList.toggle("open");
   };
+  
 console.log("parent");
   const createNavLink = (to, text, icon) => ({ to, text, icon });
-  const navLinks = {
-    Employee: [
+  const navLinks = 
+  {
+    "Employee": [
       createNavLink("leave-application", "Leave Application", personal),
       createNavLink("request-history", "Request History", team),
     ],
@@ -53,7 +55,7 @@ console.log("parent");
         icon: team,
       },
     ],
-    HR: [
+    "HR": [
       {
         category: "Personal",
         links: [
@@ -80,7 +82,7 @@ console.log("parent");
         icon: managment,
       },
     ],
-    Admin: [
+    "Admin": [
       {
         category: "Personal",
         links: [
@@ -96,6 +98,25 @@ console.log("parent");
           createNavLink("admin-others-leave-history", "Leave History"),
          
         ],
+        icon: team,
+      },
+  
+    ],
+
+    "Line Manager": [
+      {
+        category: "Personal",
+        links: [
+          createNavLink("leave-application", "Leave Application"),
+          createNavLink("request-history", "My Leave History"),
+        ],
+        icon: personal,
+      },
+      {
+        category: "Others",
+        links: [
+          createNavLink("admin-pending-request", "Pending Request"),
+         ],
         icon: team,
       },
   

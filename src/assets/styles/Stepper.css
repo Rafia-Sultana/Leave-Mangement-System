@@ -1,48 +1,33 @@
 .progress-steps {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  position: relative;
 }
 
 .step {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .step-circle {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  font-size: 12px;
+  background-color: #ccc;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
-  border: 1px solid #7BD3FF;
-  transition: background-color 0.3s, transform 0.3s;
-  z-index: 10;
-}
-
-.step.active .step-circle {
-  background-color: transparent;
-  color: black;
-  transform: scale(1.2);
+  z-index: 1;
+  margin-bottom:36px ;
 }
 
 .step-line {
-  width: 120px;
-  height: 2px;
-  background-color: #7BD3FF;
-  transition: width 0.3s;
-  z-index: -1;
- 
-
-}
-
-@keyframes translateAnimation {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(120px);
-  }
+  position: absolute;
+  top: 30px; 
+  width: 2px;
+  height: 36px;
+  background-color: #ccc;
+  z-index: 0;
 }

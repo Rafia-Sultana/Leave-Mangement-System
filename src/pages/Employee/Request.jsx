@@ -183,7 +183,7 @@ const empId = userInfoData?.emp_id;
             rows={filteredRows}
             viewDetails={handleClickOpen}
             handleDelete ={handleDelete}
-             maxHeight={660}
+            maxHeight={660}
           />
         </div>
       ) : loading ? (

@@ -49,7 +49,7 @@ const OnLeave = () => {
   ];
 
   const fetchData = useCallback(async () => {
-    // setLoading(true);
+    setLoading(true);
     try {
       const timestamp = convertToIsoString(selectedDate, "12:00 AM");
       const res = await employee.getOnLeaveEmployee(timestamp);
